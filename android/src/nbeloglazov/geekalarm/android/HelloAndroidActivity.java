@@ -1,5 +1,7 @@
-package nbeloglazov;
+package nbeloglazov.geekalarm.android;
 
+import nbeloglazov.geekalarm.android.R;
+import nbeloglazov.geekalarm.android.R.layout;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
