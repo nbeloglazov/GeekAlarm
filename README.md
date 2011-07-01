@@ -8,6 +8,7 @@ To display all this tasks to user, we need to generate images from LaTeX or Math
 
 Project consists of 2 parts:
  1. Android client
+
  2. Clojure server
 
 ## License
