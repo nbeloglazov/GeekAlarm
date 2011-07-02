@@ -23,7 +23,7 @@
   (let [get-row (fn [row]
 		  (cljml :mtr
 			 (map (fn [val] [:mtd (cljml val)]) row)))]
-    [:mfenced (cljml :mtable (map get-row matrix))]))
+    (cljml :mtable (map get-row matrix))))
 
 (defn cljml-to-str [cljml]
   (let [node-name (name (first cljml))

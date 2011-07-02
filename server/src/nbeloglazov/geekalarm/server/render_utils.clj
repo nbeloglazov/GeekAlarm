@@ -1,4 +1,4 @@
-(ns nbeloglazov.geekalarm.server.euclid-utils
+(ns nbeloglazov.geekalarm.server.render-utils
   (require [nbeloglazov.geekalarm.server.mathml-utils :as mathml])
   (import [net.sourceforge.jeuclid.context Parameter]
 	  [java.io ByteArrayInputStream ByteArrayOutputStream]))
@@ -31,4 +31,8 @@
   (->> (mathml/cljml-to-str cljml)
        (parse-node)
        (save-image)))
-		      
+
+(defn render-cljml-task [task]
+  (-> task
+      (update-in [:question] cljml-to-stream)
+      (update-in [:choices] #(map cljml-to-stream %))))
