@@ -1,12 +1,16 @@
-package nbeloglazov.geekalarm.android;
+package nbeloglazov.geekalarm.android.activities;
 
 import nbeloglazov.geekalarm.android.R;
 import nbeloglazov.geekalarm.android.R.layout;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
-public class HelloAndroidActivity extends Activity {
+public class AlarmsActivity extends Activity {
 
     private static String TAG = "geekalarm";
 
@@ -19,9 +23,20 @@ public class HelloAndroidActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.alarms);
+        Button testButton = (Button)this.findViewById(R.id.test_button);
+        testButton.setOnClickListener(new TestButtonListener());
 		Log.i(TAG, "onCreate");
-        setContentView(R.layout.main);
     }
+    
+    private class TestButtonListener implements OnClickListener {
 
+		@Override
+		public void onClick(View v) {
+			Intent intent = new Intent(AlarmsActivity.this, TaskActivity.class);
+			startActivity(intent);
+		}
+    	
+    }
 }
 
