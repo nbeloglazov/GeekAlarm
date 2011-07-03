@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <title>
+      Task viewer
+    </title>
+    <script type="text/javascript">
+      function getTask(level) {
+        var req = new XMLHttpRequest();
+        req.open("GET", "http://localhost:8080/task?category=linear-algebra&level=" + level);
+        req.onreadystatechange = function(evt) {
+          if (req.readyState === 4) {
+            if (req.status === 200) {
+              document.getElementById("task_description").innerHTML = req.responseText;
+              var task = eval("(" + req.responseText + ")");
+              var url = "http://localhost:8080/image?id=" + task.id;
+	      document.getElementById("question").src = url + "&type=question";
+	      for (var i = 1; i < 5; i++) {
+	        document.getElementById("choice_" + i).src = url + "&type=choice&number=" + i;
+	      }	
+            }
+          }
+        }
+        req.send();
+      }
+    </script>
+    <style type="text/css">
+      body {
+	text-align: center
+      }
+      img {
+        margin: 10px
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <button onclick="getTask(1);">Easy</button>
+      <button onclick="getTask(2);">Medium</button>
+      <button onclick="getTask(3);">Hard</button>
+    </div>
+    <div id="task_description"></div>
+    <img id="question"></img>
+    <br/>
+    <img id="choice_1"></img>
+    <img id="choice_2"></img>
+    <br/>
+    <img id="choice_3"></img>
+    <img id="choice_4"></img>    <div id="task_description"></div>
+    
+  </body>
+</html>
