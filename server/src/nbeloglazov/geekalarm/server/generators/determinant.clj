@@ -2,14 +2,17 @@
   (:require [incanter.core :as incanter])
   (:use [nbeloglazov.geekalarm.server.mathml-utils :only (cljml)]))
 
-(defn random-matrix [size]
-  (-> (repeatedly (* size size) #(rand-int 10))
-      (incanter/matrix size)))
+(defn- random-matrix [size max]
+  (let [rnd #(- (rand-int (* 2 max)) max)]
+  (-> (repeatedly (* size size) rnd)
+      (incanter/matrix size))))
 
-(defn get-similar [x]
-  (range x (+ x 4)))
+(defn- get-similar [x]
+  (let [r (rand-int 4)
+	a (- x r)]
+    [(inc r) (range a (+ a 4))]))
 
-(defn question-to-cljml [matrix]
+(defn- question-to-cljml [matrix]
   [:math [:mo "|"]
          [:mphantom [:mtext "-"]] ; hack to insert some space between by bracker and numbers
          (cljml matrix)
@@ -18,10 +21,16 @@
          [:mo "="]
          [:mtext "?"]])
 
+(def sizes [2 2 3])
+
+(def maxs  [10 20 10])
+
 (defn generate [level]
-  (let [matrix (random-matrix 2)
+  (let [size (sizes (dec level))
+	max (maxs (dec level))
+	matrix (random-matrix size max)
 	det (incanter/det matrix)
-	answers (get-similar (int det))]
+	[cor answers] (get-similar (int det))]
     {:question (question-to-cljml matrix)
      :choices (map cljml answers)
-     :correct 1}))
+     :correct cor}))
