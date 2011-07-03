@@ -1,4 +1,5 @@
 (ns nbeloglazov.geekalarm.server.server
+  (:import [java.util Date])
   (:use [net.cgrand.moustache :only [app delegate]]
 	[ring.middleware
 	 [params :only (wrap-params)]
@@ -6,11 +7,29 @@
   (:require [nbeloglazov.geekalarm.server
 	     [render-utils :as render]
 	     [mathml-utils :as mathml]
-	     [task-manager :as manager]]
+	     [task-manager :as manager]
+	     [utils :as utils]]
 	    [clojure.contrib
 	     [json :as json]]))
 
+(def task-timeout (* 10 60 1000))
+
+(def timer-interval (* 1 60 1000))
+
 (def active-tasks (atom {}))
+
+(defn remove-expired-tasks [tasks]
+  (println "Removing tasks:" tasks)
+  (let [lower-bound (- (.getTime (Date.))
+		       task-timeout)]
+    (->> tasks
+	 (filter (fn [[id task]]
+		   (>= (:timestamp task) lower-bound)))
+	 (into {}))))
+
+(def run-collector
+     (memoize (fn [] (utils/start-timer #(swap! active-tasks remove-expired-tasks)
+					timer-interval))))
 
 (defn get-id []
   (apply str (repeatedly 3 #(rand-int 10))))
@@ -34,10 +53,13 @@
       (response "application/json")))
 
 (defn get-task [request]
+  (run-collector)
   (let [{:keys [category level]} (:params request)
-	task (manager/get-task (keyword category) level)
+	task (manager/get-task (keyword category)
+			       (Integer/parseInt level))
 	id (get-id)]
-    (swap! active-tasks assoc id task)
+    (->> (assoc task :timestamp (.getTime (Date.)))
+	 (swap! active-tasks assoc id))
     (response (json/json-str {:id id
 			      :correct (:correct task)})
 	      "application/json")))
