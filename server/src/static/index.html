@@ -34,6 +34,7 @@
             get("question").src = url + "&type=question";
             for (var i = 1; i < 5; i++) {
                 get("choice_" + i).src = url + "&type=choice&number=" + i;
+                get("choice_" + i).className = i === task.correct ? "correct" : "incorrect";
             }
         }
 
@@ -56,7 +57,8 @@
             padding-top: 20px;
         }
         img {
-            margin: 10px;
+            padding: 10px;
+            border: #FFF 4px solid;
         }
         div {
             margin: 10px;
@@ -64,6 +66,14 @@
 
         .first img {
             display: none;
+        }
+        
+        .correct:hover {
+            border: #0F0 solid 4px;
+        }
+
+        .incorrect:hover {
+            border: #F00 solid 4px;
         }
         </style>
     </head>
