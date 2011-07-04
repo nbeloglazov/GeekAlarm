@@ -7,7 +7,9 @@
 		 [net.sourceforge.jeuclid/jeuclid-core "3.1.9"]
 		 [incanter/incanter-core "1.2.3"]]
   :dev-dependencies [[swank-clojure "1.2.0"]
-		     [lein-ring "0.4.0"]
+		     [lein-ring "0.4.5"]
 		     [ring-serve "0.1.0"]]
-  :ring {:handler geekalarm-server.server/handler})
+  :ring {:handler nbeloglazov.geekalarm.server.server/handler}
+  :target-dir "dotcloud"
+  :uberjar-name "root.war")
 
