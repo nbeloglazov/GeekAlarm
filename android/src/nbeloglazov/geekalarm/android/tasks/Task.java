@@ -8,6 +8,10 @@ public class Task {
 	private Bitmap[] choices;
 	private int correct;
 	
+	public Task() {
+		choices = new Bitmap[4];
+	}
+	
 	public Bitmap getQuestion() {
 		return question;
 	}
@@ -20,6 +24,11 @@ public class Task {
 	public void setChoices(Bitmap[] choices) {
 		this.choices = choices;
 	}
+	
+	public void setChoice(int pos, Bitmap choice) {
+		choices[pos] = choice;
+	}
+	
 	public int getCorrect() {
 		return correct;
 	}

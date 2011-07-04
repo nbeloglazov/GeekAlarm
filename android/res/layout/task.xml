@@ -1,31 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+              android:orientation="vertical" 
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="#FFFFFF"
+              android:weightSum="1.0">
     <ImageView android:id="@+id/task_question" 
                android:layout_height="wrap_content" 
-               android:layout_width="match_parent"/>
+               android:layout_width="match_parent"
+               android:layout_weight="0.5"
+               android:scaleType="center"/>
     <TableLayout android:layout_width="match_parent" 
-                 android:layout_height="wrap_content">
+                 android:layout_height="wrap_content"
+                 android:layout_weight="0.5"
+                 android:weightSum="1.0">
         <TableRow android:layout_height="wrap_content" 
-                  android:layout_width="wrap_content" 
-                  android:gravity="center">
-            <ImageButton android:layout_width="wrap_content"
-                         android:id="@+id/task_choice_1" 
-                         android:layout_height="wrap_content"/>
-            <ImageButton android:layout_width="wrap_content" 
-                         android:layout_height="wrap_content" 
-                         android:id="@+id/task_choice_2"/>
+                  android:gravity="center" 
+                  android:layout_width="match_parent"
+                  android:layout_weight="0.5"
+                  android:weightSum="1.0">
+            <ImageView android:layout_width="wrap_content"
+                       android:id="@+id/task_choice_1" 
+                       android:layout_height="fill_parent"
+                       android:layout_weight="0.5"
+                       android:scaleType="center"
+                       android:background="@drawable/border"/>
+            <ImageView android:layout_width="wrap_content" 
+                       android:layout_height="fill_parent"
+                       android:id="@+id/task_choice_2"
+                       android:layout_weight="0.5"
+                       android:scaleType="center"
+                       android:background="@drawable/border"/>
         </TableRow> 
         <TableRow android:layout_height="wrap_content" 
-                  android:layout_width="wrap_content" 
-                  android:gravity="center">
-            <ImageButton android:layout_width="wrap_content"
-                         android:layout_height="wrap_content" 
-                         android:id="@+id/task_choice_3"/>
-            <ImageButton android:layout_width="wrap_content" 
-                         android:layout_height="wrap_content" 
-                         android:id="@+id/task_choice_4"/>
+                  android:gravity="center" 
+                  android:layout_width="match_parent"
+                  android:layout_weight="0.5"
+                  android:weightSum="1.0">
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="fill_parent"
+                       android:id="@+id/task_choice_3"
+                       android:layout_weight="0.5"
+                       android:scaleType="center"
+                       android:background="@drawable/border"/>
+            <ImageView android:layout_width="wrap_content" 
+                       android:layout_height="fill_parent"
+                       android:id="@+id/task_choice_4"
+                       android:layout_weight="0.5"
+                       android:scaleType="center"
+                       android:background="@drawable/border"/>
         </TableRow> 
     </TableLayout>
 </LinearLayout>
