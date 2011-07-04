@@ -19,7 +19,6 @@
 (def active-tasks (atom {}))
 
 (defn remove-expired-tasks [tasks]
-  (println "Removing tasks:" tasks)
   (let [lower-bound (- (.getTime (Date.))
 		       task-timeout)]
     (->> tasks
@@ -63,9 +62,19 @@
     (response (json/json-str {:id id
 			      :correct (:correct task)})
 	      "application/json")))
-  
+
+(defn get-static-file [name]
+  (let [th (Thread/currentThread)
+	loader (.getContextClassLoader th)]
+    (.getResourceAsStream loader (str "static/" name))))
+
+(defn get-index-html [request]
+  (response (get-static-file "index.html")
+	    "text/html"))
+
 (def handler
      (app wrap-params wrap-keyword-params
+      [""] get-index-html
       ["image"] get-image
       ["categories"] get-categories
       ["task"] get-task))
