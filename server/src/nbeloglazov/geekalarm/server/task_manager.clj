@@ -1,15 +1,18 @@
 (ns nbeloglazov.geekalarm.server.task-manager
   (:require [nbeloglazov.geekalarm.server.render-utils :as render]
 	    [nbeloglazov.geekalarm.server.generators
-	     [determinant :as determinant]]))
+	     [determinant :as determinant]
+             [definite-polynomial-integral :as definite-polynomial-integral]]))
 
-(def categories [:linear-algebra])
+(def categories [:linear-algebra :math-analysis])
 
 (def generators
-  {:linear-algebra [determinant/generate]})
+     {:linear-algebra [determinant/generate]
+      :math-analysis  [definite-polynomial-integral/generate]})
 
 (def description
-  {:linear-algebra {:name "Linear algebra"}})
+     {:linear-algebra {:name "Linear algebra"}
+      :math-analysis {:name "Mathematical analysis"}})
 
 (defn get-task [category level]
   (let [task ((rand-nth (generators category)) level)]

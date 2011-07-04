@@ -15,8 +15,9 @@
 		 :else [:mi (str value)])))
 
 (defn ratio-to-cljml [ratio]
-  (cljml :mfrac [:mn (numerator ratio)]
-	 [:mn (denominator ratio)]))
+  [:mfrac
+   [:mn (numerator ratio)]
+   [:mn (denominator ratio)]])
 
 
 (defn matrix-to-cljml [matrix]
@@ -26,13 +27,15 @@
     (cljml :mtable (map get-row matrix))))
 
 (defn cljml-to-str [cljml]
-  (let [node-name (name (first cljml))
-	children (rest cljml)
-	child-to-str (fn [child]
-		       (cond (keyword? child) (format "<%s/>" (name child))
-			     (vector? child) (cljml-to-str child)
-			     :else (str child)))]
-    (->> (map child-to-str children)
-	 (apply str)
-	 (format "<%1$s>%2$s</%1$s>" node-name))))
+  (if (empty? cljml)
+    ""
+    (let [node-name (name (first cljml))
+          children (rest cljml)
+          child-to-str (fn [child]
+                         (cond (keyword? child) (format "<%s/>" (name child))
+                               (vector? child) (cljml-to-str child)
+                               :else (str child)))]
+      (->> (map child-to-str children)
+           (apply str)
+           (format "<%1$s>%2$s</%1$s>" node-name)))))
 

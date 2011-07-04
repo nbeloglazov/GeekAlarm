@@ -55,7 +55,7 @@
   (run-collector)
   (let [{:keys [category level]} (:params request)
 	task (manager/get-task (keyword category)
-			       (Integer/parseInt level))
+			       (dec (Integer/parseInt level)))
 	id (get-id)]
     (->> (assoc task :timestamp (.getTime (Date.)))
 	 (swap! active-tasks assoc id))

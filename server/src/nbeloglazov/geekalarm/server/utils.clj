@@ -16,3 +16,7 @@
     (.cancel timer))
   (reset! *running-timers* []))
 
+(defn get-similar-by-one [x]
+  (let [r (rand-int 4)
+	a (- x r)]
+    [(inc r) (range a (+ a 4))]))
