@@ -6,6 +6,9 @@ Example of tasks can be found [here](http://7133305a.dotcloud.com/).
 
 ## Categories
 
+Task represents basic operations and definitions in different fields of math and computer science.
+Tasks, with '+' sign already implemented.
+
 * Linear algebra
   * \+ [Matrix determinant](http://en.wikipedia.org/wiki/Determinant).
   * [Inverse matrix](http://en.wikipedia.org/wiki/Inverse_matrix).
