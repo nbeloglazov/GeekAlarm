@@ -11,7 +11,7 @@ Tasks, with '+' sign already implemented.
 
 * Linear algebra
   * \+ [Matrix determinant](http://en.wikipedia.org/wiki/Determinant).
-  * [Inverse matrix](http://en.wikipedia.org/wiki/Inverse_matrix).
+  * \+ [Inverse matrix](http://en.wikipedia.org/wiki/Inverse_matrix).
   * [Matrices multiplication](http://en.wikipedia.org/wiki/Matrix_multiplication).
   * [Eigenvalues and eigenvectors](http://en.wikipedia.org/wiki/Eigenvalue,_eigenvector_and_eigenspace).
 * Mathematical analysis

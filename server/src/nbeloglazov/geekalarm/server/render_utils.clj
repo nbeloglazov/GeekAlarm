@@ -3,10 +3,11 @@
   (import [net.sourceforge.jeuclid.context Parameter]
 	  [java.io ByteArrayInputStream ByteArrayOutputStream]))
 
-(def layout (net.sourceforge.jeuclid.context.LayoutContextImpl/getDefaultLayoutContext))
-
-(.setParameter layout Parameter/MATHSIZE 30)
-(.setParameter layout Parameter/MATHBACKGROUND java.awt.Color/WHITE)
+(defn get-layout []
+  (let [layout (net.sourceforge.jeuclid.context.LayoutContextImpl/getDefaultLayoutContext)]
+    (.setParameter layout Parameter/MATHSIZE 30)
+    (.setParameter layout Parameter/MATHBACKGROUND java.awt.Color/WHITE)
+    layout))
 
 
 (defn parse-node [str]
@@ -15,11 +16,13 @@
     (.parse parser source)))
 
 (defn save-image [node]
-  (let [converter (net.sourceforge.jeuclid.converter.Converter/getInstance)]
+  (let [layout (get-layout)
+        converter (net.sourceforge.jeuclid.converter.Converter/getInstance)]
     (.convert converter node (java.io.File. "/home/nikelandjelo/res.png") "image/png" layout)))
 
 (defn cljml-to-stream [cljml]
-  (let [output (ByteArrayOutputStream.)
+  (let [layout (get-layout)
+        output (ByteArrayOutputStream.)
 	converter (net.sourceforge.jeuclid.converter.Converter/getInstance)]
   (-> (mathml/cljml-to-str cljml)
       (parse-node)

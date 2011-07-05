@@ -2,12 +2,9 @@
   (:require [incanter.core :as incanter])
   (:use [nbeloglazov.geekalarm.server
          [mathml-utils :only (cljml)]
-         [utils :only (get-similar-by-one)]]))
+         [utils :only (get-similar-by-one
+                       random-matrix)]]))
 
-(defn- random-matrix [size max]
-  (let [rnd #(- (rand-int (* 2 max)) max)]
-  (-> (repeatedly (* size size) rnd)
-      (incanter/matrix size))))
 
 (defn- question-to-cljml [matrix]
   [:math [:mo "|"]
@@ -20,7 +17,7 @@
 
 (def sizes [2 2 3])
 
-(def maxs  [10 20 10])
+(def maxs  [9 19 9])
 
 (defn generate [level]
   (let [size (sizes level)

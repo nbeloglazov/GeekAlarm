@@ -1,5 +1,5 @@
 (ns nbeloglazov.geekalarm.server.mathml-utils
-  (:require [incanter.core :as incanter]))
+  (:require [clojure.contrib.math :as math]))
 
 ; cljml - structure, representing math ml xml
 
@@ -9,9 +9,9 @@
 (defn cljml
   ([name children] (reduce conj [name] children))
   ([value] (cond (ratio? value) (ratio-to-cljml value)
-		 (number? value) [:mn (int value)]
+		 (number? value) [:mn (math/round value)]
 		 (string? value) [:mi value]
-		 (incanter/matrix? value) (matrix-to-cljml value)
+		 (coll? value) (matrix-to-cljml value)
 		 :else [:mi (str value)])))
 
 (defn ratio-to-cljml [ratio]

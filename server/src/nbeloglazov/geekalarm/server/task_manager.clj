@@ -2,12 +2,14 @@
   (:require [nbeloglazov.geekalarm.server.render-utils :as render]
 	    [nbeloglazov.geekalarm.server.generators
 	     [determinant :as determinant]
-             [definite-polynomial-integral :as definite-polynomial-integral]]))
+             [definite-polynomial-integral :as definite-polynomial-integral]
+             [inverse-matrix :as inverse-matrix]]))
 
 (def categories [:linear-algebra :math-analysis])
 
 (def generators
-     {:linear-algebra [determinant/generate]
+     {:linear-algebra [determinant/generate
+                       inverse-matrix/generate]
       :math-analysis  [definite-polynomial-integral/generate]})
 
 (def description
