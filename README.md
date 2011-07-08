@@ -21,7 +21,7 @@ Tasks, with '+' sign already implemented.
   * Derivative.
   * Derivative at a given point.
 * Computer science (or better name?)
-  * [Base conversation](http://en.wikipedia.org/wiki/Base_conversion#Base_conversion) (e.g. from binary to decimal).
+  * \+ [Base conversation](http://en.wikipedia.org/wiki/Base_conversion#Base_conversion) (e.g. from binary to decimal).
   * Something from graph theory (finding shortest path, etc). Must be clarified.
 * Number theory
   * [Euler's totient function](http://en.wikipedia.org/wiki/Euler%27s_totient_function).

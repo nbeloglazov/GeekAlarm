@@ -3,18 +3,21 @@
 	    [nbeloglazov.geekalarm.server.generators
 	     [determinant :as determinant]
              [definite-polynomial-integral :as definite-polynomial-integral]
-             [inverse-matrix :as inverse-matrix]]))
+             ;[inverse-matrix :as inverse-matrix]
+             [base-conversion :as base-conversion]]))
 
-(def categories [:linear-algebra :math-analysis])
+(def categories [:linear-algebra :math-analysis :computer-science])
 
 (def generators
      {:linear-algebra [determinant/generate
-                       inverse-matrix/generate]
-      :math-analysis  [definite-polynomial-integral/generate]})
+                       #_inverse-matrix/generate]
+      :math-analysis  [definite-polynomial-integral/generate]
+      :computer-science [base-conversion/generate]})
 
 (def description
      {:linear-algebra {:name "Linear algebra"}
-      :math-analysis {:name "Mathematical analysis"}})
+      :math-analysis {:name "Mathematical analysis"}
+      :computer-science {:name "Computer science"}})
 
 (defn get-task [category level]
   (let [task ((rand-nth (generators category)) level)]
