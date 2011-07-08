@@ -3,14 +3,14 @@
 	    [nbeloglazov.geekalarm.server.generators
 	     [determinant :as determinant]
              [definite-polynomial-integral :as definite-polynomial-integral]
-             ;[inverse-matrix :as inverse-matrix]
+             [inverse-matrix :as inverse-matrix]
              [base-conversion :as base-conversion]]))
 
 (def categories [:linear-algebra :math-analysis :computer-science])
 
 (def generators
      {:linear-algebra [determinant/generate
-                       #_inverse-matrix/generate]
+                       inverse-matrix/generate]
       :math-analysis  [definite-polynomial-integral/generate]
       :computer-science [base-conversion/generate]})
 

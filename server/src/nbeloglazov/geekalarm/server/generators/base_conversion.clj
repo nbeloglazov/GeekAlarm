@@ -18,7 +18,7 @@
         [from to] (shuffle [a b])]
     {:question [:mrow
                 [:msub
-                 [:mn (Integer/toString val from)]
+                 [:mn (.toUpperCase (Integer/toString val from))]
                  [:mn from]]
                 [:mo "="]
                 [:msub
