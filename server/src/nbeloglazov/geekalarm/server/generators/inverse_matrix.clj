@@ -22,7 +22,7 @@
   (let [n (sizes level)
         [det mat] (get-matrix n (maxs level))
         answer (incanter/solve mat (incanter/mult det (incanter/identity-matrix n)))
-        [correct choices] (get-similar-matrices (incanter/to-vect answer))]
+        [correct choices] (get-similar-matrices answer)]
     {:question [:math
                 [:msup
                  [:mrow

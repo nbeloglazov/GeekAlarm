@@ -38,7 +38,9 @@
       (incanter/matrix size))))
 
 (defn get-similar-matrices [matrix]
-  (let [mat (vec (map vec matrix))
+  (let [mat (if (incanter/matrix? matrix)
+              (incanter/to-vect matrix)
+              (vec (map vec matrix)))
         n (count mat)
         pos (->> (range (* n n))
                  (shuffle)

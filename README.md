@@ -10,9 +10,9 @@ Task represents basic operations and definitions in different fields of math and
 Tasks, with '+' sign already implemented.
 
 * Linear algebra
-  * \+ [Matrix determinant](http://en.wikipedia.org/wiki/Determinant).
+  * \+ [Determinant](http://en.wikipedia.org/wiki/Determinant).
   * \+ [Inverse matrix](http://en.wikipedia.org/wiki/Inverse_matrix).
-  * [Matrices multiplication](http://en.wikipedia.org/wiki/Matrix_multiplication).
+  * \+ [Matrix multiplication](http://en.wikipedia.org/wiki/Matrix_multiplication).
   * [Eigenvalues and eigenvectors](http://en.wikipedia.org/wiki/Eigenvalue,_eigenvector_and_eigenspace).
 * Mathematical analysis
   * \+ Definite polynomial integral.
