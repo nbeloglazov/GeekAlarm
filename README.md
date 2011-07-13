@@ -18,7 +18,7 @@ Tasks, with '+' sign already implemented.
   * \+ Definite polynomial integral.
   * Definite random integral (trigonometric functions).
   * Indefinite integral.
-  * Derivative.
+  * \+\-Derivative.
   * Derivative at a given point.
 * Computer science (or better name?)
   * \+ [Base conversation](http://en.wikipedia.org/wiki/Base_conversion#Base_conversion) (e.g. from binary to decimal).

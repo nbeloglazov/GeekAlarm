@@ -5,6 +5,7 @@
              [definite-polynomial-integral :as definite-polynomial-integral]
              [inverse-matrix :as inverse-matrix]
              [base-conversion :as base-conversion]
+             [derivative :as derivative]
              [matrix-multiplication :as matrix-multiplication]]))
 
 (def categories [:linear-algebra :math-analysis :computer-science])
@@ -13,7 +14,8 @@
      {:linear-algebra [determinant/generate
                        inverse-matrix/generate
                        matrix-multiplication/generate]
-      :math-analysis  [definite-polynomial-integral/generate]
+      :math-analysis  [definite-polynomial-integral/generate
+                       derivative/generate]
       :computer-science [base-conversion/generate]})
 
 (def description
