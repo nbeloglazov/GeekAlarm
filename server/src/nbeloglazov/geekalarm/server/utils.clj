@@ -64,5 +64,19 @@
     [(inc correct)
      (map create-matrix (map types order))]))
 
+(defn get-similar-by-fn [orig similar-fn]
+  (let [sim-seq (repeatedly #(similar-fn orig))
+        add-sim (fn [found]
+                  (->> sim-seq
+                       (seq-utils/find-first #(not (seq-utils/includes? found %)))
+                       (conj found)))]
+    (-> (iterate add-sim [orig])
+        (nth 3)
+        (shuffle-and-track-first)
+        (vec)
+        (update-in [0] inc))))
+
+    
+
 
 

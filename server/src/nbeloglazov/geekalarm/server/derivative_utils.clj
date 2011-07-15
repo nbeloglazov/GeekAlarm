@@ -82,8 +82,6 @@
                     (update-in state [:args] conj arg)))]
     (reduce red-fun {:args [] :minus minus} args)))
                           
-                          
-
 (defn normalize-expr [[func & args]]
   (let [args (map normalize args)
         expr (cons func args)]
