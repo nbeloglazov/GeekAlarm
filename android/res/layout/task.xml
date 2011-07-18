@@ -23,13 +23,13 @@
                        android:id="@+id/task_choice_1" 
                        android:layout_height="fill_parent"
                        android:layout_weight="0.5"
-                       android:scaleType="center"
+                       android:scaleType="centerInside"
                        android:background="@drawable/border"/>
             <ImageView android:layout_width="wrap_content" 
                        android:layout_height="fill_parent"
                        android:id="@+id/task_choice_2"
                        android:layout_weight="0.5"
-                       android:scaleType="center"
+                       android:scaleType="centerInside"
                        android:background="@drawable/border"/>
         </TableRow> 
         <TableRow android:layout_height="wrap_content" 
@@ -41,13 +41,13 @@
                        android:layout_height="fill_parent"
                        android:id="@+id/task_choice_3"
                        android:layout_weight="0.5"
-                       android:scaleType="center"
+                       android:scaleType="centerInside"
                        android:background="@drawable/border"/>
             <ImageView android:layout_width="wrap_content" 
                        android:layout_height="fill_parent"
                        android:id="@+id/task_choice_4"
                        android:layout_weight="0.5"
-                       android:scaleType="center"
+                       android:scaleType="centerInside"
                        android:background="@drawable/border"/>
         </TableRow> 
     </TableLayout>
