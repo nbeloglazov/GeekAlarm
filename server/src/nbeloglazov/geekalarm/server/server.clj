@@ -8,6 +8,7 @@
 	     [render-utils :as render]
 	     [mathml-utils :as mathml]
 	     [task-manager :as manager]
+             [db :as db]
 	     [utils :as utils]]
 	    [clojure.contrib
 	     [json :as json]]))
@@ -57,6 +58,9 @@
 	task (manager/get-task (keyword category)
 			       (dec (Integer/parseInt level)))
 	id (get-id)]
+    (db/add-task {:category category
+                  :level level
+                  :time (Date.)})
     (->> (assoc task :timestamp (.getTime (Date.)))
 	 (swap! active-tasks assoc id))
     (response (json/json-str {:id id
