@@ -79,7 +79,8 @@ public class TaskActivity extends Activity {
 		public void onClick(View v) {
 			all++;
 			solved += v.getId() == correctChoiceId ? 1 : 0;
-			if (solved == TASKS_TO_FINISH) {
+			if (solved == TASKS_TO_FINISH ||
+                            all == MAX_NUM_OF_TASKS) {
 				TaskActivity.this.finish();
 				return;
 			}
@@ -102,6 +103,9 @@ public class TaskActivity extends Activity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+                if (player.isPlaying()) {
+                    player.stop();
+                }
 		timer.cancel();
 	}
 
