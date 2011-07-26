@@ -2,4 +2,5 @@
 <resources>
     <string name="hello">Hello geekalarm!</string>
     <string name="app_name">geekalarm</string>
+    <string name="mute">Mute</string>
 </resources>
