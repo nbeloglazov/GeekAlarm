@@ -8,32 +8,32 @@ import java.util.Map;
 import android.util.Log;
 
 public class Configuration {
-	
-	private static final int DEFAULT_LEVEL = 2;
-	
-	private Map<Category, Integer> categories;
-	
-	public Map<Category, Integer> getCategories() {
-		return categories; 
-	}
-	
-	public void setCategories(Map<Category, Integer> categories) {
-		this.categories = Collections.unmodifiableMap(categories);
-	}
-	
-	public static Configuration getDefaultConfiguration() {
-		try {
-			List<Category> categories = TaskManager.getCategories();
-			Map<Category, Integer> catMap = new HashMap<Category, Integer>();
-			for (Category category : categories) {
-				catMap.put(category, DEFAULT_LEVEL);
-			}
-			Configuration conf = new Configuration();
-			conf.setCategories(catMap);
-			return conf;
-		} catch (Exception e) {
-			Log.e(Configuration.class.getName(), "Something bad", e);
-			return null;
-		}
-	}
+
+    private static final int DEFAULT_LEVEL = 2;
+
+    private Map<Category, Integer> categories;
+
+    public Map<Category, Integer> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Map<Category, Integer> categories) {
+        this.categories = Collections.unmodifiableMap(categories);
+    }
+
+    public static Configuration getDefaultConfiguration() {
+        try {
+            List<Category> categories = TaskManager.getCategories();
+            Map<Category, Integer> catMap = new HashMap<Category, Integer>();
+            for (Category category : categories) {
+                catMap.put(category, DEFAULT_LEVEL);
+            }
+            Configuration conf = new Configuration();
+            conf.setCategories(catMap);
+            return conf;
+        } catch (Exception e) {
+            Log.e(Configuration.class.getName(), "Something bad", e);
+            return null;
+        }
+    }
 }

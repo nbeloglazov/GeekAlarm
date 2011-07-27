@@ -11,10 +11,11 @@
         <TextView android:layout_width="wrap_content"
                   android:layout_height="match_parent"
                   android:id="@+id/stat_text"/>
-        <Button android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/mute_button" 
-                android:text="@string/mute"/>
+        <ImageButton android:layout_width="30px"
+                     android:layout_height="30px"
+                     android:id="@+id/mute_button" 
+                     android:src="@drawable/mute"
+                     android:scaleType="centerInside"/>
     </LinearLayout>
     <ImageView android:id="@+id/task_question" 
                android:layout_height="wrap_content" 
