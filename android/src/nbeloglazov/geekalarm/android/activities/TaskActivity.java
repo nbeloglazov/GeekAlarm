@@ -27,9 +27,9 @@ import android.widget.Toast;
 
 public class TaskActivity extends Activity {
 
-    private static final int MAX_NUM_OF_TASKS = 5;
+    private static final int MAX_NUM_OF_TASKS = 10;
     private static final int TASKS_TO_FINISH = 3;
-    private static final long PLAY_DELAY = 30 * 1000; // 30 seconds
+    private static final long PLAY_DELAY = 60 * 1000; // 60 seconds
 
     private boolean isWaitingForTask;
     private Queue<Task> availableTasks;
@@ -48,26 +48,13 @@ public class TaskActivity extends Activity {
         setContentView(R.layout.task);
         player = MediaPlayer.create(this, R.raw.mario);
         choiceListener = new ChoiceListener();
-        if (getLastNonConfigurationInstance() != null) {
-            loadLastConfiguration(getLastNonConfigurationInstance());
-        } else {
-            availableTasks = new LinkedList<Task>();
-            isWaitingForTask = true;
-        }
+        availableTasks = new LinkedList<Task>();
+        isWaitingForTask = true;
         loader = new TaskLoader();
         loader.execute(Configuration.getDefaultConfiguration());
         timer = new Timer();
         findViewById(R.id.mute_button).setOnClickListener(new MuteListener());
         updateStats();
-    }
-    
-    private void loadLastConfiguration(Object obj) {
-        Map<String, Object> conf = (Map)obj;
-        all = (Integer)conf.get("all");
-        solved = (Integer)conf.get("solved");
-        availableTasks = (Queue)conf.get("availableTasks");
-        displayTask((Task)conf.get("currentTask"));
-        player.start();
     }
 
     private void displayTask(Task task) {
@@ -89,16 +76,6 @@ public class TaskActivity extends Activity {
         view.setText(String.format("%d/%d", solved, all));
     }
     
-    @Override
-    public Object onRetainNonConfigurationInstance() {
-        Map<String, Object> conf = new HashMap<String, Object>();
-        conf.put("currentTask", currentTask);
-        conf.put("all", all);
-        conf.put("solved", solved);
-        conf.put("availableTasks", availableTasks);
-        return conf;
-    }
-
     private class ChoiceListener implements View.OnClickListener {
 
         @Override
@@ -124,6 +101,9 @@ public class TaskActivity extends Activity {
             }
         }
     }
+    
+    @Override
+    public void onBackPressed() {}
 
     @Override
     public void onDestroy() {
@@ -142,11 +122,9 @@ public class TaskActivity extends Activity {
             List<Map.Entry<Category, Integer>> categories = new ArrayList(conf
                     .getCategories().entrySet());
             Collections.shuffle(categories);
-            int i = 0;
-            while (solved + availableTasks.size() < MAX_NUM_OF_TASKS) {
+            for (int i = 0; i < MAX_NUM_OF_TASKS; i++) {
                 Map.Entry<Category, Integer> taskType = categories.get(i
                         % categories.size());
-                i++;
                 try {
                     Task task = TaskManager.getTask(taskType.getKey(),
                             taskType.getValue());

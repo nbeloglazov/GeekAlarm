@@ -12,7 +12,9 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
-    <activity android:name=".activities.TaskActivity"/>
+    <activity android:name=".activities.TaskActivity"
+              android:screenOrientation="portrait"
+              android:configChanges="keyboardHidden|orientation"/>
     <activity android:name=".activities.SettingsActivity"/>
   </application>
 
