@@ -32,6 +32,7 @@ public class TaskActivity extends Activity {
     private static final long PLAY_DELAY = 60 * 1000; // 60 seconds
 
     private boolean isWaitingForTask;
+    private boolean isStarted;
     private Queue<Task> availableTasks;
     private ChoiceListener choiceListener;
     private int correctChoiceId;
@@ -73,7 +74,7 @@ public class TaskActivity extends Activity {
 
     private void updateStats() {
         TextView view = (TextView) findViewById(R.id.stat_text);
-        view.setText(String.format("%d/%d", solved, all));
+        view.setText(String.format("%d/%d", 2 * solved - all, TASKS_TO_FINISH));
     }
     
     private class ChoiceListener implements View.OnClickListener {
@@ -82,7 +83,7 @@ public class TaskActivity extends Activity {
         public void onClick(View v) {
             all++;
             solved += v.getId() == correctChoiceId ? 1 : 0;
-            if (solved == TASKS_TO_FINISH || all == MAX_NUM_OF_TASKS) {
+            if (2 * solved - all == TASKS_TO_FINISH || all == MAX_NUM_OF_TASKS) {
                 TaskActivity.this.finish();
                 return;
             }
@@ -142,7 +143,10 @@ public class TaskActivity extends Activity {
                 availableTasks.add(task);
             }
             if (isWaitingForTask) {
-                player.start();
+                if (!isStarted) {
+                    player.start();
+                }
+                isStarted = true;
                 Task task = availableTasks.poll();
                 displayTask(task);
                 isWaitingForTask = false;
