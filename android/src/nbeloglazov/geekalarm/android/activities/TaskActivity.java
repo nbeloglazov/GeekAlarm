@@ -2,7 +2,6 @@ package nbeloglazov.geekalarm.android.activities;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +19,12 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,12 +44,17 @@ public class TaskActivity extends Activity {
     private int solved;
     private int all;
     private Timer timer;
-    private Task currentTask;
+    private LayoutInflater inflater;
+    private LinearLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.task);
+        inflater = getLayoutInflater();
+        layout = (LinearLayout)inflater.inflate(R.layout.task, null);
+        setContentView(layout);
+        layout.addView(inflater.inflate(R.layout.choices_table, null),
+                new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 0.5f));
         player = MediaPlayer.create(this, R.raw.mario);
         choiceListener = new ChoiceListener();
         availableTasks = new LinkedList<Task>();
@@ -60,7 +68,15 @@ public class TaskActivity extends Activity {
 
     private void displayTask(Task task) {
         ImageView question = (ImageView) findViewById(R.id.task_question);
+        int choiceWidth = task.getChoice(0).getWidth();
+        Display display = getWindowManager().getDefaultDisplay();
+        boolean isTable = choiceWidth * 2 + 10 < display.getWidth();
+        int minHeight = layout.getBottom() / 2 / 4;
+        layout.removeViewAt(layout.getChildCount() - 1);
+        layout.addView(inflater.inflate(isTable ? R.layout.choices_table : R.layout.choices_list, null),
+                       new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 0.5f));
         question.setImageBitmap(task.getQuestion());
+        
         int choicesIds[] = { R.id.task_choice_1, R.id.task_choice_2,
                 R.id.task_choice_3, R.id.task_choice_4 };
         correctChoiceId = choicesIds[task.getCorrect() - 1];
@@ -68,8 +84,10 @@ public class TaskActivity extends Activity {
             ImageView choiceView = (ImageView) findViewById(choicesIds[i]);
             choiceView.setOnClickListener(choiceListener);
             choiceView.setImageBitmap(task.getChoice(i));
+            if (!isTable) {
+                choiceView.getLayoutParams().height = Math.max(minHeight, task.getChoice(i).getHeight());
+            }
         }
-        currentTask = task;
     }
 
     private void updateStats() {
