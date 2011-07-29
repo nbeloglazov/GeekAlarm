@@ -32,8 +32,10 @@ public class TaskActivity extends Activity {
 
     private static final int MAX_NUM_OF_TASKS = 10;
     private static final int TASKS_TO_FINISH = 3;
-    private static final long PLAY_DELAY = 60 * 1000; // 60 seconds
-
+    private static final long BASE_PLAY_DELAY = 40 * 1000; // 40 seconds
+    private static final long PLAY_DELAY_INCREASE = 10 * 1000; // 10 seconds
+    
+    private long curPlayDelay;
     private boolean isWaitingForTask;
     private boolean isStarted;
     private Queue<Task> availableTasks;
@@ -53,8 +55,6 @@ public class TaskActivity extends Activity {
         inflater = getLayoutInflater();
         layout = (LinearLayout)inflater.inflate(R.layout.task, null);
         setContentView(layout);
-        layout.addView(inflater.inflate(R.layout.choices_table, null),
-                new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 0.5f));
         player = MediaPlayer.create(this, R.raw.mario);
         choiceListener = new ChoiceListener();
         availableTasks = new LinkedList<Task>();
@@ -64,6 +64,7 @@ public class TaskActivity extends Activity {
         timer = new Timer();
         findViewById(R.id.mute_button).setOnClickListener(new MuteListener());
         updateStats();
+        curPlayDelay = BASE_PLAY_DELAY;
     }
 
     private void displayTask(Task task) {
@@ -72,7 +73,6 @@ public class TaskActivity extends Activity {
         Display display = getWindowManager().getDefaultDisplay();
         boolean isTable = choiceWidth * 2 + 10 < display.getWidth();
         int minHeight = layout.getBottom() / 2 / 4;
-        layout.removeViewAt(layout.getChildCount() - 1);
         layout.addView(inflater.inflate(isTable ? R.layout.choices_table : R.layout.choices_list, null),
                        new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 0.5f));
         question.setImageBitmap(task.getQuestion());
@@ -105,6 +105,7 @@ public class TaskActivity extends Activity {
                 TaskActivity.this.finish();
                 return;
             }
+            layout.removeViewAt(layout.getChildCount() - 1);
             updateStats();
             Toast.makeText(getApplicationContext(),
                     v.getId() == correctChoiceId ? "Accepted" : "Wrong answer",
@@ -178,7 +179,8 @@ public class TaskActivity extends Activity {
         public void onClick(View v) {
             if (player.isPlaying()) {
                 player.pause();
-                timer.schedule(new ContinuePlayTask(), PLAY_DELAY);
+                timer.schedule(new ContinuePlayTask(), curPlayDelay);
+                curPlayDelay += PLAY_DELAY_INCREASE;
             }
         }
     }
