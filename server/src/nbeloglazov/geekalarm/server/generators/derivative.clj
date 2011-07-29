@@ -63,7 +63,19 @@
         [correct choices] (utils/get-similar-by-fn derivative
                                                    get-similar-expr)]
 
-    {:question (der-ut/to-cljml expr)
+    {:question [:mtable
+                [:mtr [:mtd
+                       [:mo "f"]
+                       [:mfenced
+                        [:mi "x"]]
+                       [:mo "="]
+                       (der-ut/to-cljml expr)]]
+                [:mtr [:mtd
+                       [:mo "f '"]
+                       [:mfenced
+                        [:mi "x"]]
+                       [:mo "="]
+                       [:mtext "?"]]]]
      :choices (map der-ut/to-cljml (map der-ut/normalize choices))
      :correct correct}))
         
