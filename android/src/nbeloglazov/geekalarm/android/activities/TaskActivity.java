@@ -36,8 +36,8 @@ public class TaskActivity extends Activity {
     private static final long PLAY_DELAY_INCREASE = 10 * 1000; // 10 seconds
     
     private long curPlayDelay;
-    private boolean isWaitingForTask;
-    private boolean isStarted;
+    private boolean waitingForTask;
+    private boolean started;
     private Queue<Task> availableTasks;
     private ChoiceListener choiceListener;
     private int correctChoiceId;
@@ -48,6 +48,7 @@ public class TaskActivity extends Activity {
     private Timer timer;
     private LayoutInflater inflater;
     private LinearLayout layout;
+    private Task currentTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class TaskActivity extends Activity {
         player = MediaPlayer.create(this, R.raw.mario);
         choiceListener = new ChoiceListener();
         availableTasks = new LinkedList<Task>();
-        isWaitingForTask = true;
+        waitingForTask = true;
         loader = new TaskLoader();
         loader.execute(Configuration.getDefaultConfiguration());
         timer = new Timer();
@@ -80,6 +81,7 @@ public class TaskActivity extends Activity {
         int choicesIds[] = { R.id.task_choice_1, R.id.task_choice_2,
                 R.id.task_choice_3, R.id.task_choice_4 };
         correctChoiceId = choicesIds[task.getCorrect() - 1];
+        currentTask = task;
         for (int i = 0; i < 4; i++) {
             ImageView choiceView = (ImageView) findViewById(choicesIds[i]);
             choiceView.setOnClickListener(choiceListener);
@@ -101,6 +103,7 @@ public class TaskActivity extends Activity {
         public void onClick(View v) {
             all++;
             solved += v.getId() == correctChoiceId ? 1 : 0;
+            new ResultSender(currentTask.getId(), v.getId() == correctChoiceId).execute();
             if (2 * solved - all == TASKS_TO_FINISH || all == MAX_NUM_OF_TASKS) {
                 TaskActivity.this.finish();
                 return;
@@ -115,7 +118,7 @@ public class TaskActivity extends Activity {
                     loader = new TaskLoader();
                     loader.execute(Configuration.getDefaultConfiguration());
                 }
-                isWaitingForTask = true;
+                waitingForTask = true;
             } else {
                 displayTask(availableTasks.poll());
             }
@@ -161,14 +164,14 @@ public class TaskActivity extends Activity {
             for (Task task : values) {
                 availableTasks.add(task);
             }
-            if (isWaitingForTask) {
-                if (!isStarted) {
+            if (waitingForTask) {
+                if (!started) {
                     player.start();
                 }
-                isStarted = true;
+                started = true;
                 Task task = availableTasks.poll();
                 displayTask(task);
-                isWaitingForTask = false;
+                waitingForTask = false;
             }
         }
     }
@@ -191,6 +194,28 @@ public class TaskActivity extends Activity {
         public void run() {
             player.start();
         }
+    }    
+
+    private class ResultSender extends AsyncTask<Void, Void, Void> {
+
+        private String id;
+        private boolean solved;
+
+        public ResultSender(String id, boolean solved) {
+            this.id = id;
+            this.solved = solved;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                TaskManager.addResult(id, solved);
+            } catch (Exception e) {
+                Log.e(TaskLoader.class.getName(), "Couldn't send result", e);
+            }
+            return null;
+        }
     }
+
 
 }

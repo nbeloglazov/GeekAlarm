@@ -27,9 +27,15 @@
           (mongo/authenticate con *username* *password*)
           con))))
 
-(defn add-task [task]
+(defn add [document object]
   (mongo/with-mongo (get-connection)
-    (mongo/insert! "requests" task))) 
+    (mongo/insert! document object)))
+
+(defn add-task-request [task]
+  (add "requests" task))
+
+(defn add-task-result [task]
+  (add "results" task))
 
 
 

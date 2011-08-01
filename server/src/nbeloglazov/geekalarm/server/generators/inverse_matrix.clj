@@ -42,6 +42,7 @@
                            [:mo "("]
                            (cljml mat)
                            [:mo ")"]])))
-     :correct correct}))
+     :correct correct
+     :name "Inverse matrix"}))
                   
 

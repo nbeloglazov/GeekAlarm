@@ -7,6 +7,7 @@ public class Task {
     private Bitmap question;
     private Bitmap[] choices;
     private int correct;
+    private String id;
 
     public Task() {
         choices = new Bitmap[4];
@@ -40,4 +41,11 @@ public class Task {
         this.correct = correct;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
 }

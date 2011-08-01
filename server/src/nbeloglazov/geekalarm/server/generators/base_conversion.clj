@@ -30,5 +30,6 @@
                           [:msub
                            [:mn val]
                            [:mn to]])))
-     :correct correct}))
+     :correct correct
+     :name "Base conversion"}))
 

@@ -76,6 +76,7 @@ public final class TaskManager {
         JSONObject taskJson = new JSONObject(EntityUtils.toString(taskEntity));
         String id = taskJson.getString("id");
         Task task = new Task();
+        task.setId(id);
         task.setCorrect(Integer.parseInt(taskJson.getString("correct")));
         String questionUrl = String.format("image?id=%s&type=question", id);
         task.setQuestion(getImage(questionUrl));
@@ -85,5 +86,9 @@ public final class TaskManager {
             task.setChoice(i, getImage(choiceUrl));
         }
         return task;
+    }
+
+    public static void addResult(String id, boolean solved) throws Exception {
+        sendRequest(String.format("result?id=%s&solved=%s", id, solved));
     }
 }

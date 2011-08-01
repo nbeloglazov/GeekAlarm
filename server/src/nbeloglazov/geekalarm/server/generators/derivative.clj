@@ -77,7 +77,8 @@
                        [:mo "="]
                        [:mtext "?"]]]]
      :choices (map der-ut/to-cljml (map der-ut/normalize choices))
-     :correct correct}))
+     :correct correct
+     :name "Derivative"}))
         
           
            

@@ -58,10 +58,13 @@
 	task (manager/get-task (keyword category)
 			       (dec (Integer/parseInt level)))
 	id (get-id)]
-    (db/add-task {:category category
-                  :level level
-                  :time (Date.)})
-    (->> (assoc task :timestamp (.getTime (Date.)))
+    (db/add-task-request {:category category
+                          :level level
+                          :time (Date.)})
+    (->> (assoc task
+           :timestamp (.getTime (Date.))
+           :category category
+           :level level)
 	 (swap! active-tasks assoc id))
     (response (json/json-str {:id id
 			      :correct (:correct task)})
@@ -76,9 +79,17 @@
   (response (get-static-file "index.html")
 	    "text/html"))
 
+(defn add-result [request]
+  (let [{:keys [id solved]} (:params request)]
+    (if-let [task (@active-tasks id)]
+      (db/add-task-result (-> task
+                              (select-keys [:category :name :level])
+                              (assoc :solved (Boolean/valueOf solved)))))))
+
 (def handler
      (app wrap-params wrap-keyword-params
       [""] get-index-html
       ["image"] get-image
       ["categories"] get-categories
-      ["task"] get-task))
+      ["task"] get-task
+      ["result"] add-result))

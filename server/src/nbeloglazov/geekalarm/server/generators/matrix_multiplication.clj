@@ -30,7 +30,8 @@
                       (cljml mat)
                       [:mo ")"]])
                    choices)
-     :correct correct}))
+     :correct correct
+     :name "Matrix multiplication"}))
     
 
          

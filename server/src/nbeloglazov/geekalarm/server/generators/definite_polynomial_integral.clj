@@ -70,7 +70,8 @@
         [correct choices] (get-similar-by-one result)]
     {:question (integral-to-cljml integral)
      :choices (map cljml choices)
-     :correct correct}))
+     :correct correct
+     :name "Definite polynomial integral"}))
          
         
 
