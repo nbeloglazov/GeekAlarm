@@ -23,11 +23,16 @@ Server handles following GET requests:
 {"id": "01234567", "correct": 2}
 ```
 
-* **/image** - returns image (question or one of answers) for given task. Parameters:  
+* **/image** - returns image (for question or one of answers) for given task. Parameters:  
    *id* - task id  
    *type* - "question" or "choice"  
    *number* - number of choice if type is "choice"  
    Example: /image?id=01234567&type=choice&number=1
+
+* **/result** - tell server result for particular task
+   *id* - task id
+   *solved* - result, true of false
+   Example: /result?id=01234567&solved=true
 
 ## Architecture
 
@@ -45,6 +50,9 @@ task-manager contains information of all task categories. For every category it 
 ```:choices```  - collection of InputStream's of images or MathML expressions.     
 ```:correct``` - number of correct answer  
   
+## Database
+
+Server uses [MongoDB](http://www.mongodb.org/) database for storing statistics data: requests for tasks, task results. To run server, mongodb must be installed. Server tries to connect on default port 27017 to db 'geekalarm' and authenticates login 'geek', password 'alarm'. So mongodb must have this db with user.
 
 ## License
 
