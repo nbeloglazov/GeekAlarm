@@ -23,7 +23,6 @@ public class Utils {
     };
     
     private final static int[] DAYS_OF_WEEK = new int[8];
-    private final static long DAY = 24 * 60 * 60 * 1000;
     
     static {
         int[] days = {Calendar.MONDAY,
@@ -69,7 +68,7 @@ public class Utils {
         AlarmManager manager = (AlarmManager) Application.getContext().getSystemService(Context.ALARM_SERVICE);
         PendingIntent intent = buildAlarmIntent(alarm.getId());
         long nextTime = getNextTime(alarm.getHour(), alarm.getMinute());
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, nextTime, DAY, intent);
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, nextTime, AlarmManager.INTERVAL_DAY, intent);
     }
 
     public static void cancelAlarm(AlarmPreference alarm) {
