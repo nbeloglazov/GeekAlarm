@@ -80,7 +80,7 @@ public class AlarmsActivity extends Activity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.alarms, menu);
         return true;
-    }
+    }    
     
     private void addAlarm() {
         AlarmPreference alarm = new AlarmPreference();

@@ -37,9 +37,8 @@ public class AlarmPreferenceAdapter extends ArrayAdapter<AlarmPreference> {
         
         fillTime(convertView, preference);
         fillDays(convertView, preference.getDays());
-        ((CheckBox)convertView.findViewById(R.id.enabled_checkbox)).setChecked(preference.isEnabled());
-        EnableStateListener checkBoxListener = new EnableStateListener(preference);
-        ((CheckBox)convertView.findViewById(R.id.enabled_checkbox)).setOnCheckedChangeListener(checkBoxListener);
+        setUpCheckbox(convertView, preference);
+        
         convertView.findViewById(R.id.delete).setOnClickListener(new DeleteAlarmListener(preference));
         SetUpAlarmListenter listener = new SetUpAlarmListenter(position);   
         
@@ -47,6 +46,14 @@ public class AlarmPreferenceAdapter extends ArrayAdapter<AlarmPreference> {
         convertView.findViewById(R.id.time).setOnClickListener(listener);
         return convertView;
     }
+
+    private void setUpCheckbox(View convertView, AlarmPreference preference) {
+        CheckBox checkBox = (CheckBox)convertView.findViewById(R.id.enabled_checkbox);
+        EnableStateListener checkBoxListener = new EnableStateListener(preference);
+        checkBox.setOnCheckedChangeListener(checkBoxListener);
+        checkBox.setChecked(preference.isEnabled());
+    }
+        
     
     private void fillTime( View convertView, AlarmPreference preference) {
         java.text.DateFormat timeFormat = DateFormat.getTimeFormat(getContext());
@@ -104,7 +111,7 @@ public class AlarmPreferenceAdapter extends ArrayAdapter<AlarmPreference> {
         
         public EnableStateListener(AlarmPreference alarm) {
             super();
-            this.alarm= alarm;
+            this.alarm = alarm;
         }
         
         @Override
