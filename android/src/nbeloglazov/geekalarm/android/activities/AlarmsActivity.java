@@ -1,26 +1,33 @@
 package nbeloglazov.geekalarm.android.activities;
 
-import java.text.DateFormat;
-import java.util.Calendar;
+import java.util.List;
 
+import nbeloglazov.geekalarm.android.AlarmPreference;
+import nbeloglazov.geekalarm.android.AlarmPreferenceAdapter;
+import nbeloglazov.geekalarm.android.DBUtils;
 import nbeloglazov.geekalarm.android.R;
-import nbeloglazov.geekalarm.android.R.layout;
+import nbeloglazov.geekalarm.android.Utils;
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.DatePicker;
+import android.widget.ListView;
 import android.widget.TimePicker;
 
 public class AlarmsActivity extends Activity {
 
     private static String TAG = "geekalarm";
+    private List<AlarmPreference> alarms;
+    private AlarmPreferenceAdapter adapter;
 
     /**
      * Called when the activity is first created.
@@ -37,7 +44,9 @@ public class AlarmsActivity extends Activity {
         setContentView(R.layout.alarms);
         Button testButton = (Button) this.findViewById(R.id.test_button);
         testButton.setOnClickListener(new TestButtonListener());
-        findViewById(R.id.set_time).setOnClickListener(new SetAlarmListener());
+        alarms = DBUtils.getAlarmPreferences();
+        adapter = new AlarmPreferenceAdapter(this, alarms);
+        ((ListView)findViewById(R.id.alarms)).setAdapter(adapter);
         Log.i(TAG, "onCreate");
     }
 
@@ -48,32 +57,46 @@ public class AlarmsActivity extends Activity {
             startActivity(intent);
         }
     }
-
-    private class SetAlarmListener implements OnClickListener {
-        @Override
-        public void onClick(View v) {
-            TimePicker picker = (TimePicker) findViewById(R.id.date_picker);
-            Calendar cur = Calendar.getInstance();
-            Calendar next = Calendar.getInstance();
-            next.set(Calendar.MINUTE, picker.getCurrentMinute());
-            next.set(Calendar.HOUR_OF_DAY, picker.getCurrentHour());
-            if (next.before(cur)) {
-                next.set(Calendar.DAY_OF_MONTH,
-                        next.get(Calendar.DAY_OF_MONTH) + 1);
-            }
-            DateFormat formatter = DateFormat.getDateTimeInstance();
-            AlertDialog dialog = new AlertDialog.Builder(AlarmsActivity.this)
-                    .setMessage(formatter.format(next.getTime())).create();
-            dialog.show();
-            Intent intent = new Intent(getApplicationContext(),
-                    TaskActivity.class);
-            PendingIntent pending = PendingIntent.getActivity(
-                    getApplicationContext(), 0, intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-            manager.set(AlarmManager.RTC_WAKEUP, next.getTimeInMillis(),
-                    pending);
-            finish();
+    
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        AlarmPreference alarm = adapter.getItem(requestCode);
+        alarm.setHour(data.getIntExtra("hour", 0));
+        alarm.setMinute(data.getIntExtra("minute", 0));
+        alarm.setDays(data.getIntExtra("days", 0));
+        DBUtils.updateAlarmPreference(alarm);
+        if (alarm.isEnabled()) {
+            Utils.setAlarm(alarm);
+        }
+        adapter.notifyDataSetChanged();
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.alarms, menu);
+        return true;
+    }
+    
+    private void addAlarm() {
+        AlarmPreference alarm = new AlarmPreference();
+        DBUtils.addAlarmPreference(alarm);
+        adapter.add(alarm);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+        case R.id.add:
+            addAlarm();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
         }
     }
 }

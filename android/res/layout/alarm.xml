@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" 
+    android:gravity="bottom">
+    <CheckBox 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/enabled_checkbox"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textAppearance="@style/Time"
+        android:id="@+id/time"
+        android:gravity="center_vertical" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/days" 
+        android:layout_weight="1.0"
+        android:layout_marginLeft="15px"/>
+    <ImageButton
+        android:src="@drawable/remove"
+        android:id="@+id/delete" 
+        android:layout_width="wrap_content" 
+        android:layout_height="60px"/>
+</LinearLayout>

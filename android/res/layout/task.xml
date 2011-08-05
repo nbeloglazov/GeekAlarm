@@ -20,11 +20,10 @@
                 android:layout_height="match_parent"
                 android:id="@+id/stat_text" />
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50px"
+                android:layout_height="50px"
                 android:id="@+id/mute_button"
-                android:src="@drawable/mute"
-                android:scaleType="centerInside" />
+                android:src="@drawable/mute" />
         </LinearLayout>
         <ImageView
             android:id="@+id/task_question"

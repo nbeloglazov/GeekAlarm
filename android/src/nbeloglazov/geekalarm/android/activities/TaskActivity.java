@@ -1,6 +1,7 @@
 package nbeloglazov.geekalarm.android.activities;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,7 +10,10 @@ import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import nbeloglazov.geekalarm.android.AlarmPreference;
+import nbeloglazov.geekalarm.android.DBUtils;
 import nbeloglazov.geekalarm.android.R;
+import nbeloglazov.geekalarm.android.Utils;
 import nbeloglazov.geekalarm.android.tasks.Category;
 import nbeloglazov.geekalarm.android.tasks.Configuration;
 import nbeloglazov.geekalarm.android.tasks.Task;
@@ -38,6 +42,7 @@ public class TaskActivity extends Activity {
     private long curPlayDelay;
     private boolean waitingForTask;
     private boolean started;
+    private boolean testTask;
     private Queue<Task> availableTasks;
     private ChoiceListener choiceListener;
     private int correctChoiceId;
@@ -53,6 +58,12 @@ public class TaskActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getIntent().getData() == null) {
+            testTask = true;
+        } else if (!containsToday()) {
+            finish();
+            return;
+        }
         inflater = getLayoutInflater();
         layout = (LinearLayout)inflater.inflate(R.layout.task, null);
         setContentView(layout);
@@ -66,6 +77,16 @@ public class TaskActivity extends Activity {
         findViewById(R.id.mute_button).setOnClickListener(new MuteListener());
         updateStats();
         curPlayDelay = BASE_PLAY_DELAY;
+    }
+    
+    private boolean containsToday() {
+        Log.i("", "Checking day");
+        int id = Integer.parseInt(getIntent().getData().getEncodedSchemeSpecificPart());
+        AlarmPreference alarm = DBUtils.getAlarmPreference(id);
+        Calendar cal = Calendar.getInstance();
+        int today = cal.get(Calendar.DAY_OF_WEEK);
+        Log.i("", "Today is " + Utils.getDayOfWeek(today) + " days " + alarm.getDays());
+        return (alarm.getDays() & (1 << Utils.getDayOfWeek(today))) != 0; 
     }
 
     private void displayTask(Task task) {
@@ -126,15 +147,21 @@ public class TaskActivity extends Activity {
     }
     
     @Override
-    public void onBackPressed() {}
+    public void onBackPressed() {
+        if (testTask) {
+            super.onBackPressed();
+        }
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (player.isPlaying()) {
+        if (player != null && player.isPlaying()) {
             player.stop();
         }
-        timer.cancel();
+        if (timer != null) {
+            timer.cancel();
+        }
     }
 
     private class TaskLoader extends AsyncTask<Configuration, Task, Void> {
