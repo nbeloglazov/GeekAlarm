@@ -19,6 +19,9 @@ import nbeloglazov.geekalarm.android.tasks.Configuration;
 import nbeloglazov.geekalarm.android.tasks.Task;
 import nbeloglazov.geekalarm.android.tasks.TaskManager;
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.AssetFileDescriptor;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -67,7 +70,7 @@ public class TaskActivity extends Activity {
         inflater = getLayoutInflater();
         layout = (LinearLayout)inflater.inflate(R.layout.task, null);
         setContentView(layout);
-        player = MediaPlayer.create(this, R.raw.mario);
+        createPlayer();
         choiceListener = new ChoiceListener();
         availableTasks = new LinkedList<Task>();
         waitingForTask = true;
@@ -77,6 +80,19 @@ public class TaskActivity extends Activity {
         findViewById(R.id.mute_button).setOnClickListener(new MuteListener());
         updateStats();
         curPlayDelay = BASE_PLAY_DELAY;
+    }
+    
+    private void createPlayer() {
+        AssetFileDescriptor afd = getResources().openRawResourceFd(R.raw.mario);
+        player = new MediaPlayer();
+        try {
+            player.setDataSource(afd.getFileDescriptor());
+            player.setAudioStreamType(AudioManager.STREAM_ALARM);
+            player.prepare();
+            afd.close();
+        } catch(Exception e) {
+            Log.e(this.getClass().getName(), ":(", e);
+        }
     }
     
     private boolean containsToday() {
@@ -156,8 +172,11 @@ public class TaskActivity extends Activity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (player != null && player.isPlaying()) {
-            player.stop();
+        if (player != null) {
+            if (player.isPlaying()) {
+                player.stop();
+            }
+            player.release();
         }
         if (timer != null) {
             timer.cancel();
