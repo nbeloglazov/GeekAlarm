@@ -74,12 +74,19 @@ public class TaskActivity extends Activity {
         choiceListener = new ChoiceListener();
         availableTasks = new LinkedList<Task>();
         waitingForTask = true;
-        loader = new TaskLoader();
-        loader.execute(Configuration.getDefaultConfiguration());
+        runTaskLoader();
         timer = new Timer();
         findViewById(R.id.mute_button).setOnClickListener(new MuteListener());
         updateStats();
         curPlayDelay = BASE_PLAY_DELAY;
+    }
+    
+    private void runTaskLoader() {
+        loader = new TaskLoader();
+        int difficulty = getSharedPreferences(AlarmsActivity.PREFERENCES, 0)
+                         .getInt("difficulty", Configuration.DEFAULT_DIFFICULTY);
+        Configuration configuration = Configuration.getConfiguration(difficulty);
+        loader.execute(configuration);
     }
     
     private void createPlayer() {
@@ -96,12 +103,10 @@ public class TaskActivity extends Activity {
     }
     
     private boolean containsToday() {
-        Log.i("", "Checking day");
         int id = Integer.parseInt(getIntent().getData().getEncodedSchemeSpecificPart());
         AlarmPreference alarm = DBUtils.getAlarmPreference(id);
         Calendar cal = Calendar.getInstance();
         int today = cal.get(Calendar.DAY_OF_WEEK);
-        Log.i("", "Today is " + Utils.getDayOfWeek(today) + " days " + alarm.getDays());
         return (alarm.getDays() & (1 << Utils.getDayOfWeek(today))) != 0; 
     }
 
@@ -110,9 +115,10 @@ public class TaskActivity extends Activity {
         int choiceWidth = task.getChoice(0).getWidth();
         Display display = getWindowManager().getDefaultDisplay();
         boolean isTable = choiceWidth * 2 + 10 < display.getWidth();
-        int minHeight = layout.getBottom() / 2 / 4;
+        float weight = 0.55f;
+        int minHeight = (int)(layout.getBottom() * (1 - weight)/ 4);
         layout.addView(inflater.inflate(isTable ? R.layout.choices_table : R.layout.choices_list, null),
-                       new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 0.5f));
+                       new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, weight));
         question.setImageBitmap(task.getQuestion());
         
         int choicesIds[] = { R.id.task_choice_1, R.id.task_choice_2,
@@ -130,8 +136,10 @@ public class TaskActivity extends Activity {
     }
 
     private void updateStats() {
-        TextView view = (TextView) findViewById(R.id.stat_text);
-        view.setText(String.format("%d/%d", 2 * solved - all, TASKS_TO_FINISH));
+        TextView solvedView = (TextView) findViewById(R.id.solved);
+        solvedView.setText(String.format("%d/%d", 2 * solved - all, TASKS_TO_FINISH));
+        TextView leftView = (TextView) findViewById(R.id.left);
+        leftView.setText(String.valueOf(MAX_NUM_OF_TASKS - all));
     }
     
     private class ChoiceListener implements View.OnClickListener {

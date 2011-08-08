@@ -5,39 +5,31 @@ import java.util.List;
 import nbeloglazov.geekalarm.android.AlarmPreference;
 import nbeloglazov.geekalarm.android.AlarmPreferenceAdapter;
 import nbeloglazov.geekalarm.android.DBUtils;
+import nbeloglazov.geekalarm.android.DifficultyAdapter;
 import nbeloglazov.geekalarm.android.R;
 import nbeloglazov.geekalarm.android.Utils;
+import nbeloglazov.geekalarm.android.tasks.Configuration;
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TimePicker;
+import android.widget.Spinner;
 
 public class AlarmsActivity extends Activity {
 
-    private static String TAG = "geekalarm";
+    public static final String PREFERENCES = "geekalarm";
     private List<AlarmPreference> alarms;
     private AlarmPreferenceAdapter adapter;
 
-    /**
-     * Called when the activity is first created.
-     * 
-     * @param savedInstanceState
-     *            If the activity is being re-initialized after previously being
-     *            shut down then this Bundle contains the data it most recently
-     *            supplied in onSaveInstanceState(Bundle). <b>Note: Otherwise it
-     *            is null.</b>
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,17 +39,18 @@ public class AlarmsActivity extends Activity {
         alarms = DBUtils.getAlarmPreferences();
         adapter = new AlarmPreferenceAdapter(this, alarms);
         ((ListView)findViewById(R.id.alarms)).setAdapter(adapter);
-        Log.i(TAG, "onCreate");
-    }
-
-    private class TestButtonListener implements OnClickListener {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(AlarmsActivity.this, TaskActivity.class);
-            startActivity(intent);
-        }
+        initializeDifficultySpinner();
     }
     
+    private void initializeDifficultySpinner() {
+        Spinner spinner = (Spinner)findViewById(R.id.difficulty);
+        DifficultyAdapter adapter = new DifficultyAdapter(this);
+        spinner.setAdapter(adapter);
+        int curDifficulty = getSharedPreferences(PREFERENCES, 0)
+                            .getInt("difficulty", Configuration.DEFAULT_DIFFICULTY);
+        spinner.setSelection(adapter.getPosition(curDifficulty));
+        spinner.setOnItemSelectedListener(new DifficultyChangedListener());
+    }
     
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -98,5 +91,32 @@ public class AlarmsActivity extends Activity {
         default:
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    private class TestButtonListener implements OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(AlarmsActivity.this, TaskActivity.class);
+            startActivity(intent);
+        }
+    }
+    
+    private class DifficultyChangedListener implements OnItemSelectedListener {
+
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view,
+                int position, long id) {
+            int difficulty = (Integer)parent.getItemAtPosition(position);
+            SharedPreferences.Editor editor = getSharedPreferences(PREFERENCES, 0).edit();
+            editor.putInt("difficulty", difficulty);
+            editor.commit();
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+            // Do nothing
+        }
+        
+        
     }
 }

@@ -6,6 +6,11 @@
     <string name="add">Add</string>
     <string name="ok">Accept</string>
     <string name="cancel">Cancel</string>
+    <string name="test">Test</string>
+    
+    <string name="easy">Easy</string>
+    <string name="medium">Medium</string>
+    <string name="hard">Hard</string>
 
     <string name="sunday">Su</string>
     <string name="monday">M</string>

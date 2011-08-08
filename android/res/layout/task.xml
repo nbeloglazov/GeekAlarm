@@ -10,18 +10,30 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.5">
+        android:layout_weight="0.45">
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:weightSum="3.0">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/stat_text" />
+                android:layout_weight="1.0"
+                android:textAppearance="@style/Stats"
+                android:gravity="center_vertical|center_horizontal"
+                android:id="@+id/left"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" 
+                android:layout_weight="1.0"
+                android:textAppearance="@style/Stats"
+                android:id="@+id/solved"
+                android:gravity="center_vertical|center_horizontal"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1.0"
                 android:gravity="right">
                 <ImageButton
                     android:layout_width="80px"

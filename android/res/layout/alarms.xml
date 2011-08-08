@@ -4,13 +4,25 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="fill_parent">
-    <Button
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Test"
-        android:id="@+id/test_button" />
+        android:weightSum="1.0">
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:id="@+id/difficulty"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/test"
+            android:layout_weight="0.5"
+            android:id="@+id/test_button" />
+    </LinearLayout>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/alarms"/>
+        android:id="@+id/alarms" />
 </LinearLayout>
