@@ -41,6 +41,7 @@ public class TaskActivity extends Activity {
     private static final int TASKS_TO_FINISH = 3;
     private static final long BASE_PLAY_DELAY = 40 * 1000; // 40 seconds
     private static final long PLAY_DELAY_INCREASE = 10 * 1000; // 10 seconds
+    private static final int[] MUSIC = {R.raw.mario, R.raw.into_the_sun, R.raw.zero, R.raw.ultrachip_set_sketch};
     
     private long curPlayDelay;
     private boolean waitingForTask;
@@ -90,11 +91,16 @@ public class TaskActivity extends Activity {
     }
     
     private void createPlayer() {
-        AssetFileDescriptor afd = getResources().openRawResourceFd(R.raw.mario);
+        java.util.Random rand = new java.util.Random();
+        int music = MUSIC[rand.nextInt(MUSIC.length)];
+        AssetFileDescriptor afd = getResources().openRawResourceFd(music);
         player = new MediaPlayer();
         try {
-            player.setDataSource(afd.getFileDescriptor());
+            player.setDataSource(afd.getFileDescriptor(), 
+                                 afd.getStartOffset(),
+                                 afd.getLength());
             player.setAudioStreamType(AudioManager.STREAM_ALARM);
+            player.setLooping(true);
             player.prepare();
             afd.close();
         } catch(Exception e) {
