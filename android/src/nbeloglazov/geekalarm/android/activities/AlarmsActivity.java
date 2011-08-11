@@ -77,6 +77,8 @@ public class AlarmsActivity extends Activity {
     
     private void addAlarm() {
         AlarmPreference alarm = new AlarmPreference();
+        alarm.setEnabled(true);
+        Utils.setAlarm(alarm);
         DBUtils.addAlarmPreference(alarm);
         adapter.add(alarm);
     }
