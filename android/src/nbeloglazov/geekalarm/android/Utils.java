@@ -3,11 +3,12 @@ package nbeloglazov.geekalarm.android;
 import java.util.Calendar;
 
 import nbeloglazov.geekalarm.android.activities.TaskActivity;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 
 public class Utils {
@@ -76,4 +77,15 @@ public class Utils {
         PendingIntent intent = buildAlarmIntent(alarm.getId());
         manager.cancel(intent);
     }
+    
+    public static boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) Application.getContext()
+                                 .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
+    }
+
 }
