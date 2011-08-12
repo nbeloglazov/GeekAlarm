@@ -6,6 +6,8 @@ import nbeloglazov.geekalarm.android.activities.TaskActivity;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -35,7 +37,19 @@ public class Utils {
         for (int i = 0; i < 7; i++) {
             DAYS_OF_WEEK[days[i]] = i;
         }
+    }        
+
+    public static boolean isOnline() {
+        Context context = Application.getContext();
+        ConnectivityManager cm = (ConnectivityManager) context
+            .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
     }
+
     
     public static int getDayOfWeek(int calendarDayOfWeek) {
         return DAYS_OF_WEEK[calendarDayOfWeek];

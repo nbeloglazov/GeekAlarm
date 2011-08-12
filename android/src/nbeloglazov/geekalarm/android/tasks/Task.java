@@ -8,6 +8,7 @@ public class Task {
     private Bitmap[] choices;
     private int correct;
     private String id;
+    private int errorMessageId;
 
     public Task() {
         choices = new Bitmap[4];
@@ -41,7 +42,15 @@ public class Task {
         this.correct = correct;
     }
 
-    public void setId(String id) {
+    public int getErrorMessageId() {
+		return errorMessageId;
+	}
+
+	public void setErrorMessageId(int errorMessageId) {
+		this.errorMessageId = errorMessageId;
+	}
+
+	public void setId(String id) {
         this.id = id;
     }
 

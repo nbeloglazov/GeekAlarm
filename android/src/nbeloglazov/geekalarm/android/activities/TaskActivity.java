@@ -84,10 +84,7 @@ public class TaskActivity extends Activity {
     
     private void runTaskLoader() {
         loader = new TaskLoader();
-        int difficulty = getSharedPreferences(AlarmsActivity.PREFERENCES, 0)
-                         .getInt("difficulty", Configuration.DEFAULT_DIFFICULTY);
-        Configuration configuration = Configuration.getConfiguration(difficulty);
-        loader.execute(configuration);
+        loader.execute();
     }
     
     private void createPlayer() {
@@ -117,6 +114,12 @@ public class TaskActivity extends Activity {
     }
 
     private void displayTask(Task task) {
+        TextView errorView= (TextView)findViewById(R.id.error_message);
+        if (task.getErrorMessageId() == -1) {
+            errorView.setText("");
+        } else {
+            errorView.setText(task.getErrorMessageId());
+        }
         ImageView question = (ImageView) findViewById(R.id.task_question);
         int choiceWidth = task.getChoice(0).getWidth();
         Display display = getWindowManager().getDefaultDisplay();
@@ -167,7 +170,7 @@ public class TaskActivity extends Activity {
             if (availableTasks.isEmpty()) {
                 if (loader.getStatus() == AsyncTask.Status.FINISHED) {
                     loader = new TaskLoader();
-                    loader.execute(Configuration.getDefaultConfiguration());
+                    loader.execute();
                 }
                 waitingForTask = true;
             } else {
@@ -197,26 +200,50 @@ public class TaskActivity extends Activity {
         }
     }
 
-    private class TaskLoader extends AsyncTask<Configuration, Task, Void> {
+    private class TaskLoader extends AsyncTask<Void, Task, Void> {
 
         @Override
-        protected Void doInBackground(Configuration... params) {
-            Configuration conf = params[0];
+        protected Void doInBackground(Void... params) {
+            int difficulty = getSharedPreferences(AlarmsActivity.PREFERENCES, 0)
+                .getInt("difficulty", Configuration.DEFAULT_DIFFICULTY);
+            if (Utils.isOnline()) {
+                Configuration conf = Configuration.getConfiguration(difficulty);
+                if (conf != null) {
+                    downloadTasks(conf);
+                }
+                generateSimpleTasks(difficulty, R.string.server_error);
+            }
+            generateSimpleTasks(difficulty, R.string.not_online);
+            return null;
+        }
+
+        private void generateSimpleTasks(int difficulty, int errorMessageId) {
+            for (int i = 0; i < MAX_NUM_OF_TASKS; i++) {
+                Task task = TaskManager.generateSimpleTask(difficulty);
+                task.setErrorMessageId(errorMessageId);
+                publishProgress(task);
+            }
+        }
+
+        private void downloadTasks(Configuration conf) {
             List<Map.Entry<Category, Integer>> categories = new ArrayList(conf
                     .getCategories().entrySet());
             Collections.shuffle(categories);
             for (int i = 0; i < MAX_NUM_OF_TASKS; i++) {
                 Map.Entry<Category, Integer> taskType = categories.get(i
                         % categories.size());
+                Task task;
                 try {
-                    Task task = TaskManager.getTask(taskType.getKey(),
+                    task = TaskManager.getTask(taskType.getKey(),
                             taskType.getValue());
-                    publishProgress(task);
+                    task.setErrorMessageId(-1);
                 } catch (Exception e) {
                     Log.e(TaskLoader.class.getName(), "Something bad", e);
+                    task = TaskManager.generateSimpleTask(taskType.getValue());
+                    task.setErrorMessageId(R.string.server_error);
                 }
+                publishProgress(task);
             }
-            return null;
         }
 
         @Override

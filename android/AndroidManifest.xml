@@ -13,6 +13,7 @@
 
     <uses-sdk
         android:minSdkVersion="8" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
 
     <application
         android:icon="@drawable/icon"

@@ -26,4 +26,12 @@
              #000000
         </item>
     </style>
+    <style name="Error">
+        <item name="android:textSize">
+            20sp
+        </item>
+        <item name="android:textColor">
+             #FF0000
+        </item>
+    </style>
 </resources>
