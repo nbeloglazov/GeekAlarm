@@ -91,15 +91,5 @@ public class Utils {
         PendingIntent intent = buildAlarmIntent(alarm.getId());
         manager.cancel(intent);
     }
-    
-    public static boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) Application.getContext()
-                                 .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-            return true;
-        }
-        return false;
-    }
 
 }
