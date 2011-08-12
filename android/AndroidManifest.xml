@@ -32,7 +32,8 @@
             android:name=".activities.TaskActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop" 
+            android:theme="@android:style/Theme.Light"/>
         <activity
             android:name=".activities.SetUpAlarmActivity"
             android:theme="@android:style/Theme.Dialog" />

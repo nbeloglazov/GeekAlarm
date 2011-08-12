@@ -19,7 +19,7 @@ import nbeloglazov.geekalarm.android.tasks.Configuration;
 import nbeloglazov.geekalarm.android.tasks.Task;
 import nbeloglazov.geekalarm.android.tasks.TaskManager;
 import android.app.Activity;
-import android.content.Context;
+import android.app.Dialog;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -32,6 +32,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +42,10 @@ public class TaskActivity extends Activity {
     private static final int TASKS_TO_FINISH = 3;
     private static final long BASE_PLAY_DELAY = 40 * 1000; // 40 seconds
     private static final long PLAY_DELAY_INCREASE = 10 * 1000; // 10 seconds
-    private static final int[] MUSIC = {R.raw.mario, R.raw.into_the_sun, R.raw.zero, R.raw.ultrachip_set_sketch};
+    private static final int[] MUSIC = {R.raw.mario, 
+                                        R.raw.into_the_sun, 
+                                        R.raw.zero, 
+                                        R.raw.ultrachip_set_sketch};
     
     private long curPlayDelay;
     private boolean waitingForTask;
@@ -112,14 +116,25 @@ public class TaskActivity extends Activity {
         int today = cal.get(Calendar.DAY_OF_WEEK);
         return (alarm.getDays() & (1 << Utils.getDayOfWeek(today))) != 0; 
     }
+    
+    private void showErrorMessage(int errorMessageId) {
+        TextView errorView= (TextView)findViewById(R.id.error_message);
+        if (errorMessageId == -1) {
+            errorView.setVisibility(View.GONE);
+        } else {
+            errorView.setText(errorMessageId);
+            errorView.setVisibility(View.VISIBLE);
+        }
+    }
+    
+    private void toggleSpinner(boolean show) {
+        findViewById(R.id.progress).setVisibility(show ? View.VISIBLE : View.GONE);
+        findViewById(R.id.task_question).setVisibility(show ? View.GONE : View.VISIBLE);
+    }
 
     private void displayTask(Task task) {
-        TextView errorView= (TextView)findViewById(R.id.error_message);
-        if (task.getErrorMessageId() == -1) {
-            errorView.setText("");
-        } else {
-            errorView.setText(task.getErrorMessageId());
-        }
+        toggleSpinner(false);
+        showErrorMessage(task.getErrorMessageId());
         ImageView question = (ImageView) findViewById(R.id.task_question);
         int choiceWidth = task.getChoice(0).getWidth();
         Display display = getWindowManager().getDefaultDisplay();
@@ -151,34 +166,6 @@ public class TaskActivity extends Activity {
         leftView.setText(String.valueOf(MAX_NUM_OF_TASKS - all));
     }
     
-    private class ChoiceListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            all++;
-            solved += v.getId() == correctChoiceId ? 1 : 0;
-            new ResultSender(currentTask.getId(), v.getId() == correctChoiceId).execute();
-            if (2 * solved - all == TASKS_TO_FINISH || all == MAX_NUM_OF_TASKS) {
-                TaskActivity.this.finish();
-                return;
-            }
-            layout.removeViewAt(layout.getChildCount() - 1);
-            updateStats();
-            Toast.makeText(getApplicationContext(),
-                    v.getId() == correctChoiceId ? "Accepted" : "Wrong answer",
-                    Toast.LENGTH_SHORT).show();
-            if (availableTasks.isEmpty()) {
-                if (loader.getStatus() == AsyncTask.Status.FINISHED) {
-                    loader = new TaskLoader();
-                    loader.execute();
-                }
-                waitingForTask = true;
-            } else {
-                displayTask(availableTasks.poll());
-            }
-        }
-    }
-    
     @Override
     public void onBackPressed() {
         if (testTask) {
@@ -194,12 +181,13 @@ public class TaskActivity extends Activity {
                 player.stop();
             }
             player.release();
+            player = null;
         }
         if (timer != null) {
             timer.cancel();
         }
     }
-
+    
     private class TaskLoader extends AsyncTask<Void, Task, Void> {
 
         @Override
@@ -252,13 +240,42 @@ public class TaskActivity extends Activity {
                 availableTasks.add(task);
             }
             if (waitingForTask) {
-                if (!started) {
+                if (!started && player != null) {
                     player.start();
                 }
                 started = true;
                 Task task = availableTasks.poll();
                 displayTask(task);
                 waitingForTask = false;
+            }
+        }
+    }
+    
+    private class ChoiceListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            all++;
+            solved += v.getId() == correctChoiceId ? 1 : 0;
+            new ResultSender(currentTask.getId(), v.getId() == correctChoiceId).execute();
+            if (2 * solved - all == TASKS_TO_FINISH || all == MAX_NUM_OF_TASKS) {
+                TaskActivity.this.finish();
+                return;
+            }
+            layout.removeViewAt(layout.getChildCount() - 1);
+            updateStats();
+            Toast.makeText(getApplicationContext(),
+                    v.getId() == correctChoiceId ? "Accepted" : "Wrong answer",
+                    Toast.LENGTH_SHORT).show();
+            if (availableTasks.isEmpty()) {
+                if (loader.getStatus() == AsyncTask.Status.FINISHED) {
+                    loader = new TaskLoader();
+                    loader.execute();
+                }
+                waitingForTask = true;
+                toggleSpinner(true);
+            } else {
+                displayTask(availableTasks.poll());
             }
         }
     }
