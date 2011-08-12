@@ -19,7 +19,7 @@ import nbeloglazov.geekalarm.android.tasks.Configuration;
 import nbeloglazov.geekalarm.android.tasks.Task;
 import nbeloglazov.geekalarm.android.tasks.TaskManager;
 import android.app.Activity;
-import android.content.Context;
+import android.app.Dialog;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -32,6 +32,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +42,10 @@ public class TaskActivity extends Activity {
     private static final int TASKS_TO_FINISH = 3;
     private static final long BASE_PLAY_DELAY = 40 * 1000; // 40 seconds
     private static final long PLAY_DELAY_INCREASE = 10 * 1000; // 10 seconds
-    private static final int[] MUSIC = {R.raw.mario, R.raw.into_the_sun, R.raw.zero, R.raw.ultrachip_set_sketch};
+    private static final int[] MUSIC = {R.raw.mario, 
+                                        R.raw.into_the_sun, 
+                                        R.raw.zero, 
+                                        R.raw.ultrachip_set_sketch};
     
     private long curPlayDelay;
     private boolean waitingForTask;
@@ -84,10 +88,7 @@ public class TaskActivity extends Activity {
     
     private void runTaskLoader() {
         loader = new TaskLoader();
-        int difficulty = getSharedPreferences(AlarmsActivity.PREFERENCES, 0)
-                         .getInt("difficulty", Configuration.DEFAULT_DIFFICULTY);
-        Configuration configuration = Configuration.getConfiguration(difficulty);
-        loader.execute(configuration);
+        loader.execute();
     }
     
     private void createPlayer() {
@@ -115,8 +116,25 @@ public class TaskActivity extends Activity {
         int today = cal.get(Calendar.DAY_OF_WEEK);
         return (alarm.getDays() & (1 << Utils.getDayOfWeek(today))) != 0; 
     }
+    
+    private void showErrorMessage(int errorMessageId) {
+        TextView errorView= (TextView)findViewById(R.id.error_message);
+        if (errorMessageId == -1) {
+            errorView.setVisibility(View.GONE);
+        } else {
+            errorView.setText(errorMessageId);
+            errorView.setVisibility(View.VISIBLE);
+        }
+    }
+    
+    private void toggleSpinner(boolean show) {
+        findViewById(R.id.progress).setVisibility(show ? View.VISIBLE : View.GONE);
+        findViewById(R.id.task_question).setVisibility(show ? View.GONE : View.VISIBLE);
+    }
 
     private void displayTask(Task task) {
+        toggleSpinner(false);
+        showErrorMessage(task.getErrorMessageId());
         ImageView question = (ImageView) findViewById(R.id.task_question);
         int choiceWidth = task.getChoice(0).getWidth();
         Display display = getWindowManager().getDefaultDisplay();
@@ -148,6 +166,91 @@ public class TaskActivity extends Activity {
         leftView.setText(String.valueOf(MAX_NUM_OF_TASKS - all));
     }
     
+    @Override
+    public void onBackPressed() {
+        if (testTask) {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (player != null) {
+            if (player.isPlaying()) {
+                player.stop();
+            }
+            player.release();
+            player = null;
+        }
+        if (timer != null) {
+            timer.cancel();
+        }
+    }
+    
+    private class TaskLoader extends AsyncTask<Void, Task, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            int difficulty = getSharedPreferences(AlarmsActivity.PREFERENCES, 0)
+                .getInt("difficulty", Configuration.DEFAULT_DIFFICULTY);
+            if (Utils.isOnline()) {
+                Configuration conf = Configuration.getConfiguration(difficulty);
+                if (conf != null) {
+                    downloadTasks(conf);
+                }
+                generateSimpleTasks(difficulty, R.string.server_error);
+            }
+            generateSimpleTasks(difficulty, R.string.not_online);
+            return null;
+        }
+
+        private void generateSimpleTasks(int difficulty, int errorMessageId) {
+            for (int i = 0; i < MAX_NUM_OF_TASKS; i++) {
+                Task task = TaskManager.generateSimpleTask(difficulty);
+                task.setErrorMessageId(errorMessageId);
+                publishProgress(task);
+            }
+        }
+
+        private void downloadTasks(Configuration conf) {
+            List<Map.Entry<Category, Integer>> categories = new ArrayList(conf
+                    .getCategories().entrySet());
+            Collections.shuffle(categories);
+            for (int i = 0; i < MAX_NUM_OF_TASKS; i++) {
+                Map.Entry<Category, Integer> taskType = categories.get(i
+                        % categories.size());
+                Task task;
+                try {
+                    task = TaskManager.getTask(taskType.getKey(),
+                            taskType.getValue());
+                    task.setErrorMessageId(-1);
+                } catch (Exception e) {
+                    Log.e(TaskLoader.class.getName(), "Something bad", e);
+                    task = TaskManager.generateSimpleTask(taskType.getValue());
+                    task.setErrorMessageId(R.string.server_error);
+                }
+                publishProgress(task);
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(Task... values) {
+            for (Task task : values) {
+                availableTasks.add(task);
+            }
+            if (waitingForTask) {
+                if (!started && player != null) {
+                    player.start();
+                }
+                started = true;
+                Task task = availableTasks.poll();
+                displayTask(task);
+                waitingForTask = false;
+            }
+        }
+    }
+    
     private class ChoiceListener implements View.OnClickListener {
 
         @Override
@@ -167,71 +270,12 @@ public class TaskActivity extends Activity {
             if (availableTasks.isEmpty()) {
                 if (loader.getStatus() == AsyncTask.Status.FINISHED) {
                     loader = new TaskLoader();
-                    loader.execute(Configuration.getDefaultConfiguration());
+                    loader.execute();
                 }
                 waitingForTask = true;
+                toggleSpinner(true);
             } else {
                 displayTask(availableTasks.poll());
-            }
-        }
-    }
-    
-    @Override
-    public void onBackPressed() {
-        if (testTask) {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (player != null) {
-            if (player.isPlaying()) {
-                player.stop();
-            }
-            player.release();
-        }
-        if (timer != null) {
-            timer.cancel();
-        }
-    }
-
-    private class TaskLoader extends AsyncTask<Configuration, Task, Void> {
-
-        @Override
-        protected Void doInBackground(Configuration... params) {
-            Configuration conf = params[0];
-            List<Map.Entry<Category, Integer>> categories = new ArrayList(conf
-                    .getCategories().entrySet());
-            Collections.shuffle(categories);
-            for (int i = 0; i < MAX_NUM_OF_TASKS; i++) {
-                Map.Entry<Category, Integer> taskType = categories.get(i
-                        % categories.size());
-                try {
-                    Task task = TaskManager.getTask(taskType.getKey(),
-                            taskType.getValue());
-                    publishProgress(task);
-                } catch (Exception e) {
-                    Log.e(TaskLoader.class.getName(), "Something bad", e);
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Task... values) {
-            for (Task task : values) {
-                availableTasks.add(task);
-            }
-            if (waitingForTask) {
-                if (!started) {
-                    player.start();
-                }
-                started = true;
-                Task task = availableTasks.poll();
-                displayTask(task);
-                waitingForTask = false;
             }
         }
     }

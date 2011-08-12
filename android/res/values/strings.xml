@@ -7,6 +7,8 @@
     <string name="ok">Accept</string>
     <string name="cancel">Cancel</string>
     <string name="test">Test</string>
+    <string name="server_error">Can\'t connect to server.</string>
+    <string name="not_online">Internet is not available.</string>
     
     <string name="easy">Easy</string>
     <string name="medium">Medium</string>

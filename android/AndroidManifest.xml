@@ -13,6 +13,7 @@
 
     <uses-sdk
         android:minSdkVersion="8" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
 
     <application
         android:icon="@drawable/icon"
@@ -31,7 +32,8 @@
             android:name=".activities.TaskActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop" 
+            android:theme="@android:style/Theme.Light"/>
         <activity
             android:name=".activities.SetUpAlarmActivity"
             android:theme="@android:style/Theme.Dialog" />
