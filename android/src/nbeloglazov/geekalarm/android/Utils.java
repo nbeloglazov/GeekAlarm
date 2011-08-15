@@ -5,10 +5,12 @@ import java.util.Calendar;
 import nbeloglazov.geekalarm.android.activities.TaskActivity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -39,6 +41,8 @@ public class Utils {
             DAYS_OF_WEEK[days[i]] = i;
         }
     }        
+    
+    private static final String ALARM_SOUND = "alarm_sound";
 
     public static boolean isOnline() {
         Context context = Application.getContext();
@@ -90,6 +94,47 @@ public class Utils {
         AlarmManager manager = (AlarmManager) Application.getContext().getSystemService(Context.ALARM_SERVICE);
         PendingIntent intent = buildAlarmIntent(alarm.getId());
         manager.cancel(intent);
+    }
+    
+    public static SharedPreferences getPreferences() {
+        return Application.getContext()
+            .getSharedPreferences("geekalarm", Context.MODE_PRIVATE);
+    }
+    
+    public static Uri getCurrentAlarmSound() {
+        Uri sound = null; 
+        // Look up sound in preferences.
+        SharedPreferences pref = getPreferences();
+        String uriString = pref.getString(ALARM_SOUND, null);
+        if (uriString != null) {
+            sound = Uri.parse(uriString);
+        }
+        // Look up default alarm sound.
+        if (sound == null) {
+            sound = RingtoneManager.getActualDefaultRingtoneUri(
+                        Application.getContext(),
+                        RingtoneManager.TYPE_ALARM);
+        }
+        
+        // If no sound in preferences, no default return geek alarm music.
+        if (sound == null) {
+            sound = getUriFromResource(R.raw.into_the_sun);
+        }
+        return sound;
+    }   
+    
+    public static void setCurrentAlarmSound(Uri uri) {
+        SharedPreferences pref = getPreferences();
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString(ALARM_SOUND, uri.toString());
+        editor.commit();
+    }
+    
+    public static Uri getUriFromResource(int resource) {
+        String uri = String.format("android.resource://%s/%d", 
+                Application.getContext().getPackageName(), 
+                resource);
+        return Uri.parse(uri);
     }
 
 }

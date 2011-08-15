@@ -3,11 +3,11 @@ package nbeloglazov.geekalarm.android.activities;
 import java.util.List;
 
 import nbeloglazov.geekalarm.android.AlarmPreference;
-import nbeloglazov.geekalarm.android.AlarmPreferenceAdapter;
 import nbeloglazov.geekalarm.android.DBUtils;
-import nbeloglazov.geekalarm.android.DifficultyAdapter;
 import nbeloglazov.geekalarm.android.R;
 import nbeloglazov.geekalarm.android.Utils;
+import nbeloglazov.geekalarm.android.adapters.AlarmPreferenceAdapter;
+import nbeloglazov.geekalarm.android.adapters.DifficultyAdapter;
 import nbeloglazov.geekalarm.android.tasks.Configuration;
 import android.app.Activity;
 import android.content.Intent;
@@ -26,7 +26,6 @@ import android.widget.Spinner;
 
 public class AlarmsActivity extends Activity {
 
-    public static final String PREFERENCES = "geekalarm";
     private List<AlarmPreference> alarms;
     private AlarmPreferenceAdapter adapter;
 
@@ -34,8 +33,10 @@ public class AlarmsActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alarms);
-        Button testButton = (Button) this.findViewById(R.id.test_button);
-        testButton.setOnClickListener(new TestButtonListener());
+        findViewById(R.id.test_button)
+            .setOnClickListener(new TestButtonListener());
+        findViewById(R.id.alarm_sound_picker)
+            .setOnClickListener(new AlarmSoundPickerListener());
         alarms = DBUtils.getAlarmPreferences();
         adapter = new AlarmPreferenceAdapter(this, alarms);
         ((ListView)findViewById(R.id.alarms)).setAdapter(adapter);
@@ -46,7 +47,7 @@ public class AlarmsActivity extends Activity {
         Spinner spinner = (Spinner)findViewById(R.id.difficulty);
         DifficultyAdapter adapter = new DifficultyAdapter(this);
         spinner.setAdapter(adapter);
-        int curDifficulty = getSharedPreferences(PREFERENCES, 0)
+        int curDifficulty = Utils.getPreferences()
                             .getInt("difficulty", Configuration.DEFAULT_DIFFICULTY);
         spinner.setSelection(adapter.getPosition(curDifficulty));
         spinner.setOnItemSelectedListener(new DifficultyChangedListener());
@@ -109,7 +110,7 @@ public class AlarmsActivity extends Activity {
         public void onItemSelected(AdapterView<?> parent, View view,
                 int position, long id) {
             int difficulty = (Integer)parent.getItemAtPosition(position);
-            SharedPreferences.Editor editor = getSharedPreferences(PREFERENCES, 0).edit();
+            SharedPreferences.Editor editor = Utils.getPreferences().edit();
             editor.putInt("difficulty", difficulty);
             editor.commit();
         }
@@ -118,7 +119,15 @@ public class AlarmsActivity extends Activity {
         public void onNothingSelected(AdapterView<?> parent) {
             // Do nothing
         }
-        
-        
+    }
+    
+    private class AlarmSoundPickerListener implements OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(AlarmsActivity.this, 
+                                       AlarmSoundPickerActivity.class);
+            startActivity(intent);
+        }
     }
 }

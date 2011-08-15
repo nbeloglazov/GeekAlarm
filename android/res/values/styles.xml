@@ -34,4 +34,12 @@
              #FF0000
         </item>
     </style>
+    <style name="SoundTitle">
+        <item name="android:textSize">
+            20sp
+        </item>
+        <item name="android:textColor">
+            #FFFFFF
+        </item>
+    </style>
 </resources>
