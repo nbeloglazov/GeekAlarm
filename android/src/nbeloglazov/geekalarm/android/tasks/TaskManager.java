@@ -26,7 +26,7 @@ import android.graphics.Paint;
 
 public final class TaskManager {
 
-    private static final String SERVER_URL = "http://www.geek-alarm.com/";
+    private static final String SERVER_URL = "http://7133305a.dotcloud.com/";
     private static final Random RANDOM = new Random();
 
     private TaskManager() {
