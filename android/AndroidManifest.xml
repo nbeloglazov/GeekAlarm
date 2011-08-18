@@ -36,7 +36,9 @@
             android:theme="@android:style/Theme.Light"/>
         <activity
             android:name=".activities.SetUpAlarmActivity"
-            android:theme="@android:style/Theme.Dialog" />
+            android:theme="@android:style/Theme.Dialog" />        
+        <activity android:name="com.lamerman.FileDialog"/>
+            
         <receiver
             android:name=".BootReceiver">
             <intent-filter>
