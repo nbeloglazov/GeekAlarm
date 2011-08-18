@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
@@ -18,20 +19,17 @@ import com.geekalarm.android.AlarmSound;
 import com.geekalarm.android.R;
 import com.geekalarm.android.Utils;
 import com.geekalarm.android.adapters.AlarmSoundAdapter;
+import com.lamerman.FileDialog;
 
 public class AlarmSoundPickerActivity extends Activity {
     
     private static String[] GEEK_ALARMS_TITLES = {
         "Into the sun",
-        "Mario",
-        "Ultrachip set sketch",
-        "Zero"};
+        "Mario"};
     
     private static int[] GEEK_ALARMS_RES = {
         R.raw.into_the_sun,
-        R.raw.mario,
-        R.raw.ultrachip_set_sketch,
-        R.raw.zero};
+        R.raw.mario};
 
     private AlarmSoundAdapter adapter;
     private MediaPlayer player;
@@ -50,6 +48,7 @@ public class AlarmSoundPickerActivity extends Activity {
     
     private void setUpListView() {
         List<AlarmSound> sounds = new ArrayList<AlarmSound>();
+        sounds.add(new AlarmSound("Custom", Uri.parse("http://geek-alarm.com")));
         sounds.addAll(getGeekAlarms());
         sounds.addAll(getStandardAlarms());
         adapter = 
@@ -65,8 +64,8 @@ public class AlarmSoundPickerActivity extends Activity {
                 return;
             }
         }
-        AlarmSound defSound = new AlarmSound("Default", sound);
-        adapter.add(defSound);
+        adapter.getItem(0).setUri(sound);
+        adapter.setSelected(0);
     }
     
     private List<AlarmSound> getStandardAlarms() {
@@ -105,6 +104,16 @@ public class AlarmSoundPickerActivity extends Activity {
 
         public void onClick(int position) {
             AlarmSound sound = adapter.getItem(position);
+            if (position == 0) {
+                if (player.isPlaying()) {
+                    player.stop();
+                }
+                Intent intent = new Intent(AlarmSoundPickerActivity.this, FileDialog.class);
+                intent.putExtra(FileDialog.START_URI, 
+                        adapter.getItem(0).getUri().toString());
+                startActivityForResult(intent, 0);
+                return;
+            }
             try {
                 player.reset();
                 player.setDataSource(AlarmSoundPickerActivity.this, sound.getUri());
@@ -117,6 +126,16 @@ public class AlarmSoundPickerActivity extends Activity {
         }
     }
     
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_CANCELED) {
+            this.adapter.selectPrevious();
+        } else if (resultCode == Activity.RESULT_OK) {
+            Uri uri = Uri.parse(data.getStringExtra(FileDialog.RESULT_URI));
+            this.adapter.getItem(0).setUri(uri);
+        }
+    }
+
     private class OkListener implements OnClickListener {
 
         @Override

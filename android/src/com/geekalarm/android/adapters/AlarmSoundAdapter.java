@@ -20,12 +20,14 @@ public class AlarmSoundAdapter extends ArrayAdapter<AlarmSound> {
     private LayoutInflater inflater;
     private AlarmSoundPickerActivity.SoundClickListener clickCallback;
     private int selected = -1;
+    private int previousSelected = -1;
     private OnClickListener listener;
     
     public int getSelected() {
         return selected;
     }
     public void setSelected(int selected) {
+        this.previousSelected = this.selected;
         this.selected = selected;
     }
     
@@ -52,12 +54,16 @@ public class AlarmSoundAdapter extends ArrayAdapter<AlarmSound> {
         return convertView;
     }
     
+    public void selectPrevious() {
+        this.selected = this.previousSelected;
+        notifyDataSetChanged();
+    }
     
     private class SoundClickListener implements OnClickListener {
         
         @Override
         public void onClick(View view) {
-            selected = view.getId();
+            setSelected(view.getId());
             clickCallback.onClick(selected);
             notifyDataSetChanged();
         }

@@ -11,6 +11,7 @@
     <string name="server_error">Can\'t connect to server.</string>
     <string name="not_online">Internet is not available.</string>
     <string name="change_sound">Change sound</string>
+    <string name="bad_file">Sorry. Can\'t play this file.</string>
     
     <string name="easy">Easy</string>
     <string name="medium">Medium</string>
@@ -26,10 +27,8 @@
     
     <string name="location">Location</string>
     <string name="cant_read_folder">folder can\'t be read!</string>
-    <string name="nnew">New</string>
     <string name="select">Select</string>
     <string name="file_name">File name:</string>
-    <string name="create">Create</string>
     <string name="no_data">No Data</string>
 	<color name="gray">#ffff0000</color>
 </resources>

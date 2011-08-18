@@ -16,4 +16,8 @@ public class AlarmSound {
     public Uri getUri() {
         return uri;
     }
+    
+    public void setUri(Uri uri) {
+        this.uri = uri;
+    }
 }
