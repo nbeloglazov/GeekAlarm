@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="nbeloglazov.geekalarm.android"
+    package="com.geekalarm.android"
     android:versionCode="1"
     android:versionName="1.0-SNAPSHOT">
-
     <uses-permission
         android:name="android.permission.INTERNET" />
     <uses-permission
         android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission
         android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-
-
     <uses-sdk
         android:minSdkVersion="8" />
-
-    <application
+        
+        
+        <application
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:name=".Application">
@@ -37,7 +35,7 @@
             android:theme="@android:style/Theme.Light" />
         <activity
             android:name=".activities.SetUpAlarmActivity"
-            android:theme="@android:style/Theme.Dialog" />        
+            android:theme="@android:style/Theme.Dialog" />
         <activity android:name="com.lamerman.FileDialog"/>
         <activity
             android:name=".activities.AlarmSoundPickerActivity"
@@ -50,9 +48,5 @@
                     android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-
     </application>
-
 </manifest>
-

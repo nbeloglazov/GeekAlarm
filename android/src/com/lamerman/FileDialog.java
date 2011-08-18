@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
-import nbeloglazov.geekalarm.android.R;
+import com.geekalarm.android.R;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
