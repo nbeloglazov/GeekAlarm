@@ -1,6 +1,9 @@
-package nbeloglazov.geekalarm.android;
+package nbeloglazov.geekalarm.android.adapters;
 
 import java.util.List;
+
+import nbeloglazov.geekalarm.android.R;
+import nbeloglazov.geekalarm.android.R.string;
 
 import android.content.Context;
 import android.view.LayoutInflater;

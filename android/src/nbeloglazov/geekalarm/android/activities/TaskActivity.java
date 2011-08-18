@@ -19,10 +19,9 @@ import nbeloglazov.geekalarm.android.tasks.Configuration;
 import nbeloglazov.geekalarm.android.tasks.Task;
 import nbeloglazov.geekalarm.android.tasks.TaskManager;
 import android.app.Activity;
-import android.app.Dialog;
-import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,7 +31,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,18 +90,13 @@ public class TaskActivity extends Activity {
     }
     
     private void createPlayer() {
-        java.util.Random rand = new java.util.Random();
-        int music = MUSIC[rand.nextInt(MUSIC.length)];
-        AssetFileDescriptor afd = getResources().openRawResourceFd(music);
+        Uri music = Utils.getCurrentAlarmSound();
         player = new MediaPlayer();
         try {
-            player.setDataSource(afd.getFileDescriptor(), 
-                                 afd.getStartOffset(),
-                                 afd.getLength());
+            player.setDataSource(this, music);
             player.setAudioStreamType(AudioManager.STREAM_ALARM);
             player.setLooping(true);
             player.prepare();
-            afd.close();
         } catch(Exception e) {
             Log.e(this.getClass().getName(), ":(", e);
         }
@@ -192,7 +185,7 @@ public class TaskActivity extends Activity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            int difficulty = getSharedPreferences(AlarmsActivity.PREFERENCES, 0)
+            int difficulty = Utils.getPreferences()
                 .getInt("difficulty", Configuration.DEFAULT_DIFFICULTY);
             if (Utils.isOnline()) {
                 Configuration conf = Configuration.getConfiguration(difficulty);

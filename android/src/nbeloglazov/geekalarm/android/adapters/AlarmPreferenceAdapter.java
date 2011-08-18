@@ -1,8 +1,15 @@
-package nbeloglazov.geekalarm.android;
+package nbeloglazov.geekalarm.android.adapters;
 
 import java.util.Date;
 import java.util.List;
 
+import nbeloglazov.geekalarm.android.AlarmPreference;
+import nbeloglazov.geekalarm.android.DBUtils;
+import nbeloglazov.geekalarm.android.R;
+import nbeloglazov.geekalarm.android.Utils;
+import nbeloglazov.geekalarm.android.R.id;
+import nbeloglazov.geekalarm.android.R.layout;
+import nbeloglazov.geekalarm.android.R.style;
 import nbeloglazov.geekalarm.android.activities.SetUpAlarmActivity;
 import android.app.Activity;
 import android.content.Context;
