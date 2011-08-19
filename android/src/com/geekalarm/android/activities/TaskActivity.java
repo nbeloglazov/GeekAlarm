@@ -1,5 +1,6 @@
 package com.geekalarm.android.activities;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -41,11 +42,7 @@ public class TaskActivity extends Activity {
     private static final int TASKS_TO_FINISH = 3;
     private static final long BASE_PLAY_DELAY = 40 * 1000; // 40 seconds
     private static final long PLAY_DELAY_INCREASE = 10 * 1000; // 10 seconds
-    private static final int[] MUSIC = {R.raw.mario, 
-                                        R.raw.into_the_sun, 
-                                        R.raw.zero, 
-                                        R.raw.ultrachip_set_sketch};
-    
+
     private long curPlayDelay;
     private boolean waitingForTask;
     private boolean started;
@@ -72,7 +69,7 @@ public class TaskActivity extends Activity {
             return;
         }
         inflater = getLayoutInflater();
-        layout = (LinearLayout)inflater.inflate(R.layout.task, null);
+        layout = (LinearLayout) inflater.inflate(R.layout.task, null);
         setContentView(layout);
         createPlayer();
         choiceListener = new ChoiceListener();
@@ -84,12 +81,12 @@ public class TaskActivity extends Activity {
         updateStats();
         curPlayDelay = BASE_PLAY_DELAY;
     }
-    
+
     private void runTaskLoader() {
         loader = new TaskLoader();
         loader.execute();
     }
-    
+
     private void createPlayer() {
         Uri music = Utils.getCurrentAlarmSound();
         player = new MediaPlayer();
@@ -98,21 +95,33 @@ public class TaskActivity extends Activity {
             player.setAudioStreamType(AudioManager.STREAM_ALARM);
             player.setLooping(true);
             player.prepare();
-        } catch(Exception e) {
-            Log.e(this.getClass().getName(), ":(", e);
+        } catch (Exception e) {
+            // Suppose we can't play current music, because it's renamed/removed.
+            // Play standard mario theme.
+            player.reset();
+            try {
+                player.setDataSource(this,
+                        Utils.getUriFromResource(R.raw.mario));
+                player.setAudioStreamType(AudioManager.STREAM_ALARM);
+                player.setLooping(true);
+                player.prepare();
+            } catch (Exception e2) {
+                Log.e(this.getClass().getName(), "Now I don't know what to do.", e2);
+            }
         }
     }
-    
+
     private boolean containsToday() {
-        int id = Integer.parseInt(getIntent().getData().getEncodedSchemeSpecificPart());
+        int id = Integer.parseInt(getIntent().getData()
+                .getEncodedSchemeSpecificPart());
         AlarmPreference alarm = DBUtils.getAlarmPreference(id);
         Calendar cal = Calendar.getInstance();
         int today = cal.get(Calendar.DAY_OF_WEEK);
-        return (alarm.getDays() & (1 << Utils.getDayOfWeek(today))) != 0; 
+        return (alarm.getDays() & (1 << Utils.getDayOfWeek(today))) != 0;
     }
-    
+
     private void showErrorMessage(int errorMessageId) {
-        TextView errorView= (TextView)findViewById(R.id.error_message);
+        TextView errorView = (TextView) findViewById(R.id.error_message);
         if (errorMessageId == -1) {
             errorView.setVisibility(View.GONE);
         } else {
@@ -120,10 +129,12 @@ public class TaskActivity extends Activity {
             errorView.setVisibility(View.VISIBLE);
         }
     }
-    
+
     private void toggleSpinner(boolean show) {
-        findViewById(R.id.progress).setVisibility(show ? View.VISIBLE : View.GONE);
-        findViewById(R.id.task_question).setVisibility(show ? View.GONE : View.VISIBLE);
+        findViewById(R.id.progress).setVisibility(
+                show ? View.VISIBLE : View.GONE);
+        findViewById(R.id.task_question).setVisibility(
+                show ? View.GONE : View.VISIBLE);
     }
 
     private void displayTask(Task task) {
@@ -134,11 +145,12 @@ public class TaskActivity extends Activity {
         Display display = getWindowManager().getDefaultDisplay();
         boolean isTable = choiceWidth * 2 + 10 < display.getWidth();
         float weight = 0.55f;
-        int minHeight = (int)(layout.getBottom() * (1 - weight)/ 4);
-        layout.addView(inflater.inflate(isTable ? R.layout.choices_table : R.layout.choices_list, null),
-                       new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, weight));
+        int minHeight = (int) (layout.getBottom() * (1 - weight) / 4);
+        layout.addView(inflater.inflate(isTable ? R.layout.choices_table
+                : R.layout.choices_list, null), new LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, weight));
         question.setImageBitmap(task.getQuestion());
-        
+
         int choicesIds[] = { R.id.task_choice_1, R.id.task_choice_2,
                 R.id.task_choice_3, R.id.task_choice_4 };
         correctChoiceId = choicesIds[task.getCorrect() - 1];
@@ -148,18 +160,20 @@ public class TaskActivity extends Activity {
             choiceView.setOnClickListener(choiceListener);
             choiceView.setImageBitmap(task.getChoice(i));
             if (!isTable) {
-                choiceView.getLayoutParams().height = Math.max(minHeight, task.getChoice(i).getHeight());
+                choiceView.getLayoutParams().height = Math.max(minHeight, task
+                        .getChoice(i).getHeight());
             }
         }
     }
 
     private void updateStats() {
         TextView solvedView = (TextView) findViewById(R.id.solved);
-        solvedView.setText(String.format("%d/%d", 2 * solved - all, TASKS_TO_FINISH));
+        solvedView.setText(String.format("%d/%d", 2 * solved - all,
+                TASKS_TO_FINISH));
         TextView leftView = (TextView) findViewById(R.id.left);
         leftView.setText(String.valueOf(MAX_NUM_OF_TASKS - all));
     }
-    
+
     @Override
     public void onBackPressed() {
         if (testTask) {
@@ -181,13 +195,13 @@ public class TaskActivity extends Activity {
             timer.cancel();
         }
     }
-    
+
     private class TaskLoader extends AsyncTask<Void, Task, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
-            int difficulty = Utils.getPreferences()
-                .getInt("difficulty", Configuration.DEFAULT_DIFFICULTY);
+            int difficulty = Utils.getPreferences().getInt("difficulty",
+                    Configuration.DEFAULT_DIFFICULTY);
             if (Utils.isOnline()) {
                 Configuration conf = Configuration.getConfiguration(difficulty);
                 if (conf != null) {
@@ -244,14 +258,15 @@ public class TaskActivity extends Activity {
             }
         }
     }
-    
+
     private class ChoiceListener implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
             all++;
             solved += v.getId() == correctChoiceId ? 1 : 0;
-            new ResultSender(currentTask.getId(), v.getId() == correctChoiceId).execute();
+            new ResultSender(currentTask.getId(), v.getId() == correctChoiceId)
+                    .execute();
             if (2 * solved - all == TASKS_TO_FINISH || all == MAX_NUM_OF_TASKS) {
                 TaskActivity.this.finish();
                 return;
@@ -292,7 +307,7 @@ public class TaskActivity extends Activity {
         public void run() {
             player.start();
         }
-    }    
+    }
 
     private class ResultSender extends AsyncTask<Void, Void, Void> {
 
@@ -314,6 +329,5 @@ public class TaskActivity extends Activity {
             return null;
         }
     }
-
 
 }
