@@ -10,6 +10,9 @@
     <string name="not_online">Internet is not available.</string>
     <string name="change_sound">Change sound</string>
     <string name="bad_file">Sorry. Can\'t play this file.</string>
+    <string name="feedback">Feedback</string>
+    <string name="send_email">Send email...</string>
+    <string name="no_email_clients">There are no email clients installed.</string>
     
     <string name="easy">Easy</string>
     <string name="medium">Medium</string>

@@ -267,7 +267,9 @@ public class FileDialog extends ListActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             unselect();
-            history.pop();
+            if (!history.isEmpty()) {
+                history.pop();
+            }
             if (!history.empty()) {
                 getDir(history.pop());
             } else {
