@@ -12,14 +12,13 @@
         android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
     <uses-sdk
         android:minSdkVersion="8" />
-        
-        
-        <application
+    <application
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:name=".Application">
         <activity
-            android:name=".activities.AlarmsActivity">
+            android:name=".activities.AlarmsActivity"
+            android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action
                     android:name="android.intent.action.MAIN" />
@@ -36,11 +35,12 @@
         <activity
             android:name=".activities.SetUpAlarmActivity"
             android:theme="@android:style/Theme.Dialog" />
-        <activity android:name="com.lamerman.FileDialog"/>
+        <activity
+            android:name="com.lamerman.FileDialog"
+            android:theme="@android:style/Theme.NoTitleBar" />
         <activity
             android:name=".activities.AlarmSoundPickerActivity"
             android:theme="@android:style/Theme.Dialog" />
-
         <receiver
             android:name=".BootReceiver">
             <intent-filter>

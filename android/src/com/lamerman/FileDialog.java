@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import java.util.TreeMap;
 
 import android.app.AlertDialog;
@@ -55,6 +56,7 @@ public class FileDialog extends ListActivity {
     private MediaPlayer player;
     private File selectedFile;
     private HashMap<String, Integer> lastPositions = new HashMap<String, Integer>();
+    private Stack<String> history;
 
     /** Called when the activity is first created. */
     @Override
@@ -82,6 +84,7 @@ public class FileDialog extends ListActivity {
             }
         });
 
+        history = new Stack<String>();
         layoutSelect = (LinearLayout) findViewById(R.id.fdLinearLayoutSelect);
 
         cancelButton = (Button) findViewById(R.id.fdButtonCancel);
@@ -116,6 +119,7 @@ public class FileDialog extends ListActivity {
 
         Integer position = lastPositions.get(parentPath);
 
+        history.push(dirPath);
         getDirImpl(dirPath);
 
         if (position != null && useAutoSelection) {
@@ -263,8 +267,9 @@ public class FileDialog extends ListActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             unselect();
-            if (!currentPath.equals(root)) {
-                getDir(parentPath);
+            history.pop();
+            if (!history.empty()) {
+                getDir(history.pop());
             } else {
                 return super.onKeyDown(keyCode, event);
             }
