@@ -41,6 +41,9 @@ public class AlarmsActivity extends Activity {
         adapter = new AlarmPreferenceAdapter(this, alarms);
         ((ListView)findViewById(R.id.alarms)).setAdapter(adapter);
         initializeDifficultySpinner();
+        if (alarms.isEmpty()) {
+            addAlarm();
+        }
     }
     
     private void initializeDifficultySpinner() {
@@ -78,6 +81,8 @@ public class AlarmsActivity extends Activity {
     
     private void addAlarm() {
         AlarmPreference alarm = new AlarmPreference();
+        // All days by default.
+        alarm.setDays(0x7F);
         alarm.setEnabled(true);
         Utils.setAlarm(alarm);
         DBUtils.addAlarmPreference(alarm);
