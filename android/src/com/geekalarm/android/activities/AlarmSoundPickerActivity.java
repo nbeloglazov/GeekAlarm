@@ -133,16 +133,21 @@ public class AlarmSoundPickerActivity extends Activity {
         } else if (resultCode == Activity.RESULT_OK) {
             Uri uri = Uri.parse(data.getStringExtra(FileDialog.RESULT_URI));
             this.adapter.getItem(0).setUri(uri);
+            saveCurrentSoundAndExit();
         }
     }
-
+    
+    private void saveCurrentSoundAndExit() {
+        Uri uri = adapter.getItem(adapter.getSelected()).getUri();
+        Utils.setCurrentAlarmSound(uri);
+        finish();
+    }
+    
     private class OkListener implements OnClickListener {
 
         @Override
         public void onClick(View v) {
-            Uri uri = adapter.getItem(adapter.getSelected()).getUri();
-            Utils.setCurrentAlarmSound(uri);
-            finish();
+            saveCurrentSoundAndExit();
         }
         
     }

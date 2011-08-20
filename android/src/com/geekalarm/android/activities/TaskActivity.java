@@ -1,6 +1,5 @@
 package com.geekalarm.android.activities;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -12,6 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -268,6 +268,13 @@ public class TaskActivity extends Activity {
             new ResultSender(currentTask.getId(), v.getId() == correctChoiceId)
                     .execute();
             if (2 * solved - all == TASKS_TO_FINISH || all == MAX_NUM_OF_TASKS) {
+                boolean win = 2 * solved == TASKS_TO_FINISH;
+                if (!testTask) {
+                    Intent intent = new Intent(TaskActivity.this, ResultActivity.class);
+                    intent.putExtra("win", win);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
+                    startActivity(intent);
+                } 
                 TaskActivity.this.finish();
                 return;
             }

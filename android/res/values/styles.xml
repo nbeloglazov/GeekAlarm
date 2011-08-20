@@ -26,6 +26,14 @@
              #000000
         </item>
     </style>
+    <style name="WinLose">
+        <item name="android:textSize">
+            25sp
+        </item>
+        <item name="android:textColor">
+            #FFFFFF
+        </item>
+    </style>
     <style name="Error">
         <item name="android:textSize">
             20sp

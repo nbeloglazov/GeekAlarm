@@ -30,8 +30,8 @@
             android:name=".activities.TaskActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTop"
-            android:theme="@android:style/Theme.Light" />
+            android:theme="@android:style/Theme.Light">
+        </activity>
         <activity
             android:name=".activities.SetUpAlarmActivity"
             android:theme="@android:style/Theme.Dialog" />
@@ -43,7 +43,9 @@
             android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".activities.ResultActivity"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation" />
         <receiver
             android:name=".BootReceiver">
             <intent-filter>

@@ -12,11 +12,29 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1.0">
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/alarm_sound_picker"
-            android:text="@string/change_sound" />
+            android:layout_weight="0.2"
+            android:gravity="center"
+            android:textAppearance="@style/WinLose"
+            android:text="Wins"
+            android:id="@+id/wins" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.6"
+            android:id="@+id/exit"
+            android:text="@string/exit" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:gravity="center"
+            android:textAppearance="@style/WinLose"
+            android:text="Loses"
+            android:id="@+id/loses" />
     </LinearLayout>
 </LinearLayout>

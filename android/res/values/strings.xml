@@ -13,6 +13,7 @@
     <string name="feedback">Feedback</string>
     <string name="send_email">Send email...</string>
     <string name="no_email_clients">There are no email clients installed.</string>
+    <string name="exit">Exit</string>
     
     <string name="easy">Easy</string>
     <string name="medium">Medium</string>

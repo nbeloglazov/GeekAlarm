@@ -38,8 +38,6 @@ public class AlarmsActivity extends Activity {
                 new TestButtonListener());
         findViewById(R.id.alarm_sound_picker).setOnClickListener(
                 new AlarmSoundPickerListener());
-        findViewById(R.id.image).setOnClickListener(
-                new AnimationListener());
         alarms = DBUtils.getAlarmPreferences();
         adapter = new AlarmPreferenceAdapter(this, alarms);
         ((ListView) findViewById(R.id.alarms)).setAdapter(adapter);
@@ -111,7 +109,7 @@ public class AlarmsActivity extends Activity {
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("message/rfc822");
         i.putExtra(Intent.EXTRA_EMAIL, new String[] { "feedback@geek-alarm.com" });
-        i.putExtra(Intent.EXTRA_SUBJECT, "GeekAlarm feedback");
+        i.putExtra(Intent.EXTRA_SUBJECT, "Feedback");
         try {
             String text = getResources().getString(R.string.send_email);
             startActivity(Intent.createChooser(i, text));
@@ -154,15 +152,5 @@ public class AlarmsActivity extends Activity {
                     AlarmSoundPickerActivity.class);
             startActivity(intent);
         }
-    }
-    
-    private class AnimationListener implements OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(AlarmsActivity.this, ResultActivity.class);
-            startActivity(intent);
-        }
-        
     }
 }
