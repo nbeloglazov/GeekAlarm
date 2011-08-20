@@ -41,6 +41,9 @@
         <activity
             android:name=".activities.AlarmSoundPickerActivity"
             android:theme="@android:style/Theme.Dialog" />
+        <activity
+            android:name=".activities.ResultActivity"
+            android:theme="@android:style/Theme.NoTitleBar" />
         <receiver
             android:name=".BootReceiver">
             <intent-filter>
