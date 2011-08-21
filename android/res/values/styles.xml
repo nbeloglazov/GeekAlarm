@@ -26,12 +26,20 @@
              #000000
         </item>
     </style>
-    <style name="WinLose">
+    <style name="Wins">
         <item name="android:textSize">
             25sp
         </item>
         <item name="android:textColor">
-            #FFFFFF
+             #00FF00
+        </item>
+    </style>
+    <style name="Loses">
+        <item name="android:textSize">
+            25sp
+        </item>
+        <item name="android:textColor">
+            #FF0000
         </item>
     </style>
     <style name="Error">

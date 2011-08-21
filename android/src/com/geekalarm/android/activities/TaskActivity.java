@@ -268,7 +268,7 @@ public class TaskActivity extends Activity {
             new ResultSender(currentTask.getId(), v.getId() == correctChoiceId)
                     .execute();
             if (2 * solved - all == TASKS_TO_FINISH || all == MAX_NUM_OF_TASKS) {
-                boolean win = 2 * solved == TASKS_TO_FINISH;
+                boolean win = 2 * solved - all == TASKS_TO_FINISH;
                 if (!testTask) {
                     Intent intent = new Intent(TaskActivity.this, ResultActivity.class);
                     intent.putExtra("win", win);
