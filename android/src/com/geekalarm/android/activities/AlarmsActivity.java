@@ -85,8 +85,11 @@ public class AlarmsActivity extends Activity {
         // All days by default.
         alarm.setDays(0x7F);
         alarm.setEnabled(true);
-        Utils.setAlarm(alarm);
         DBUtils.addAlarmPreference(alarm);
+        // It must be only AFTER we inserted in db, 
+        // otherwise id will be empty and we won't find alarm in db, 
+        // when it go off.
+        Utils.setAlarm(alarm);
         adapter.add(alarm);
     }
 
