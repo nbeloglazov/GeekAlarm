@@ -44,12 +44,15 @@ public class AlarmSoundAdapter extends ArrayAdapter<AlarmSound> {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.alarm_sound, null);
             convertView.setOnClickListener(listener);
+            convertView.findViewById(R.id.radio).setOnClickListener(listener);
+
         }
-        convertView.setId(position);
+        convertView.setTag(position);
         AlarmSound sound = getItem(position);
         TextView title = (TextView)convertView.findViewById(R.id.title);
         title.setText(sound.getTitle());
         RadioButton radio = (RadioButton)convertView.findViewById(R.id.radio);
+        radio.setTag(position);
         radio.setChecked(selected == position);
         return convertView;
     }
@@ -63,7 +66,8 @@ public class AlarmSoundAdapter extends ArrayAdapter<AlarmSound> {
         
         @Override
         public void onClick(View view) {
-            setSelected(view.getId());
+            int id = (Integer)view.getTag();
+            setSelected(id);
             clickCallback.onClick(selected);
             notifyDataSetChanged();
         }
