@@ -4,6 +4,8 @@ Geek alarm is alarm application for android. It works as usual alarm application
 
 Example of tasks can be found here [http://www.geek-alarm.com](http://www.geek-alarm.com).
 
+App in android market: [GeekAlarm](http://market.android.com/details?id=com.geekalarm.android)
+
 ## Categories
 
 Task represents basic operations and definitions in different fields of math and computer science.  
