@@ -117,7 +117,7 @@ public class Utils {
         
         // If no sound in preferences, no default return geek alarm music.
         if (sound == null) {
-            sound = getUriFromResource(R.raw.into_the_sun);
+            sound = getUriFromResource(R.raw.mario);
         }
         return sound;
     }   

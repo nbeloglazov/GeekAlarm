@@ -24,11 +24,9 @@ import com.lamerman.FileDialog;
 public class AlarmSoundPickerActivity extends Activity {
     
     private static String[] GEEK_ALARMS_TITLES = {
-        "Into the sun",
         "Mario"};
     
     private static int[] GEEK_ALARMS_RES = {
-        R.raw.into_the_sun,
         R.raw.mario};
 
     private AlarmSoundAdapter adapter;
