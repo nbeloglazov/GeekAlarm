@@ -46,6 +46,7 @@ public class ResultActivity extends Activity {
         findViewById(R.id.exit).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                moveTaskToBack(true);
                 finish();
             }
         });
@@ -57,8 +58,14 @@ public class ResultActivity extends Activity {
         view = (TextView) findViewById(R.id.loses);
         view.setText(String.valueOf(loses));
     }
+    
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        moveTaskToBack(true);
+    }
 
-    private void updateStats() {
+    private void updateStats(){
         SharedPreferences pref = Utils.getPreferences();
         int wins = pref.getInt("wins", 0);
         int loses = pref.getInt("loses", 0);

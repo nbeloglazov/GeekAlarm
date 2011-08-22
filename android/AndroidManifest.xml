@@ -29,7 +29,6 @@
         <activity
             android:name=".activities.TaskActivity"
             android:screenOrientation="portrait"
-            android:taskAffinity="com.geekalarm.android.TaskActivity.Fucking.TaskAffinity"
             android:configChanges="keyboardHidden|orientation"
             android:theme="@android:style/Theme.Light">
         </activity>

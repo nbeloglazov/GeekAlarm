@@ -75,7 +75,6 @@ public class Utils {
     public static PendingIntent buildAlarmIntent(int alarmId) {
         Intent intent = new Intent(Application.getContext(), TaskActivity.class);
         intent.setData(Uri.parse("id:" + alarmId));
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pending = PendingIntent.getActivity(
                 Application.getContext(), 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
