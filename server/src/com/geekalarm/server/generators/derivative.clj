@@ -1,9 +1,9 @@
-(ns nbeloglazov.geekalarm.server.generators.derivative
-  (:require [nbeloglazov.geekalarm.server
+(ns com.geekalarm.server.generators.derivative
+  (:require [com.geekalarm.server
              [derivative-utils :as der-ut]
              [utils :as utils]]
             [clojure.walk :as walk])
-  (:use [nbeloglazov.geekalarm.server.mathml-utils :only (cljml)]))
+  (:use [com.geekalarm.server.mathml-utils :only (cljml)]))
 
 (defn rand-fn []
   (rand-nth (vec der-ut/fns)))

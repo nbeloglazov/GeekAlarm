@@ -1,4 +1,4 @@
-(ns nbeloglazov.geekalarm.server.mathml-utils
+(ns com.geekalarm.server.mathml-utils
   (:require [clojure.contrib.math :as math]))
 
 ; cljml - structure, representing math ml xml

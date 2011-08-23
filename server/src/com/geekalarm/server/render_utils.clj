@@ -1,5 +1,5 @@
-(ns nbeloglazov.geekalarm.server.render-utils
-  (require [nbeloglazov.geekalarm.server.mathml-utils :as mathml])
+(ns com.geekalarm.server.render-utils
+  (require [com.geekalarm.server.mathml-utils :as mathml])
   (import [net.sourceforge.jeuclid.context Parameter]
 	  [java.io ByteArrayInputStream ByteArrayOutputStream]))
 

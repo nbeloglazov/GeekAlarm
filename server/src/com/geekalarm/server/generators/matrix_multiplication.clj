@@ -1,5 +1,5 @@
-(ns nbeloglazov.geekalarm.server.generators.matrix-multiplication
-  (:use [nbeloglazov.geekalarm.server
+(ns com.geekalarm.server.generators.matrix-multiplication
+  (:use [com.geekalarm.server
          [utils :only (random-matrix get-similar-matrices)]
          [mathml-utils :only (cljml)]])
   (:require [incanter.core :as incanter]))

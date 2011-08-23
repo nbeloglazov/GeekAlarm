@@ -1,9 +1,9 @@
-(ns nbeloglazov.geekalarm.server.generators.inverse-matrix
+(ns com.geekalarm.server.generators.inverse-matrix
   (:require [incanter.core :as incanter])
   (:use [clojure.contrib
          [seq-utils :only (find-first)]
          [math :only (round)]]
-        [nbeloglazov.geekalarm.server
+        [com.geekalarm.server
          [mathml-utils :only (cljml)]
          [utils :only (get-similar-matrices
                        random-matrix)]]))

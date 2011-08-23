@@ -1,5 +1,5 @@
-(ns nbeloglazov.geekalarm.server.generators.base-conversion
-  (:use [nbeloglazov.geekalarm.server.utils :only (get-similar-by-one)]))
+(ns com.geekalarm.server.generators.base-conversion
+  (:use [com.geekalarm.server.utils :only (get-similar-by-one)]))
 
 (defn generate [level]
   (let [a (case level 

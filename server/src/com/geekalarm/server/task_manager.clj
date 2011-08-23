@@ -1,6 +1,6 @@
-(ns nbeloglazov.geekalarm.server.task-manager
-  (:require [nbeloglazov.geekalarm.server.render-utils :as render]
-	    [nbeloglazov.geekalarm.server.generators
+(ns com.geekalarm.server.task-manager
+  (:require [com.geekalarm.server.render-utils :as render]
+	    [com.geekalarm.server.generators
 	     [determinant :as determinant]
              [definite-polynomial-integral :as definite-polynomial-integral]
              [inverse-matrix :as inverse-matrix]

@@ -1,5 +1,5 @@
-(ns nbeloglazov.geekalarm.server.generators.definite-polynomial-integral
-  (:use [nbeloglazov.geekalarm.server
+(ns com.geekalarm.server.generators.definite-polynomial-integral
+  (:use [com.geekalarm.server
          [mathml-utils :only (cljml)]
          [utils :only (get-similar-by-one)]]
         [clojure.contrib.math :only (expt)]))

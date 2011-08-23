@@ -1,6 +1,6 @@
-(ns nbeloglazov.geekalarm.server.generators.determinant
+(ns com.geekalarm.server.generators.determinant
   (:require [incanter.core :as incanter])
-  (:use [nbeloglazov.geekalarm.server
+  (:use [com.geekalarm.server
          [mathml-utils :only (cljml)]
          [utils :only (get-similar-by-one
                        random-matrix)]]))

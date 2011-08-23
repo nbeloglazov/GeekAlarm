@@ -1,4 +1,4 @@
-(ns nbeloglazov.geekalarm.server.utils
+(ns com.geekalarm.server.utils
   (:require [incanter.core :as incanter]
             [clojure.contrib
              [seq-utils :as seq-utils]])

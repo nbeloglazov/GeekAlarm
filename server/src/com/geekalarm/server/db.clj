@@ -1,4 +1,4 @@
-(ns nbeloglazov.geekalarm.server.db
+(ns com.geekalarm.server.db
   (:require [somnium.congomongo :as mongo]
             [clojure.contrib.json :as json]))
 

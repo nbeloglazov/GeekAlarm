@@ -10,7 +10,7 @@
   :dev-dependencies [[swank-clojure "1.2.0"]
 		     [lein-ring "0.4.5"]
 		     [ring-serve "0.1.0"]]
-  :ring {:handler nbeloglazov.geekalarm.server.server/handler}
+  :ring {:handler com.geekalarm.server.server/handler}
   :target-dir "dotcloud"
   :uberjar-name "root.war")
 

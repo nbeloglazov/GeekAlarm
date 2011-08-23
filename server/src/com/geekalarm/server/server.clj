@@ -1,10 +1,10 @@
-(ns nbeloglazov.geekalarm.server.server
+(ns com.geekalarm.server.server
   (:import [java.util Date])
   (:use [net.cgrand.moustache :only [app delegate]]
 	[ring.middleware
 	 [params :only (wrap-params)]
 	 [keyword-params :only (wrap-keyword-params)]])
-  (:require [nbeloglazov.geekalarm.server
+  (:require [com.geekalarm.server
 	     [render-utils :as render]
 	     [mathml-utils :as mathml]
 	     [task-manager :as manager]

@@ -1,6 +1,6 @@
-(ns nbeloglazov.geekalarm.server.derivative-utils
+(ns com.geekalarm.server.derivative-utils
   (:use [clojure.contrib.seq-utils :only (separate)]
-        [nbeloglazov.geekalarm.server.mathml-utils :only (cljml)]))
+        [com.geekalarm.server.mathml-utils :only (cljml)]))
 
 (declare derivative-expr)
 
