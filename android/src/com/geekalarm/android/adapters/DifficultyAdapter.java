@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+/**
+ * Adapter, for displaying 3 difficulties.
+ */
 public class DifficultyAdapter extends ArrayAdapter<Integer> {
     
     private static Integer[] DIFFICULTY_CODES = {1, 2, 3};

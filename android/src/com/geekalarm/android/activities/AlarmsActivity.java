@@ -25,6 +25,11 @@ import com.geekalarm.android.adapters.AlarmPreferenceAdapter;
 import com.geekalarm.android.adapters.DifficultyAdapter;
 import com.geekalarm.android.tasks.Configuration;
 
+/**
+ * This is main window. 
+ * List of alarms and option buttons 
+ * are displayed in this activity.
+ */
 public class AlarmsActivity extends Activity {
 
     private List<AlarmPreference> alarms;
@@ -42,6 +47,7 @@ public class AlarmsActivity extends Activity {
         adapter = new AlarmPreferenceAdapter(this, alarms);
         ((ListView) findViewById(R.id.alarms)).setAdapter(adapter);
         initializeDifficultySpinner();
+        // Add alarm by default, if there is no one yet.
         if (alarms.isEmpty()) {
             addAlarm();
         }
@@ -57,6 +63,9 @@ public class AlarmsActivity extends Activity {
         spinner.setOnItemSelectedListener(new DifficultyChangedListener());
     }
 
+    /**
+     * This method called, after user modified activity.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK) {

@@ -8,6 +8,8 @@ public class Task {
     private Bitmap[] choices;
     private int correct;
     private String id;
+    // Error message id is needed 
+    // when task downloading is failed.
     private int errorMessageId;
 
     public Task() {

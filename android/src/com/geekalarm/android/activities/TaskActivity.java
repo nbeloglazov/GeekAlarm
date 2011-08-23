@@ -36,11 +36,18 @@ import com.geekalarm.android.tasks.Configuration;
 import com.geekalarm.android.tasks.Task;
 import com.geekalarm.android.tasks.TaskManager;
 
+/**
+ * Activity, it is place where user solves tasks. 
+ */
 public class TaskActivity extends Activity {
 
     private static final int MAX_NUM_OF_TASKS = 10;
+    // This const indicates how many tasks user must 
+    // solve correctly than incorrectly to dismiss alarm.
     private static final int TASKS_TO_FINISH = 3;
+    // Start music mute.
     private static final long BASE_PLAY_DELAY = 40 * 1000; // 40 seconds
+    // Increasing music mute each time.
     private static final long PLAY_DELAY_INCREASE = 10 * 1000; // 10 seconds
 
     private long curPlayDelay;
@@ -53,6 +60,7 @@ public class TaskActivity extends Activity {
     private TaskLoader loader;
     private MediaPlayer player;
     private int solved;
+    // How many tasks user already tried: solved + unsolved.
     private int all;
     private Timer timer;
     private LayoutInflater inflater;
@@ -111,6 +119,10 @@ public class TaskActivity extends Activity {
         }
     }
 
+    /**
+     * Checks, if today's day is enable in current alarm.
+     * @return true or false (amazing, really?).
+     */
     private boolean containsToday() {
         int id = Integer.parseInt(getIntent().getData()
                 .getEncodedSchemeSpecificPart());
@@ -120,6 +132,10 @@ public class TaskActivity extends Activity {
         return (alarm.getDays() & (1 << Utils.getDayOfWeek(today))) != 0;
     }
 
+    /**
+     * Shows (or removes) error message with given id.
+     * @param errorMessageId resource id of message, -1 if no error.
+     */
     private void showErrorMessage(int errorMessageId) {
         TextView errorView = (TextView) findViewById(R.id.error_message);
         if (errorMessageId == -1) {
@@ -143,6 +159,7 @@ public class TaskActivity extends Activity {
         ImageView question = (ImageView) findViewById(R.id.task_question);
         int choiceWidth = task.getChoice(0).getWidth();
         Display display = getWindowManager().getDefaultDisplay();
+        // If images is too wide, we need to use layout 4x1 instead of table 2x2.
         boolean isTable = choiceWidth * 2 + 10 < display.getWidth();
         float weight = 0.55f;
         int minHeight = (int) (layout.getBottom() * (1 - weight) / 4);
@@ -196,6 +213,9 @@ public class TaskActivity extends Activity {
         }
     }
 
+    /**
+     * Loads MAX_NUM_OF_TASKS of random tasks from server.
+     */
     private class TaskLoader extends AsyncTask<Void, Task, Void> {
 
         @Override
@@ -206,10 +226,12 @@ public class TaskActivity extends Activity {
                 Configuration conf = Configuration.getConfiguration(difficulty);
                 if (conf != null) {
                     downloadTasks(conf);
+                } else {
+                    generateSimpleTasks(difficulty, R.string.server_error);
                 }
-                generateSimpleTasks(difficulty, R.string.server_error);
+            } else {
+                generateSimpleTasks(difficulty, R.string.not_online);
             }
-            generateSimpleTasks(difficulty, R.string.not_online);
             return null;
         }
 
@@ -234,6 +256,7 @@ public class TaskActivity extends Activity {
                             taskType.getValue());
                     task.setErrorMessageId(-1);
                 } catch (Exception e) {
+                    // Some error, so we show simple task.
                     Log.e(TaskLoader.class.getName(), "Something bad", e);
                     task = TaskManager.generateSimpleTask(taskType.getValue());
                     task.setErrorMessageId(R.string.server_error);

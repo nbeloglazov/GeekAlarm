@@ -1,7 +1,12 @@
 package com.geekalarm.android;
 
+/**
+ * AlarmPreference is particular alarm, 
+ * it has only time, when it go off.  
+ */
 public class AlarmPreference {
 
+    // Days represents as bits.
     private int days;
     private int hour;
     private int minute;

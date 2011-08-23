@@ -43,6 +43,10 @@ public class Utils {
     
     private static final String ALARM_SOUND = "alarm_sound";
 
+    /**
+     * Checks if device is connected to internet.
+     * @return true or false.
+     */
     public static boolean isOnline() {
         Context context = Application.getContext();
         ConnectivityManager cm = (ConnectivityManager) context
@@ -55,10 +59,26 @@ public class Utils {
     }
 
     
+    /**
+     * Transforms calendar day of week to number (from 0 to 7).
+     * E.g. Calendar.MONDAY -> 0
+     *      Calendar.TUESDAY -> 1
+     * @param calendarDayOfWeek
+     * @return 
+     */
     public static int getDayOfWeek(int calendarDayOfWeek) {
         return DAYS_OF_WEEK[calendarDayOfWeek];
     }
 
+    /**
+     * Returns earliest date in future, which has given hour and minute. 
+     * E.g now is May 1, 2000. 14:00
+     * getNextTime(14, 15) -> May 1, 2000, 14:15
+     * getNextTime(13, 15) -> May 2, 2000, 13:15
+     * @param hour
+     * @param minute
+     * @return date in millis.
+     */
     public static long getNextTime(int hour, int minute) {
         Calendar cur = Calendar.getInstance();
         Calendar next = Calendar.getInstance();
@@ -72,7 +92,7 @@ public class Utils {
         return next.getTimeInMillis();
     }
     
-    public static PendingIntent buildAlarmIntent(int alarmId) {
+    private static PendingIntent buildAlarmIntent(int alarmId) {
         Intent intent = new Intent(Application.getContext(), TaskActivity.class);
         intent.setData(Uri.parse("id:" + alarmId));
         PendingIntent pending = PendingIntent.getActivity(
@@ -80,7 +100,12 @@ public class Utils {
                 PendingIntent.FLAG_UPDATE_CURRENT);
         return pending;
     }
-    
+
+    /**
+     * Sets alarm in AlarmManager, so TaskActivity will be launched at alarm's time every day.
+     * It's TaskActivity's responsibility to check if current day is enabled in this alarm. 
+     * @param alarm to be set.
+     */
     public static void setAlarm(AlarmPreference alarm) {
         AlarmManager manager = (AlarmManager) Application.getContext().getSystemService(Context.ALARM_SERVICE);
         PendingIntent intent = buildAlarmIntent(alarm.getId());
@@ -99,6 +124,13 @@ public class Utils {
             .getSharedPreferences("geekalarm", Context.MODE_PRIVATE);
     }
     
+    /**
+     * Returns alarm sound.
+     * 1. Returns selected sound, if exists
+     * 2. Returns default alarm sound, if exists.
+     * 3. Returns built in mario sound, exists!
+     * @return uri to sound.
+     */
     public static Uri getCurrentAlarmSound() {
         Uri sound = null; 
         // Look up sound in preferences.
@@ -121,6 +153,10 @@ public class Utils {
         return sound;
     }   
     
+    /**
+     * Saves given uri as alarm sound.
+     * @param uri
+     */
     public static void setCurrentAlarmSound(Uri uri) {
         SharedPreferences pref = getPreferences();
         SharedPreferences.Editor editor = pref.edit();
@@ -128,6 +164,11 @@ public class Utils {
         editor.commit();
     }
     
+    /**
+     * Transforms resource id to uri.
+     * @param resource
+     * @return uri 
+     */
     public static Uri getUriFromResource(int resource) {
         String uri = String.format("android.resource://%s/%d", 
                 Application.getContext().getPackageName(), 

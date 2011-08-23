@@ -39,7 +39,7 @@ public final class DBUtils {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            // No upgrading right now.
+            // No upgrade right now.
         }
     }
 

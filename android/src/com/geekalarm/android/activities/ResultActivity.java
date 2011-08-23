@@ -17,21 +17,38 @@ import android.widget.TextView;
 import com.geekalarm.android.R;
 import com.geekalarm.android.Utils;
 
+/**
+ * Final activity. It shows users "progress".
+ * Draws green rectangles for correct solutions and red for incorrect.
+ */
 public class ResultActivity extends Activity {
 
     private final static double GAP_TO_SIZE = 1 / 10.;
     private final static int[] LEVELS = { 6, 24, 60, 144, 360, 720 };
 
+    // Current 'size' of screen. Maximum number of rectangles on screen.
+    // Possible values - LEVELS.
     private int num;
+    // Number of rectangles in row.
     private int inRow;
+    // Number of rectangles in column.
     private int inColumn;
+    // Size of rectangle.
     private int size;
+    // Gap between 2 rectangles.
     private int gap;
+    // Left margin of first rect.
     private int marginLeft;
+    // Top margin of first rect.
     private int marginTop;
+    // NUmber of green rects.
     private int green;
+    // NUmber of red rects.
     private int red;
+    // True if green rect tries to fill red's position 
+    // or otherwise
     private boolean isFighting;
+    // If user solved current "round" correctly.
     private boolean win;
     private boolean runAnimation;
 
@@ -78,7 +95,6 @@ public class ResultActivity extends Activity {
         red = pref.getInt("red", 0);
         green = pref.getInt("green", 0);
         int level = pref.getInt("level", 0);
-        Log.e("Stats", String.format("%d %d %s %d", green, red, win, level));
         num = LEVELS[level];
         if (green == num && win) {
             level++;
@@ -104,9 +120,16 @@ public class ResultActivity extends Activity {
         editor.commit();
     }
 
+    /**
+     * Calulcates all neccessary drawing parameters: 
+     * size, margins, etc...
+     * @param width of drawing area.
+     * @param height of drawing area.
+     */
     private void initConf(int width, int height) {
         size = 0;
         gap = 0;
+        // Try all possible positions, finding position where size is max.
         for (int i = 1; i < num / 2; i++) {
             if (num % i != 0) {
                 continue;
@@ -192,6 +215,15 @@ public class ResultActivity extends Activity {
             }
         }
 
+        /**
+         * 
+         * @param num - number of rect to be drawn. 
+         * @param color
+         * @param canvas
+         * @param fromLeft - if rect should be drawn starting from left. 
+         * it matters when rect is not square. Red rects must be drawn from right.
+         * @param width
+         */
         private void drawRect(int num, int color, Canvas canvas,
                 boolean fromLeft, int width) {
             if (width == 0) {

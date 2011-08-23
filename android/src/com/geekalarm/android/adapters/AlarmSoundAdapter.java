@@ -15,6 +15,11 @@ import com.geekalarm.android.AlarmSound;
 import com.geekalarm.android.R;
 import com.geekalarm.android.activities.AlarmSoundPickerActivity;
 
+/**
+ * Adapter for displaying alarm sounds.
+ * It also tracks current selected and previous selected sound,
+ * in case we need to return to previous selected.
+ */
 public class AlarmSoundAdapter extends ArrayAdapter<AlarmSound> {
 
     private LayoutInflater inflater;

@@ -7,6 +7,9 @@ import java.util.Map;
 
 import android.util.Log;
 
+/**
+ * Configuration is map of all categories.
+ */
 public class Configuration {
 
     public static final int DEFAULT_DIFFICULTY = 2;

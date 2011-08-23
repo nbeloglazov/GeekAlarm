@@ -1,5 +1,9 @@
 package com.geekalarm.android.tasks;
 
+/**
+ * Tasks category.
+ * E.g. linear algebra, math analysis.
+ */
 public class Category {
 
     private String code;

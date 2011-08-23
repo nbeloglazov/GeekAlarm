@@ -24,6 +24,9 @@ import com.geekalarm.android.R;
 import com.geekalarm.android.Utils;
 import com.geekalarm.android.activities.SetUpAlarmActivity;
 
+/**
+ * Adapter for displaying alarms.
+ */
 public class AlarmPreferenceAdapter extends ArrayAdapter<AlarmPreference> {
     
     private LayoutInflater inflater;
@@ -59,7 +62,11 @@ public class AlarmPreferenceAdapter extends ArrayAdapter<AlarmPreference> {
         checkBox.setChecked(preference.isEnabled());
     }
         
-    
+    /**
+     * Sets time to text view.
+     * @param convertView
+     * @param preference
+     */
     private void fillTime( View convertView, AlarmPreference preference) {
         java.text.DateFormat timeFormat = DateFormat.getTimeFormat(getContext());
         Date date = new Date(0, 0, 0, preference.getHour(), preference.getMinute());
@@ -67,6 +74,12 @@ public class AlarmPreferenceAdapter extends ArrayAdapter<AlarmPreference> {
         ((TextView)convertView.findViewById(R.id.time)).setText(time);
     }
     
+    /**
+     * Adds days to view.
+     * If day is enabled it's white, gray otherwise.
+     * @param convertView
+     * @param days
+     */
     private void fillDays(View convertView, int days) {
         LinearLayout layout = (LinearLayout)convertView.findViewById(R.id.days);
         layout.removeAllViews();
@@ -86,6 +99,10 @@ public class AlarmPreferenceAdapter extends ArrayAdapter<AlarmPreference> {
         }
     }
     
+    /**
+     * Called, when user taps on alarm.
+     * Shows dialog with setting - SetUpAlarmActivity.
+     */
     private class SetUpAlarmListenter implements View.OnClickListener {
 
         private int position;
@@ -109,7 +126,10 @@ public class AlarmPreferenceAdapter extends ArrayAdapter<AlarmPreference> {
             ((Activity)getContext()).startActivityForResult(intent, position);
         }
     }
-    
+
+    /**
+     * Called when user enables/disables alarm using checkbox.
+     */
     private class EnableStateListener implements OnCheckedChangeListener {
 
         private AlarmPreference alarm;

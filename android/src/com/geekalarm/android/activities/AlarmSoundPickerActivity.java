@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -21,6 +22,14 @@ import com.geekalarm.android.Utils;
 import com.geekalarm.android.adapters.AlarmSoundAdapter;
 import com.lamerman.FileDialog;
 
+/**
+ * Activity for selecting sound. 
+ * It displays:
+ * 1. option to choose custom sound. 
+ * 2. built in mario sound.
+ * 3. all alarm and ringtone sounds available on device.
+ *
+ */
 public class AlarmSoundPickerActivity extends Activity {
     
     private static String[] GEEK_ALARMS_TITLES = {
@@ -43,11 +52,15 @@ public class AlarmSoundPickerActivity extends Activity {
         setSelected(Utils.getCurrentAlarmSound());
         player = new MediaPlayer();
     }   
-    
+
     private void setUpListView() {
         List<AlarmSound> sounds = new ArrayList<AlarmSound>();
-        sounds.add(new AlarmSound("Custom", Uri.parse("http://geek-alarm.com")));
+        // Add option to choose custom sound.
+        sounds.add(new AlarmSound(getResources().getString(R.string.custom),
+                                  null));
+        // Add built in alarms.
         sounds.addAll(getGeekAlarms());
+        // Add android alarms.
         sounds.addAll(getStandardAlarms());
         adapter = 
             new AlarmSoundAdapter(this, sounds, new SoundClickListener());
@@ -55,6 +68,11 @@ public class AlarmSoundPickerActivity extends Activity {
         listView.setAdapter(adapter);
     }
     
+    /**
+     * Finds option with given uri and sets selected.
+     * If no option found, sets first "Custom" selected.
+     * @param sound
+     */
     private void setSelected(Uri sound) {
         for (int i = 0; i < adapter.getCount(); i++) {
             if (adapter.getItem(i).getUri().equals(sound)) {
@@ -66,6 +84,11 @@ public class AlarmSoundPickerActivity extends Activity {
         adapter.setSelected(0);
     }
     
+    /**
+     * Retrieves list of standard android sounds.
+     * It gets TYPE_ALARM and TYPE_RINGTONE sounds.
+     * @return list
+     */
     private List<AlarmSound> getStandardAlarms() {
         RingtoneManager manager = new RingtoneManager(this);
         manager.setType(RingtoneManager.TYPE_ALARM | RingtoneManager.TYPE_RINGTONE);
@@ -82,6 +105,10 @@ public class AlarmSoundPickerActivity extends Activity {
         return sounds;
     }
     
+    /**
+     * Creates list of built in sounds.
+     * @return list
+     */
     private List<AlarmSound> getGeekAlarms() {
         List<AlarmSound> sounds = new ArrayList<AlarmSound>();
         for (int i = 0; i < GEEK_ALARMS_RES.length; i++) {
@@ -98,10 +125,17 @@ public class AlarmSoundPickerActivity extends Activity {
         player.release();
     }
 
+    /**
+     * Callback, which passed to AlarmSoundAdapter.
+     * It's invoked when user select any sound.
+     * This callback starts playing selected sound or 
+     * open file dialog, if user selected "Custom" option.
+     */
     public class SoundClickListener {
 
         public void onClick(int position) {
             AlarmSound sound = adapter.getItem(position);
+            // Open file dialog if "Custom" option selected.
             if (position == 0) {
                 if (player.isPlaying()) {
                     player.stop();
@@ -112,18 +146,22 @@ public class AlarmSoundPickerActivity extends Activity {
                 startActivityForResult(intent, 0);
                 return;
             }
+            // Play music otherwise.
             try {
                 player.reset();
                 player.setDataSource(AlarmSoundPickerActivity.this, sound.getUri());
                 player.prepare();
                 player.start();
             } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                // Don't know what should I do here.
+                Log.e(getClass().getName(), "Can't play sound", e);
             }     
         }
     }
     
+    /**
+     * Invoked after user has selected music in filedialog or canceled it.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_CANCELED) {

@@ -78,13 +78,18 @@ public final class TaskManager {
         return task;
     }
 
-    public static void addResult(String id, boolean solved) throws Exception {
+    /**
+     * Sends result of solving particular task to server for statistics.
+     * @param id
+     * @param isSolved
+     */
+    public static void addResult(String id, boolean isSolved) throws Exception {
         if (id != null) {
-            sendRequest(String.format("result?id=%s&solved=%s", id, solved));
+            sendRequest(String.format("result?id=%s&solved=%s", id, isSolved));
         }
     }
 
-    private static Bitmap getBitmapWithText(String text) {
+    private static Bitmap createBitmapWithText(String text) {
         float size = 30;
         Paint paint = new Paint();
         paint.setTextSize(size);
@@ -99,6 +104,13 @@ public final class TaskManager {
         return bitmap;
     }
 
+    /**
+     * Returns array of 4 elements.
+     * 1 element is given number.
+     * Others are random number close to given number.
+     * @param number
+     * @return
+     */
     private static int[] getSimilarNumbers(int number) {
         Random rand = new Random();
         int[] res = new int[4];
@@ -130,10 +142,10 @@ public final class TaskManager {
         Bitmap[] choicesBitMap = new Bitmap[4];
         for (int i = 0; i < 4; i++) {
             String text = String.valueOf(choices[i]);
-            choicesBitMap[i] = getBitmapWithText(text);
+            choicesBitMap[i] = createBitmapWithText(text);
         }
         Task task = new Task();
-        task.setQuestion(getBitmapWithText(question));
+        task.setQuestion(createBitmapWithText(question));
         task.setChoices(choicesBitMap);
         task.setCorrect(correct + 1);
         return task;
@@ -161,6 +173,13 @@ public final class TaskManager {
         return generateTaskByData(question, a * b + c);
     }
 
+    /**
+     * When internet or server unavailable, 
+     * we create simple arithmetic tasks.
+     * Like 12 * 23 + 33 = ?
+     * @param difficulty
+     * @return simple task.
+     */
     public static Task generateSimpleTask(int difficulty) {
         switch (difficulty) {
         case 1:

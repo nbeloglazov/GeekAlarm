@@ -16,6 +16,9 @@ import android.widget.TimePicker;
 import com.geekalarm.android.R;
 import com.geekalarm.android.Utils;
 
+/**
+ * Activity for setting up alarm: set time and days.
+ */
 public class SetUpAlarmActivity extends Activity {
 
     @Override
