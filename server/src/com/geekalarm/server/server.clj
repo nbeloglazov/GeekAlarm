@@ -32,7 +32,7 @@
 					timer-interval))))
 
 (defn get-id []
-  (apply str (repeatedly 3 #(rand-int 10))))
+  (apply str (repeatedly 8 #(rand-int 10))))
 
 (defn response [body content]
   {:status 200
