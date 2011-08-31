@@ -26,16 +26,28 @@
 			 (map (fn [val] [:mtd (cljml val)]) row)))]
     (cljml :mtable (map get-row matrix))))
 
+(defn attributes-to-str [att]
+  (if (nil? att)
+    ""
+    (reduce (fn [st [at-name value]]
+              (format "%s %s=\"%s\"" st (name at-name) value))
+            "" att)))
+                                         
+
 (defn cljml-to-str [cljml]
   (if (empty? cljml)
     ""
     (let [node-name (name (first cljml))
           children (rest cljml)
+          attributes (->> (filter map? children)
+                          (reduce merge)
+                          (attributes-to-str))
           child-to-str (fn [child]
                          (cond (keyword? child) (format "<%s/>" (name child))
                                (vector? child) (cljml-to-str child)
+                               (map? child) ""
                                :else (str child)))]
       (->> (map child-to-str children)
            (apply str)
-           (format "<%1$s>%2$s</%1$s>" node-name)))))
+           (format "<%1$s%2$s>%3$s</%1$s>" node-name attributes)))))
 

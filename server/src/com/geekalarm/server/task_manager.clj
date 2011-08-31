@@ -6,9 +6,8 @@
              [inverse-matrix :as inverse-matrix]
              [base-conversion :as base-conversion]
              [derivative :as derivative]
-             [matrix-multiplication :as matrix-multiplication]]))
-
-(def categories [:linear-algebra :math-analysis :computer-science])
+             [matrix-multiplication :as matrix-multiplication]
+             [congruence :as congruence]]))
 
 (def generators
      {:linear-algebra [determinant/generate
@@ -16,16 +15,18 @@
                        matrix-multiplication/generate]
       :math-analysis  [definite-polynomial-integral/generate
                        derivative/generate]
-      :computer-science [base-conversion/generate]})
+      :computer-science [base-conversion/generate]
+      :number-theory [congruence/generate]})
 
 (def description
      {:linear-algebra {:name "Linear algebra"}
       :math-analysis {:name "Mathematical analysis"}
-      :computer-science {:name "Computer science"}})
+      :computer-science {:name "Computer science"}
+      :number-theory {:name "Number theory"}})
 
 (defn get-task [category level]
   (let [task ((rand-nth (generators category)) level)]
-    (if (vector? (:question task))
+    (if (coll? (:question task))
       (render/render-cljml-task task)
       task)))
 
@@ -33,5 +34,5 @@
   (map (fn [categ]
 	 {:code (name categ)
 	  :name (:name (description categ))})
-       categories))
+       (keys description)))
 
