@@ -28,7 +28,7 @@ Tasks, with '+' sign already implemented.
   * Regex.
 * Number theory
   * [Euler's totient function](http://en.wikipedia.org/wiki/Euler%27s_totient_function).
-  * Select prime number.
+  * \+ Select prime number.
   * [Greatest common divisors](http://en.wikipedia.org/wiki/Greatest_common_divisor).
   * \+ [Congruence relation](http://en.wikipedia.org/wiki/Modular_arithmetic).
   

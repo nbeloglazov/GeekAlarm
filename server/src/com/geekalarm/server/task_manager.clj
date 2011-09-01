@@ -7,7 +7,8 @@
              [base-conversion :as base-conversion]
              [derivative :as derivative]
              [matrix-multiplication :as matrix-multiplication]
-             [congruence :as congruence]]))
+             [congruence :as congruence]
+             [prime-numbers :as prime-numbers]]))
 
 (def generators
      {:linear-algebra [determinant/generate
@@ -16,7 +17,8 @@
       :math-analysis  [definite-polynomial-integral/generate
                        derivative/generate]
       :computer-science [base-conversion/generate]
-      :number-theory [congruence/generate]})
+      :number-theory [congruence/generate
+                      prime-numbers/generate]})
 
 (def description
      {:linear-algebra {:name "Linear algebra"}
