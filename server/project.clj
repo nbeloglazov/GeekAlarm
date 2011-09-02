@@ -6,6 +6,7 @@
 		 [net.cgrand/moustache "1.0.0"]
 		 [net.sourceforge.jeuclid/jeuclid-core "3.1.9"]
 		 [incanter/incanter-core "1.2.3"]
+                 [dk.brics.automaton/automaton "1.11.2"]
                  [congomongo "0.1.6-SNAPSHOT"]]
   :dev-dependencies [[swank-clojure "1.2.0"]
 		     [lein-ring "0.4.5"]

@@ -25,7 +25,7 @@ Tasks, with '+' sign already implemented.
 * Computer science (or better name?)
   * \+ [Base conversation](http://en.wikipedia.org/wiki/Base_conversion#Base_conversion) (e.g. from binary to decimal).
   * Something from graph theory (finding shortest path, etc). Must be clarified.
-  * Regex.
+  * \+ Regex.
 * Number theory
   * [Euler's totient function](http://en.wikipedia.org/wiki/Euler%27s_totient_function).
   * \+ Select prime number.

@@ -8,7 +8,9 @@
              [derivative :as derivative]
              [matrix-multiplication :as matrix-multiplication]
              [congruence :as congruence]
-             [prime-numbers :as prime-numbers]]))
+             [prime-numbers :as prime-numbers]
+             [regex :as regex]
+             ]))
 
 (def generators
      {:linear-algebra [determinant/generate
@@ -16,7 +18,8 @@
                        matrix-multiplication/generate]
       :math-analysis  [definite-polynomial-integral/generate
                        derivative/generate]
-      :computer-science [base-conversion/generate]
+      :computer-science [base-conversion/generate
+                         regex/generate]
       :number-theory [congruence/generate
                       prime-numbers/generate]})
 
