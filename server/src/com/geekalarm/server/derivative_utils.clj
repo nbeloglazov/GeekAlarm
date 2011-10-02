@@ -1,6 +1,7 @@
 (ns com.geekalarm.server.derivative-utils
   (:use [clojure.contrib.seq-utils :only (separate)]
-        [com.geekalarm.server.mathml-utils :only (cljml)]))
+        [com.geekalarm.server.mathml-utils :only (cljml)]
+        [clojure.core.match.core :only (match)]))
 
 (declare derivative-expr)
 
@@ -23,39 +24,33 @@
              :ln  [:div 1 arg])
        (conj [:mult (derivative arg)])))
 
-(defn derivative-expr [[func & args]]
-  (case func
-        :pow (let [[arg pow] args]
-               [:mult
-                pow
-                [:pow 
-                 arg
-                 (if (fn-of pow :minus)
-                   [:minus (inc (last pow))]
-                   (dec pow))]
-                (derivative arg)])
-        :exp (let [[base pow] args]
-               [:mult
-                [:ln base]
-                [:exp base pow]
-                (derivative pow)])
-        :plus (->> (map derivative args)
-                   (cons :plus))
-        :minus [:minus (derivative (first args))]
-        :mult (let [[a & rst] args]
-                (if (nil? rst)
-                  (derivative a)
-                  [:plus [:mult (derivative a)
-                          (cons :mult rst)]
-                   [:mult a
-                    (derivative (cons :mult rst))]]))
-        :div (let [[num den] args]
-               [:div [:plus [:mult (derivative num)
-                             den]
-                      [:minus [:mult num
-                               (derivative den)]]]
-                [:pow den 2]])
-        (derivative-f func (first args))))
+(defn derivative-expr [expr]
+  (match [(vec expr)]
+         [[:pow arg pow]] [:mult pow
+                           [:pow arg
+                            (if (fn-of pow :minus)
+                              [:minus (inc (last pow))]
+                              (dec pow))]
+                           (derivative arg)]
+         [[:exp base pow]] [:mult
+                          [:ln base]
+                          [:exp base pow]
+                          (derivative pow)]
+         [[:plus & args]] (->> (map derivative args)
+                             (cons :plus))
+         [[:minus & args]] [:minus (derivative (first args))]
+         [[:mult a & rst]] (if (empty? rst)
+                             (derivative a)
+                             [:plus [:mult (derivative a)
+                                     (cons :mult rst)]
+                              [:mult a
+                               (derivative (cons :mult rst))]])
+        [[:div num den]] [:div [:plus [:mult (derivative num)
+                                     den]
+                                [:minus [:mult num
+                                         (derivative den)]]]
+                          [:pow den 2]]
+        [[func arg]] (derivative-f func arg)))
 
 (declare normalize-expr)
 
@@ -85,40 +80,37 @@
 (defn normalize-expr [[func & args]]
   (let [args (map normalize args)
         expr (cons func args)]
-    (case func
-          :pow (let [[arg pow] args
-                     [arg pow] (if (fn-of arg :pow)
-                                 [(second arg) (* (last arg) pow)]
-                                 [arg pow])]
-                 (cond (= pow 1) arg
-                       (= pow 0) 1
-                       :else [:pow arg pow]))
-          :exp expr
-          :plus (let [args (reduce #(if (fn-of %2 :plus)
-                                      (concat %1 (rest %2))
-                                      (conj %1 %2)) [] args)
-                      [nums exprs] (separate number? args)
-                      num (reduce + nums)]
-                  (->> (if (zero? num) exprs (cons num exprs))
-                       (#(cond (empty? %) 0
-                               (= (count %) 1) (first %)
-                               :else (cons :plus %)))))
-          :minus (let [arg (first args)]
-                   (cond (= arg 0) 0
-                         (fn-of arg :minus) (last arg)
-                         :else expr))
-          :mult (let [{:keys [args minus]} (flatten-mult args)
-                      [nums exprs] (separate number? args)
-                      num (reduce * nums)]
-                  (if (zero? num)
-                    0
-                    (->> (if (= num 1) exprs (cons num exprs))
-                         (#(if (= (count %) 1)
-                             (first %)
-                             (cons :mult %)))
-                         (#(if minus [:minus %] %)))))
-          :div expr
-          expr)))
+    (match [(vec expr)]
+          [[:pow arg pow]] (let [[arg pow] (if (fn-of arg :pow)
+                                             [(second arg) (* (last arg) pow)]
+                                             [arg pow])]
+                            (cond (= pow 1) arg
+                                  (= pow 0) 1
+                                  :else [:pow arg pow]))
+          [[:exp & _]] expr
+          [[:plus & args]] (let [args (reduce #(if (fn-of %2 :plus)
+                                                 (concat %1 (rest %2))
+                                                 (conj %1 %2)) [] args)
+                                 [nums exprs] (separate number? args)
+                                 num (reduce + nums)]
+                             (->> (if (zero? num) exprs (cons num exprs))
+                                  (#(cond (empty? %) 0
+                                          (= (count %) 1) (first %)
+                                          :else (cons :plus %)))))
+          [[:minus arg]] (cond (= arg 0) 0
+                               (fn-of arg :minus) (last arg)
+                               :else expr)
+          [[:mult & args]] (let [{:keys [args minus]} (flatten-mult args)
+                                 [nums exprs] (separate number? args)
+                                 num (reduce * nums)]
+                             (if (zero? num)
+                               0
+                               (->> (if (= num 1) exprs (cons num exprs))
+                                    (#(if (= (count %) 1)
+                                        (first %)
+                                        (cons :mult %)))
+                                    (#(if minus [:minus %] %)))))
+          :else expr)))
 
 (declare to-cljml-expr)
 
