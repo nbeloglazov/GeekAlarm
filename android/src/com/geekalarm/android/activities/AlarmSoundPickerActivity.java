@@ -69,12 +69,14 @@ public class AlarmSoundPickerActivity extends Activity {
     }
     
     /**
-     * Finds option with given uri and sets selected.
+     * Looks up sound in available sounds and selects option, if found.
      * If no option found, sets first "Custom" selected.
      * @param sound
      */
     private void setSelected(Uri sound) {
-        for (int i = 0; i < adapter.getCount(); i++) {
+        // Skip sound at position 0, because it is custom sound
+        // with uri equals to null.
+        for (int i = 1; i < adapter.getCount(); i++) {
             if (adapter.getItem(i).getUri().equals(sound)) {
                 adapter.setSelected(i);
                 return;
