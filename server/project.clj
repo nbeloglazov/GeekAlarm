@@ -1,5 +1,5 @@
-(defproject geekalarm-server "1.0.0-SNAPSHOT"
-  :description "FIXME: write description"
+(defproject geekalarm-server "1.0.1"
+  :description "Server for generating and serving tasks."
   :dependencies [[org.clojure/clojure "1.2.1"]
 		 [org.clojure/clojure-contrib "1.2.0"]
 		 [ring "0.3.8"]
