@@ -43,6 +43,8 @@
                            (cljml mat)
                            [:mo ")"]])))
      :correct correct
-     :name "Inverse matrix"}))
-                  
+     :name "Inverse matrix"
+     :info (str "Find inverse of the matrix.\n"
+                "http://en.wikipedia.org/wiki/Invertible_matrix")}))
+
 

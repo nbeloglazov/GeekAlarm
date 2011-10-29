@@ -68,6 +68,8 @@ public final class TaskManager {
         Task task = new Task();
         task.setId(id);
         task.setCorrect(Integer.parseInt(taskJson.getString("correct")));
+        task.setName(taskJson.getString("name"));
+        task.setInfo(taskJson.getString("info"));
         String questionUrl = String.format("image?id=%s&type=question", id);
         task.setQuestion(getImage(questionUrl));
         for (int i = 0; i < 4; i++) {

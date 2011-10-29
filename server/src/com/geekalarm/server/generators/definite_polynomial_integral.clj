@@ -71,12 +71,6 @@
     {:question (integral-to-cljml integral)
      :choices (map cljml choices)
      :correct correct
-     :name "Definite polynomial integral"}))
-         
-        
-
-
-
-
-       
-
+     :name "Definite integral"
+     :info (str "Calculate given integral.\n"
+                "http://en.wikipedia.org/wiki/Symbolic_integration#Example")}))

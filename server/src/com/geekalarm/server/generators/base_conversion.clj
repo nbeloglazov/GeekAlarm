@@ -2,7 +2,7 @@
   (:use [com.geekalarm.server.utils :only (get-similar-by-one)]))
 
 (defn generate [level]
-  (let [a (case level 
+  (let [a (case level
                 0 10
                 1 10
                 2 (rand-nth (range 2 17)))
@@ -31,5 +31,7 @@
                            [:mn val]
                            [:mn to]])))
      :correct correct
-     :name "Base conversion"}))
+     :name "Base conversion"
+     :info (str "Convert given number from one base to another.\n"
+                "http://en.wikipedia.org/wiki/Positional_notation")}))
 

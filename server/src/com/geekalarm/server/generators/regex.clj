@@ -130,6 +130,8 @@
       {:question [:mtext regex]
        :choices (map (fn [x] [:mtext x]) choices)
        :correct (inc correct)
-       :name "Regex"})))
-                                 
+       :name "Regex"
+       :info (str "Choose string matching the pattern.\n"
+                  "http://www.regular-expressions.info/reference.html")})))
+
 

@@ -78,8 +78,6 @@
                        [:mtext "?"]]]]
      :choices (map der-ut/to-cljml (map der-ut/normalize choices))
      :correct correct
-     :name "Derivative"}))
-        
-          
-           
-           
+     :name "Derivative"
+     :info (str "Find derivative of the function."
+                "http://en.wikipedia.org/wiki/Table_of_derivatives")}))

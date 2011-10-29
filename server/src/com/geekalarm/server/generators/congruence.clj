@@ -84,7 +84,7 @@
     {:question (concat [:mtable {:columnalign "left"}] (map eq-to-cljml eqs))
      :choices (map (fn [x] [:mn x]) choices)
      :correct (inc correct)
-     :name "Congruence relation"}))
+     :name "Congruence relation"
+     :info (str "Solve system of linear congruences.\n"
+                "http://en.wikipedia.org/wiki/Modular_arithmetic")}))
 
-        
-        

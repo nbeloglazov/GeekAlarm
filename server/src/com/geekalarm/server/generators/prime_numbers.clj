@@ -39,4 +39,6 @@
     {:question [:mtext "Prime number?"]
      :choices (map (fn [x] [:mn x]) choices)
      :correct correct
-     :name "Prime numbers"}))
+     :name "Prime numbers"
+     :info (str "One of the numbers is prime. Which one?\n"
+                "http://en.wikipedia.org/wiki/Prime_number")}))

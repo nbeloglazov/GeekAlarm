@@ -28,4 +28,6 @@
     {:question (question-to-cljml matrix)
      :choices (map cljml answers)
      :correct cor
-     :name "Determinant"}))
+     :name "Determinant"
+     :info (str "Find determinant of the matrix.\n"
+                "http://en.wikipedia.org/wiki/Determinant")}))

@@ -31,7 +31,6 @@
                       [:mo ")"]])
                    choices)
      :correct correct
-     :name "Matrix multiplication"}))
-    
-
-         
+     :name "Matrix multiplication"
+     :info (str "Find product of the matrices.\n"
+                "http://en.wikipedia.org/wiki/Matrix_multiplication")}))

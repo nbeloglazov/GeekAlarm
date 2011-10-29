@@ -15,7 +15,8 @@
     <string name="no_email_clients">There are no email clients installed.</string>
     <string name="exit">Exit</string>
     <string name="custom">Custom</string>
-    
+    <string name="hide">Hide</string>
+
     <string name="easy">Easy</string>
     <string name="medium">Medium</string>
     <string name="hard">Hard</string>
@@ -27,7 +28,7 @@
     <string name="thursday">Th</string>
     <string name="friday">F</string>
     <string name="saturday">Sa</string>
-    
+
     <string name="location">Location</string>
     <string name="cant_read_folder">folder can\'t be read!</string>
     <string name="select">Select</string>

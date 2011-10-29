@@ -11,7 +11,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.DialogInterface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -26,6 +28,9 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.text.util.Linkify;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
 
 import com.geekalarm.android.AlarmPreference;
 import com.geekalarm.android.DBUtils;
@@ -86,6 +91,7 @@ public class TaskActivity extends Activity {
         runTaskLoader();
         timer = new Timer();
         findViewById(R.id.mute_button).setOnClickListener(new MuteListener());
+        findViewById(R.id.info_button).setOnClickListener(new InfoListener());
         updateStats();
         curPlayDelay = BASE_PLAY_DELAY;
     }
@@ -297,7 +303,7 @@ public class TaskActivity extends Activity {
                     intent.putExtra("win", win);
                     intent.setFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
                     startActivity(intent);
-                } 
+                }
                 TaskActivity.this.finish();
                 return;
             }
@@ -328,6 +334,29 @@ public class TaskActivity extends Activity {
                 timer.schedule(new ContinuePlayTask(), curPlayDelay);
                 curPlayDelay += PLAY_DELAY_INCREASE;
             }
+        }
+    }
+
+    private class InfoListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            if (currentTask == null) {
+                return;
+            }
+            SpannableString info = new SpannableString(currentTask.getInfo());
+            Linkify.addLinks(info, Linkify.ALL);
+            AlertDialog dialog = new AlertDialog.Builder(TaskActivity.this)
+                .setTitle(currentTask.getName())
+                .setMessage(info)
+                .setNeutralButton(R.string.hide, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }})
+                .show();
+            ((TextView)dialog.findViewById(android.R.id.message))
+                .setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 

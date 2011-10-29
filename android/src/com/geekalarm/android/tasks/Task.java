@@ -8,7 +8,9 @@ public class Task {
     private Bitmap[] choices;
     private int correct;
     private String id;
-    // Error message id is needed 
+    private String name;
+    private String info;
+    // Error message id is needed
     // when task downloading is failed.
     private int errorMessageId;
 
@@ -45,18 +47,34 @@ public class Task {
     }
 
     public int getErrorMessageId() {
-		return errorMessageId;
-	}
+        return errorMessageId;
+    }
 
-	public void setErrorMessageId(int errorMessageId) {
-		this.errorMessageId = errorMessageId;
-	}
+    public void setErrorMessageId(int errorMessageId) {
+        this.errorMessageId = errorMessageId;
+    }
 
-	public void setId(String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     public String getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 }

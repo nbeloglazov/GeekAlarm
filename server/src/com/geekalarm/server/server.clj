@@ -66,9 +66,10 @@
            :category category
            :level level)
 	 (swap! active-tasks assoc id))
-    (response (json/json-str {:id id
-			      :correct (:correct task)})
-	      "application/json")))
+    (-> (select-keys task [:info :name :correct])
+        (assoc :id id)
+        (json/json-str)
+    (response "application/json"))))
 
 (defn get-static-file [name]
   (let [th (Thread/currentThread)
