@@ -23,18 +23,18 @@ import com.geekalarm.android.adapters.AlarmSoundAdapter;
 import com.lamerman.FileDialog;
 
 /**
- * Activity for selecting sound. 
+ * Activity for selecting sound.
  * It displays:
- * 1. option to choose custom sound. 
+ * 1. option to choose custom sound.
  * 2. built in mario sound.
  * 3. all alarm and ringtone sounds available on device.
  *
  */
 public class AlarmSoundPickerActivity extends Activity {
-    
+
     private static String[] GEEK_ALARMS_TITLES = {
         "Mario"};
-    
+
     private static int[] GEEK_ALARMS_RES = {
         R.raw.mario};
 

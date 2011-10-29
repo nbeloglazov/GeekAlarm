@@ -52,7 +52,7 @@ public class FileDialog extends ListActivity {
     private String parentPath;
     private String currentPath = root;
 
-    
+
     private MediaPlayer player;
     private File selectedFile;
     private HashMap<String, Integer> lastPositions = new HashMap<String, Integer>();
@@ -228,7 +228,7 @@ public class FileDialog extends ListActivity {
             selectFile(file);
         }
     }
-    
+
     private void selectFile(File file) {
         player.reset();
         String fileName = file.getName();
@@ -262,7 +262,7 @@ public class FileDialog extends ListActivity {
         }
         super.onDestroy();
     }
-    
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
@@ -287,7 +287,7 @@ public class FileDialog extends ListActivity {
             player.stop();
         }
     }
-    
+
     private class FileSimpleAdapter extends SimpleAdapter {
 
         public FileSimpleAdapter(Context context,
@@ -305,6 +305,6 @@ public class FileDialog extends ListActivity {
             v.setBackgroundColor(!selected ? Color.BLACK : Color.BLUE);
             return v;
         }
-        
+
     }
 }
