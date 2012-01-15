@@ -1,2 +1,13 @@
 .idea
 *.iml
+.classpath
+target
+bin
+gen
+.project
+*jar
+/lib/
+server/classes/
+.lein-deps-sum
+*war
+*.keystore
