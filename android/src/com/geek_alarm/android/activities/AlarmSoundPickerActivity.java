@@ -40,7 +40,7 @@ public class AlarmSoundPickerActivity extends Activity {
 
     private AlarmSoundAdapter adapter;
     private MediaPlayer player;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +51,7 @@ public class AlarmSoundPickerActivity extends Activity {
         setUpListView();
         setSelected(Utils.getCurrentAlarmSound());
         player = new MediaPlayer();
-    }   
+    }
 
     private void setUpListView() {
         List<AlarmSound> sounds = new ArrayList<AlarmSound>();
@@ -62,12 +62,12 @@ public class AlarmSoundPickerActivity extends Activity {
         sounds.addAll(getGeekAlarms());
         // Add android alarms.
         sounds.addAll(getStandardAlarms());
-        adapter = 
+        adapter =
             new AlarmSoundAdapter(this, sounds, new SoundClickListener());
         ListView listView = (ListView)findViewById(R.id.list_view);
         listView.setAdapter(adapter);
     }
-    
+
     /**
      * Looks up sound in available sounds and selects option, if found.
      * If no option found, sets first "Custom" selected.
@@ -85,7 +85,7 @@ public class AlarmSoundPickerActivity extends Activity {
         adapter.getItem(0).setUri(sound);
         adapter.setSelected(0);
     }
-    
+
     /**
      * Retrieves list of standard android sounds.
      * It gets TYPE_ALARM and TYPE_RINGTONE sounds.
@@ -102,11 +102,11 @@ public class AlarmSoundPickerActivity extends Activity {
             String uri = cursor.getString(RingtoneManager.URI_COLUMN_INDEX);
             uri += "/" + cursor.getInt(RingtoneManager.ID_COLUMN_INDEX);
             sounds.add(new AlarmSound(title, manager.getRingtoneUri(i)));
-        }   
+        }
         cursor.deactivate();
         return sounds;
     }
-    
+
     /**
      * Creates list of built in sounds.
      * @return list
@@ -115,12 +115,12 @@ public class AlarmSoundPickerActivity extends Activity {
         List<AlarmSound> sounds = new ArrayList<AlarmSound>();
         for (int i = 0; i < GEEK_ALARMS_RES.length; i++) {
             sounds.add(new AlarmSound(
-                    GEEK_ALARMS_TITLES[i], 
+                    GEEK_ALARMS_TITLES[i],
                     Utils.getUriFromResource(GEEK_ALARMS_RES[i])));
         }
         return sounds;
     }
-    
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -130,7 +130,7 @@ public class AlarmSoundPickerActivity extends Activity {
     /**
      * Callback, which passed to AlarmSoundAdapter.
      * It's invoked when user select any sound.
-     * This callback starts playing selected sound or 
+     * This callback starts playing selected sound or
      * open file dialog, if user selected "Custom" option.
      */
     public class SoundClickListener {
@@ -143,8 +143,8 @@ public class AlarmSoundPickerActivity extends Activity {
                     player.stop();
                 }
                 Intent intent = new Intent(AlarmSoundPickerActivity.this, FileDialog.class);
-                intent.putExtra(FileDialog.START_URI, 
-                        adapter.getItem(0).getUri().toString());
+                String startUri = adapter.getItem(0).getUri() == null ? "" : adapter.getItem(0).getUri().toString();
+                intent.putExtra(FileDialog.START_URI, startUri);
                 startActivityForResult(intent, 0);
                 return;
             }
@@ -157,10 +157,10 @@ public class AlarmSoundPickerActivity extends Activity {
             } catch (Exception e) {
                 // Don't know what should I do here.
                 Log.e(getClass().getName(), "Can't play sound", e);
-            }     
+            }
         }
     }
-    
+
     /**
      * Invoked after user has selected music in filedialog or canceled it.
      */
@@ -174,22 +174,22 @@ public class AlarmSoundPickerActivity extends Activity {
             saveCurrentSoundAndExit();
         }
     }
-    
+
     private void saveCurrentSoundAndExit() {
         Uri uri = adapter.getItem(adapter.getSelected()).getUri();
         Utils.setCurrentAlarmSound(uri);
         finish();
     }
-    
+
     private class OkListener implements OnClickListener {
 
         @Override
         public void onClick(View v) {
             saveCurrentSoundAndExit();
         }
-        
+
     }
-    
+
     private class CancelListener implements OnClickListener {
 
         @Override
