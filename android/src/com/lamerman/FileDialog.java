@@ -28,7 +28,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.geekalarm.android.R;
+import com.geek_alarm.android.R;
 
 public class FileDialog extends ListActivity {
 

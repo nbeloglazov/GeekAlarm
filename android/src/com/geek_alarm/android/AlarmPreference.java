@@ -1,4 +1,4 @@
-package com.geekalarm.android;
+package com.geek_alarm.android;
 
 /**
  * AlarmPreference is particular alarm, 

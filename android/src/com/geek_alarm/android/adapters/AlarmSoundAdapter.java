@@ -1,4 +1,4 @@
-package com.geekalarm.android.adapters;
+package com.geek_alarm.android.adapters;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.geekalarm.android.AlarmSound;
-import com.geekalarm.android.R;
-import com.geekalarm.android.activities.AlarmSoundPickerActivity;
+import com.geek_alarm.android.AlarmSound;
+import com.geek_alarm.android.R;
+import com.geek_alarm.android.activities.AlarmSoundPickerActivity;
 
 /**
  * Adapter for displaying alarm sounds.

@@ -1,4 +1,4 @@
-package com.geekalarm.android.activities;
+package com.geek_alarm.android.activities;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,14 +32,14 @@ import android.text.util.Linkify;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 
-import com.geekalarm.android.AlarmPreference;
-import com.geekalarm.android.DBUtils;
-import com.geekalarm.android.R;
-import com.geekalarm.android.Utils;
-import com.geekalarm.android.tasks.Category;
-import com.geekalarm.android.tasks.Configuration;
-import com.geekalarm.android.tasks.Task;
-import com.geekalarm.android.tasks.TaskManager;
+import com.geek_alarm.android.AlarmPreference;
+import com.geek_alarm.android.DBUtils;
+import com.geek_alarm.android.R;
+import com.geek_alarm.android.Utils;
+import com.geek_alarm.android.tasks.Category;
+import com.geek_alarm.android.tasks.Configuration;
+import com.geek_alarm.android.tasks.Task;
+import com.geek_alarm.android.tasks.TaskManager;
 
 /**
  * Activity, it is place where user solves tasks. 

@@ -1,8 +1,6 @@
-package com.geekalarm.android.adapters;
+package com.geek_alarm.android.adapters;
 
-import java.util.List;
-
-import com.geekalarm.android.R;
+import com.geek_alarm.android.R;
 
 import android.content.Context;
 import android.view.LayoutInflater;

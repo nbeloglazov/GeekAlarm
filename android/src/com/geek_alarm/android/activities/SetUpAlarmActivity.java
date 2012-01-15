@@ -1,4 +1,4 @@
-package com.geekalarm.android.activities;
+package com.geek_alarm.android.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,8 +13,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.geekalarm.android.R;
-import com.geekalarm.android.Utils;
+import com.geek_alarm.android.R;
+import com.geek_alarm.android.Utils;
 
 /**
  * Activity for setting up alarm: set time and days.

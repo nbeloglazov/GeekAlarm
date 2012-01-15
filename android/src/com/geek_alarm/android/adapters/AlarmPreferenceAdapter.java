@@ -1,4 +1,4 @@
-package com.geekalarm.android.adapters;
+package com.geek_alarm.android.adapters;
 
 import java.util.Date;
 import java.util.List;
@@ -18,11 +18,11 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.geekalarm.android.AlarmPreference;
-import com.geekalarm.android.DBUtils;
-import com.geekalarm.android.R;
-import com.geekalarm.android.Utils;
-import com.geekalarm.android.activities.SetUpAlarmActivity;
+import com.geek_alarm.android.AlarmPreference;
+import com.geek_alarm.android.DBUtils;
+import com.geek_alarm.android.R;
+import com.geek_alarm.android.Utils;
+import com.geek_alarm.android.activities.SetUpAlarmActivity;
 
 /**
  * Adapter for displaying alarms.

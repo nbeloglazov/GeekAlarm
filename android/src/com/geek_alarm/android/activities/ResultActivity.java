@@ -1,4 +1,4 @@
-package com.geekalarm.android.activities;
+package com.geek_alarm.android.activities;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -7,15 +7,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
-import com.geekalarm.android.R;
-import com.geekalarm.android.Utils;
+import com.geek_alarm.android.R;
+import com.geek_alarm.android.Utils;
 
 /**
  * Final activity. It shows users "progress".

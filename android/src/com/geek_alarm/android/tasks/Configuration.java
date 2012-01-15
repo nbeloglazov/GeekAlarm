@@ -1,4 +1,4 @@
-package com.geekalarm.android.tasks;
+package com.geek_alarm.android.tasks;
 
 import java.util.Collections;
 import java.util.HashMap;

@@ -1,14 +1,13 @@
-package com.geekalarm.android;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.geek_alarm.android;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class DBUtils {
     

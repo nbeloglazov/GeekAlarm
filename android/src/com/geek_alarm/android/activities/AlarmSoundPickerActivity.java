@@ -1,4 +1,4 @@
-package com.geekalarm.android.activities;
+package com.geek_alarm.android.activities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +16,10 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.ListView;
 
-import com.geekalarm.android.AlarmSound;
-import com.geekalarm.android.R;
-import com.geekalarm.android.Utils;
-import com.geekalarm.android.adapters.AlarmSoundAdapter;
+import com.geek_alarm.android.AlarmSound;
+import com.geek_alarm.android.R;
+import com.geek_alarm.android.Utils;
+import com.geek_alarm.android.adapters.AlarmSoundAdapter;
 import com.lamerman.FileDialog;
 
 /**

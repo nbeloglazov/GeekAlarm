@@ -1,4 +1,4 @@
-package com.geekalarm.android;
+package com.geek_alarm.android;
 
 import android.net.Uri;
 

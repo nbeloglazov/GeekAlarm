@@ -1,6 +1,4 @@
-package com.geekalarm.android;
-
-import java.util.Calendar;
+package com.geek_alarm.android;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -11,8 +9,9 @@ import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import com.geek_alarm.android.activities.TaskActivity;
 
-import com.geekalarm.android.activities.TaskActivity;
+import java.util.Calendar;
 
 public class Utils {
     

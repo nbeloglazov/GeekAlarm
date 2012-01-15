@@ -1,4 +1,4 @@
-package com.geekalarm.android.activities;
+package com.geek_alarm.android.activities;
 
 import java.util.List;
 
@@ -17,13 +17,13 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.geekalarm.android.AlarmPreference;
-import com.geekalarm.android.DBUtils;
-import com.geekalarm.android.R;
-import com.geekalarm.android.Utils;
-import com.geekalarm.android.adapters.AlarmPreferenceAdapter;
-import com.geekalarm.android.adapters.DifficultyAdapter;
-import com.geekalarm.android.tasks.Configuration;
+import com.geek_alarm.android.AlarmPreference;
+import com.geek_alarm.android.DBUtils;
+import com.geek_alarm.android.R;
+import com.geek_alarm.android.Utils;
+import com.geek_alarm.android.adapters.AlarmPreferenceAdapter;
+import com.geek_alarm.android.adapters.DifficultyAdapter;
+import com.geek_alarm.android.tasks.Configuration;
 
 /**
  * This is main window. 
