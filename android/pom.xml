@@ -34,6 +34,9 @@
           </sdk>
           <deleteConflictingFiles>true</deleteConflictingFiles>
           <undeployBeforeDeploy>true</undeployBeforeDeploy>
+          <proguard>
+            <skip>false</skip>
+          </proguard>
         </configuration>
         <extensions>true</extensions>
       </plugin>
