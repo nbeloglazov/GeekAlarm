@@ -26,8 +26,8 @@ import com.geek_alarm.android.adapters.DifficultyAdapter;
 import com.geek_alarm.android.tasks.Configuration;
 
 /**
- * This is main window. 
- * List of alarms and option buttons 
+ * This is main window.
+ * List of alarms and option buttons
  * are displayed in this activity.
  */
 public class AlarmsActivity extends Activity {
