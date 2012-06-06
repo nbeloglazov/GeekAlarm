@@ -1,7 +1,5 @@
 (ns com.geekalarm.server.generators.congruence
-  (:require [clojure.contrib
-             [seq-utils :as seq-utils]
-             [combinatorics :as combinatorics]]
+  (:require [clojure.math.combinatorics :as combinatorics]
             [com.geekalarm.server
              [utils :as utils]
              [mathml-utils :as mathml]]))
@@ -15,7 +13,7 @@
         satisfy-all? (fn [x]
                        (->> (map #(satisfy? % x) eqs)
                             (every? true?)))]
-    [(seq-utils/find-first satisfy-all? (iterate inc 1))
+    [(first (filter satisfy-all? (iterate inc 1)))
      (reduce * (map second eqs))]))
 
 (defn generate-equations [n]
@@ -50,7 +48,8 @@
         rand-answer (fn [ans]
                       (->> #(rand-with-module ans upper-bound)
                            (repeatedly)
-                           (seq-utils/find-first not-real-answer?)))]
+                           (filter not-real-answer?)
+                           (first)))]
     (cons real-answer (map rand-answer rst))))
 
 (defn add-missing [answers]

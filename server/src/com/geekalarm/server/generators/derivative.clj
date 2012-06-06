@@ -77,7 +77,7 @@
                        [:mo "="]
                        [:mtext "?"]]]]
      :choices (map der-ut/to-cljml (map der-ut/normalize choices))
-     :correct correct
+     :correct (inc correct)
      :name "Derivative"
      :info (str "Find derivative of the function."
                 "http://en.wikipedia.org/wiki/Table_of_derivatives")}))

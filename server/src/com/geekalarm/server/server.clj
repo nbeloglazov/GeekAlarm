@@ -5,17 +5,16 @@
 	 [params :only (wrap-params)]
 	 [keyword-params :only (wrap-keyword-params)]])
   (:require [com.geekalarm.server
-	     [render-utils :as render]
+             [render-utils :as render]
 	     [mathml-utils :as mathml]
 	     [task-manager :as manager]
-             [db :as db]
 	     [utils :as utils]]
-	    [clojure.contrib
-	     [json :as json]]))
+	    [clojure.data.json :as json]))
+
 
 (def task-timeout (* 10 60 1000))
 
-(def timer-interval (* 1 60 1000))
+(def timer-interval (* 1 1000))
 
 (def active-tasks (atom {}))
 
@@ -27,9 +26,9 @@
 		   (>= (:timestamp task) lower-bound)))
 	 (into {}))))
 
-(def run-collector
-     (memoize (fn [] (utils/start-timer #(swap! active-tasks remove-expired-tasks)
-					timer-interval))))
+(defn run-collector []
+  (utils/start-timer #(do (println "!!!!") (swap! active-tasks remove-expired-tasks))
+                     timer-interval))
 
 (defn get-id []
   (apply str (repeatedly 8 #(rand-int 10))))
@@ -53,14 +52,10 @@
       (response "application/json")))
 
 (defn get-task [request]
-  (run-collector)
   (let [{:keys [category level]} (:params request)
 	task (manager/get-task (keyword category)
 			       (dec (Integer/parseInt level)))
 	id (get-id)]
-    (db/add-task-request {:category category
-                          :level level
-                          :time (Date.)})
     (->> (assoc task
            :timestamp (.getTime (Date.))
            :category category
@@ -80,12 +75,7 @@
   (response (get-static-file "index.html")
 	    "text/html"))
 
-(defn add-result [request]
-  (let [{:keys [id solved]} (:params request)]
-    (if-let [task (@active-tasks id)]
-      (db/add-task-result (-> task
-                              (select-keys [:category :name :level])
-                              (assoc :solved (Boolean/valueOf solved)))))))
+(defn add-result [request])
 
 (def handler
      (app wrap-params wrap-keyword-params

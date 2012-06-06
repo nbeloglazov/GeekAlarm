@@ -30,7 +30,7 @@
                       (cljml mat)
                       [:mo ")"]])
                    choices)
-     :correct correct
+     :correct (inc correct)
      :name "Matrix multiplication"
      :info (str "Find product of the matrices.\n"
                 "http://en.wikipedia.org/wiki/Matrix_multiplication")}))

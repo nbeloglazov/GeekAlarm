@@ -1,5 +1,5 @@
 (ns com.geekalarm.server.mathml-utils
-  (:require [clojure.contrib.math :as math]))
+  (:require [clojure.math.numeric-tower :as math]))
 
 ; cljml - structure, representing math ml xml
 
@@ -32,7 +32,7 @@
     (reduce (fn [st [at-name value]]
               (format "%s %s=\"%s\"" st (name at-name) value))
             "" att)))
-                                         
+
 
 (defn cljml-to-str [cljml]
   (if (empty? cljml)

@@ -27,7 +27,7 @@
 	[cor answers] (get-similar-by-one (int det))]
     {:question (question-to-cljml matrix)
      :choices (map cljml answers)
-     :correct cor
+     :correct (inc cor)
      :name "Determinant"
      :info (str "Find determinant of the matrix.\n"
                 "http://en.wikipedia.org/wiki/Determinant")}))

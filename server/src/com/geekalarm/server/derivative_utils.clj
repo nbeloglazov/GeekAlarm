@@ -1,7 +1,6 @@
 (ns com.geekalarm.server.derivative-utils
-  (:use [clojure.contrib.seq-utils :only (separate)]
-        [com.geekalarm.server.mathml-utils :only (cljml)]
-        [clojure.core.match.core :only (match)]))
+  (:use [com.geekalarm.server.mathml-utils :only (cljml)]
+        [clojure.core.match :only (match)]))
 
 (declare derivative-expr)
 
@@ -76,7 +75,7 @@
                           (update-in [:args] concat args)))
                     (update-in state [:args] conj arg)))]
     (reduce red-fun {:args [] :minus minus} args)))
-                          
+
 (defn normalize-expr [[func & args]]
   (let [args (map normalize args)
         expr (cons func args)]
@@ -91,7 +90,7 @@
           [[:plus & args]] (let [args (reduce #(if (fn-of %2 :plus)
                                                  (concat %1 (rest %2))
                                                  (conj %1 %2)) [] args)
-                                 [nums exprs] (separate number? args)
+                                 {nums true  exprs false} (group-by number? args)
                                  num (reduce + nums)]
                              (->> (if (zero? num) exprs (cons num exprs))
                                   (#(cond (empty? %) 0
@@ -101,7 +100,7 @@
                                (fn-of arg :minus) (last arg)
                                :else expr)
           [[:mult & args]] (let [{:keys [args minus]} (flatten-mult args)
-                                 [nums exprs] (separate number? args)
+                                 {nums true exprs false} (group-by number? args)
                                  num (reduce * nums)]
                              (if (zero? num)
                                0

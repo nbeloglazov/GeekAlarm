@@ -1,8 +1,5 @@
 (ns com.geekalarm.server.generators.prime-numbers
-  (:require [clojure.contrib
-             [lazy-seqs :as lazy-seqs]
-             [seq-utils :as seq-utils]]
-            [com.geekalarm.server
+  (:require [com.geekalarm.server
              [utils :as utils]]))
 
 (def levels [[0 100]
@@ -16,7 +13,7 @@
 
 (def pseudoprimes (memoize (fn []
   (let [mx (second (last levels))]
-    (loop [primes (subseq-within 3 mx lazy-seqs/primes)
+    (loop [primes (subseq-within 3 mx (utils/primes))
            accum []]
       (if (empty? primes)
         (sort accum)
@@ -26,7 +23,7 @@
                     (concat accum)))))))))
 
 (defn rand-prime [left right]
-  (rand-nth (subseq-within left right lazy-seqs/primes)))
+  (rand-nth (subseq-within left right (utils/primes))))
 
 (defn rand-pseudoprime [left right]
   (rand-nth (subseq-within left right (pseudoprimes))))
@@ -38,7 +35,7 @@
         [correct choices] (utils/get-similar-by-fn prime pseudo-fn)]
     {:question [:mtext "Prime number?"]
      :choices (map (fn [x] [:mn x]) choices)
-     :correct correct
+     :correct (inc correct)
      :name "Prime numbers"
      :info (str "One of the numbers is prime. Which one?\n"
                 "http://en.wikipedia.org/wiki/Prime_number")}))

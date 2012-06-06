@@ -30,7 +30,7 @@
                           [:msub
                            [:mn val]
                            [:mn to]])))
-     :correct correct
+     :correct (inc correct)
      :name "Base conversion"
      :info (str "Convert given number from one base to another.\n"
                 "http://en.wikipedia.org/wiki/Positional_notation")}))

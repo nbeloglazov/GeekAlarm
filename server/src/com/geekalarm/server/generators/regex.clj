@@ -1,8 +1,6 @@
 (ns com.geekalarm.server.generators.regex
   (:import [dk.brics.automaton RegExp])
-  (:require [clojure.contrib
-             [seq-utils :as seq-utils]]
-            [com.geekalarm.server
+  (:require [com.geekalarm.server
              [utils :as utils]
              [mathml-utils :as cljml]]))
 
@@ -109,11 +107,12 @@
                  (rand-char)))))
 
 (defn similar-invalid [regex st]
-            (->> (repeatedly 100 #(similar-string st))
-                 (seq-utils/find-first #(not (.run regex %)))
-                 (#(if (nil? %)
-                    "He$$o_world!"
-                    %))))
+  (->> (repeatedly 100 #(similar-string st))
+       (filter #(not (.run regex %)))
+       (first)
+       (#(if (nil? %)
+           "He$$o_world!"
+           %))))
 
 (defn generate [level]
   (let [regex (generate-regex level)

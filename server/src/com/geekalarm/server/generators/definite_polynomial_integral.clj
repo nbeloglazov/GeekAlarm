@@ -2,7 +2,7 @@
   (:use [com.geekalarm.server
          [mathml-utils :only (cljml)]
          [utils :only (get-similar-by-one)]]
-        [clojure.contrib.math :only (expt)]))
+        [clojure.math.numeric-tower :only (expt)]))
 
 (def max-limit 4)
 
@@ -70,7 +70,7 @@
         [correct choices] (get-similar-by-one result)]
     {:question (integral-to-cljml integral)
      :choices (map cljml choices)
-     :correct correct
+     :correct (inc correct)
      :name "Definite integral"
      :info (str "Calculate given integral.\n"
                 "http://en.wikipedia.org/wiki/Symbolic_integration#Example")}))

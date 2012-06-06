@@ -1,8 +1,6 @@
 (ns com.geekalarm.server.generators.inverse-matrix
   (:require [incanter.core :as incanter])
-  (:use [clojure.contrib
-         [seq-utils :only (find-first)]
-         [math :only (round)]]
+  (:use [clojure.math.numeric-tower :only (round)]
         [com.geekalarm.server
          [mathml-utils :only (cljml)]
          [utils :only (get-similar-matrices
@@ -16,7 +14,8 @@
   (->> (repeatedly #(random-matrix size max))
        (map (fn [mat]
               [(round (incanter/det mat)) mat]))
-       (find-first #(> (first %) 0))))
+       (filter #(> (first %) 0))
+       (first)))
 
 (defn generate [level]
   (let [n (sizes level)
@@ -42,7 +41,7 @@
                            [:mo "("]
                            (cljml mat)
                            [:mo ")"]])))
-     :correct correct
+     :correct (inc correct)
      :name "Inverse matrix"
      :info (str "Find inverse of the matrix.\n"
                 "http://en.wikipedia.org/wiki/Invertible_matrix")}))
