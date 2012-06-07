@@ -4,7 +4,12 @@
 ; cljml - structure, representing math ml xml
 
 (declare matrix-to-cljml)
-(declare ratio-to-cljml)
+
+(defn- ratio-to-cljml [ratio]
+  [:mfrac
+   [:mn (numerator ratio)]
+   [:mn (denominator ratio)]])
+
 
 (defn cljml
   ([name children] (reduce conj [name] children))
@@ -14,10 +19,6 @@
 		 (coll? value) (matrix-to-cljml value)
 		 :else [:mi (str value)])))
 
-(defn ratio-to-cljml [ratio]
-  [:mfrac
-   [:mn (numerator ratio)]
-   [:mn (denominator ratio)]])
 
 
 (defn matrix-to-cljml [matrix]
