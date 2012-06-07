@@ -2,6 +2,8 @@
   (:require [com.geekalarm.server
              [utils :as utils]]))
 
+(def category :number-theory)
+
 (def levels [[0 100]
              [100 500]
              [500 1500]])

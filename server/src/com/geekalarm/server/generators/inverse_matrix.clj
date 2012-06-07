@@ -6,6 +6,8 @@
          [utils :only (get-similar-matrices
                        random-matrix)]]))
 
+(def category :linear-algebra)
+
 (def maxs [4 9 4])
 
 (def sizes [2 2 3])

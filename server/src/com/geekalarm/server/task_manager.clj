@@ -1,27 +1,31 @@
 (ns com.geekalarm.server.task-manager
   (:require [com.geekalarm.server.render-utils :as render]
-	    [com.geekalarm.server.generators
-	     [determinant :as determinant]
-             [definite-polynomial-integral :as definite-polynomial-integral]
-             [inverse-matrix :as inverse-matrix]
-             [base-conversion :as base-conversion]
-             [derivative :as derivative]
-             [matrix-multiplication :as matrix-multiplication]
-             [congruence :as congruence]
-             [prime-numbers :as prime-numbers]
-             [regex :as regex]
-             ]))
+            [clojure.java.io :as io]))
 
-(def generators
-     {:linear-algebra [determinant/generate
-                       inverse-matrix/generate
-                       matrix-multiplication/generate]
-      :math-analysis  [definite-polynomial-integral/generate
-                       derivative/generate]
-      :computer-science [base-conversion/generate
-                         regex/generate]
-      :number-theory [congruence/generate
-                      prime-numbers/generate]})
+(def generators-folder "com/geekalarm/server/generators")
+
+(defn get-namespaces [folder]
+  (->> folder
+       io/resource
+       io/as-file
+       file-seq
+       (map #(.getName %))
+       (filter #(re-matches #".*\.clj" %))
+       (map #(re-find #"[^.]+" %))
+       (map #(str folder "/" %))
+       (map #(replace {\_ \- \/ \.} %))
+       (map #(apply str %))
+       (map symbol)))
+
+(defn resolve-generator [ns]
+  (require ns)
+  (let [[cat gen] (map #(deref (ns-resolve ns %)) '[category generate])]
+    (vary-meta gen assoc :category cat)))
+
+(defn get-generators [namespaces]
+  (group-by #(:category (meta %)) (map resolve-generator namespaces)))
+
+(def generators (get-generators (get-namespaces generators-folder)))
 
 (def description
      {:linear-algebra {:name "Linear algebra"}

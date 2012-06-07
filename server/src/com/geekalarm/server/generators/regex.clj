@@ -4,6 +4,8 @@
              [utils :as utils]
              [mathml-utils :as cljml]]))
 
+(def category :computer-science)
+
 (def max-count 3)
 (def max-length 30)
 

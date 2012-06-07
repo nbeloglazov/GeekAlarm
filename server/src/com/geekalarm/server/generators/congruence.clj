@@ -4,6 +4,8 @@
              [utils :as utils]
              [mathml-utils :as mathml]]))
 
+(def category :number-theory)
+
 (def modules [2 3 5 7 11 13 17 19])
 (def multiplier 4)
 

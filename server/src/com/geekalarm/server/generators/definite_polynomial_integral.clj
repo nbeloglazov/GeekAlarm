@@ -4,6 +4,8 @@
          [utils :only (get-similar-by-one)]]
         [clojure.math.numeric-tower :only (expt)]))
 
+(def category :math-analysis)
+
 (def max-limit 4)
 
 (def max-power 3)

@@ -1,6 +1,8 @@
 (ns com.geekalarm.server.generators.base-conversion
   (:use [com.geekalarm.server.utils :only (get-similar-by-one)]))
 
+(def category :computer-science)
+
 (defn generate [level]
   (let [a (case level
                 0 10

@@ -5,6 +5,8 @@
             [clojure.walk :as walk])
   (:use [com.geekalarm.server.mathml-utils :only (cljml)]))
 
+(def category :math-analysis)
+
 (defn rand-fn []
   (rand-nth (vec der-ut/fns)))
 

@@ -4,6 +4,8 @@
          [mathml-utils :only (cljml)]])
   (:require [incanter.core :as incanter]))
 
+(def category :linear-algebra)
+
 (def maxs [9 19 9])
 
 (def sizes [2 2 3])

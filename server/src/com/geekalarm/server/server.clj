@@ -14,7 +14,7 @@
 
 (def task-timeout (* 10 60 1000))
 
-(def timer-interval (* 1 1000))
+(def timer-interval (* 1 60 1000))
 
 (def active-tasks (atom {}))
 
@@ -27,7 +27,7 @@
 	 (into {}))))
 
 (defn run-collector []
-  (utils/start-timer #(do (println "!!!!") (swap! active-tasks remove-expired-tasks))
+  (utils/start-timer #(swap! active-tasks remove-expired-tasks)
                      timer-interval))
 
 (defn get-id []

@@ -5,6 +5,8 @@
          [utils :only (get-similar-by-one
                        random-matrix)]]))
 
+(def category :linear-algebra)
+
 
 (defn- question-to-cljml [matrix]
   [:math [:mo "|"]
