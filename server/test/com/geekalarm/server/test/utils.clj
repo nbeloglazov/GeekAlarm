@@ -42,4 +42,12 @@
                        (partition 2)
                        (map #(apply - %))))))))
 
+(deftest test-rand-range
+  (dotimes [_ 10]
+    (let [a (rand-int 100)
+          b (+ a (rand-int 100))]
+      (dotimes [_ 10]
+        (is (<= a (rand-range a b) b))))))
+
+
 

@@ -79,5 +79,9 @@
 (defn primes []
   (filter prime? (iterate inc 2)))
 
+(defn rand-range [a b]
+  (+ a (rand-int (inc (- b a)))))
+
+
 
 

@@ -1,20 +1,25 @@
 (ns com.geekalarm.server.task-manager
   (:require [com.geekalarm.server.render-utils :as render]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [clojure.string :as string]))
 
-(def generators-folder "com/geekalarm/server/generators")
 
-(defn get-namespaces [folder]
-  (->> folder
+(defn generators-folder []
+  (->> "com/geekalarm/server/server.clj"
        io/resource
        io/as-file
+       (.getParent)
+       (#(str % "/generators"))))
+
+
+(defn get-namespaces [folder]
+  (->> (io/as-file folder)
        file-seq
        (map #(.getName %))
        (filter #(re-matches #".*\.clj" %))
        (map #(re-find #"[^.]+" %))
-       (map #(str folder "/" %))
-       (map #(replace {\_ \- \/ \.} %))
-       (map #(apply str %))
+       (map #(str "com.geekalarm.server.generators." %))
+       (map #(string/replace % "_" "-"))
        (map symbol)))
 
 (defn resolve-generator [ns]
@@ -25,7 +30,7 @@
 (defn get-generators [namespaces]
   (group-by #(:category (meta %)) (map resolve-generator namespaces)))
 
-(def generators (get-generators (get-namespaces generators-folder)))
+(def generators (get-generators (get-namespaces (generators-folder))))
 
 (def description
      {:linear-algebra {:name "Linear algebra"}
