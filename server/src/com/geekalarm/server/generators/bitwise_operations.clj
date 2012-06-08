@@ -34,7 +34,7 @@
         res (op-fn a b)
         [correct choices] (utils/get-similar-by-fn res
                                                    change-random-bit)]
-    {:question [:mrow [:mn a] [:mo op-name] [:mn b]]
+    {:question [:mrow [:mn a] [:mo op-name] [:mn b] [:mo "="] [:mtext "?"]]
      :choices (map #(vector :mn %)
                     choices)
      :correct (inc correct)
