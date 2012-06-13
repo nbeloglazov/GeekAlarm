@@ -6,35 +6,32 @@ Example of tasks can be found here [http://www.geek-alarm.com](http://www.geek-a
 
 App in android market: [GeekAlarm](http://market.android.com/details?id=com.geek_alarm.android)
 
-## Categories
+## Tasks
 
-Task represents basic operations and definitions in different fields of math and computer science.  
+Task represents basic operations and definitions in different fields of math and computer science.
 Tasks, with '+' sign already implemented.
 
-* Linear algebra
-  * \+ [Determinant](http://en.wikipedia.org/wiki/Determinant).
-  * \+ [Inverse matrix](http://en.wikipedia.org/wiki/Inverse_matrix).
-  * \+ [Matrix multiplication](http://en.wikipedia.org/wiki/Matrix_multiplication).
-  * [Eigenvalues and eigenvectors](http://en.wikipedia.org/wiki/Eigenvalue,_eigenvector_and_eigenspace).
-* Mathematical analysis
-  * \+ Definite polynomial integral.
-  * Definite random integral (trigonometric functions).
-  * Indefinite integral.
-  * \+ Derivative.
-  * Derivative at a given point.
-* Computer science (or better name?)
-  * \+ [Base conversation](http://en.wikipedia.org/wiki/Base_conversion#Base_conversion) (e.g. from binary to decimal).
-  * Something from graph theory (finding shortest path, etc). Must be clarified.
-  * \+ Regex.
-* Number theory
-  * [Euler's totient function](http://en.wikipedia.org/wiki/Euler%27s_totient_function).
-  * \+ Select prime number.
-  * [Greatest common divisors](http://en.wikipedia.org/wiki/Greatest_common_divisor).
-  * \+ [Congruence relation](http://en.wikipedia.org/wiki/Modular_arithmetic).
-  
+* \+ [Determinant](http://en.wikipedia.org/wiki/Determinant).
+* \+ [Inverse matrix](http://en.wikipedia.org/wiki/Inverse_matrix).
+* \+ [Matrix multiplication](http://en.wikipedia.org/wiki/Matrix_multiplication).
+* [Eigenvalues and eigenvectors](http://en.wikipedia.org/wiki/Eigenvalue,_eigenvector_and_eigenspace).
+* \+ Definite polynomial integral.
+* Definite random integral (trigonometric functions).
+* Indefinite integral.
+* \+ Derivative.
+* Derivative at a given point.
+* \+ [Base conversation](http://en.wikipedia.org/wiki/Base_conversion#Base_conversion) (e.g. from binary to decimal).
+* Something from graph theory (finding shortest path, etc). Must be clarified.
+* \+ Regex.
+* [Euler's totient function](http://en.wikipedia.org/wiki/Euler%27s_totient_function).
+* \+ Select prime number.
+* [Greatest common divisors](http://en.wikipedia.org/wiki/Greatest_common_divisor).
+* \+ [Congruence relation](http://en.wikipedia.org/wiki/Modular_arithmetic).
+* \+ [Bitwise operations](http://en.wikipedia.org/wiki/Bitwise_operation)
+
 ## Architecture
 
-To display all this tasks to user, we need to generate images from LaTeX or MathML notation. I haven't found any lightweight library for java to do it. So we can't generate tasks in android application. These tasks will be generated on server and android client will get them using http requests. Server usage requires internet access for client (not good), but it allows to add new tasks very easy (good). Server will be implemented in Clojure.
+To display all this tasks to user, we need to generate images from LaTeX or MathML notation. I haven't found any lightweight library for java to do it. So we can't generate tasks in android application. These tasks will be generated on server and android client will get them using http requests. Server usage requires internet access for client (not good), but it allows to add new tasks very easy (good). Server is implemented in Clojure.
 
 Project consists of 2 parts:
 
@@ -44,5 +41,5 @@ Project consists of 2 parts:
 
 ## License
 
-Copyright (C) 2011 Nikita Beloglazov
+Copyright (C) 2011-2012 Nikita Beloglazov
 

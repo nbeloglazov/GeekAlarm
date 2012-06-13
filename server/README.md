@@ -6,18 +6,18 @@ Server application for GeekAlarm.
 
 Server handles following GET requests:
 
-* **/categories** - returns array in json of categories:
+* **/tasks** - returns array of available tasks in json format:
 
 ```javascript
-[{"name": "Linear algebra", "code": "linear-algebra"},
- {"name": "Mathematical analysis", "code": "math-analysis"}]
+[{"name": "Determinant", "type": "determinant", "description": "Bla-bla-bla"},
+ {"name": "Prime numbers", "type": "prime-numbers", "description": "Bla-bla-bla about prime numbers"}]
 ```
 
 * **/task** - generates and returns task. Parameters:
-   *category* - code of one of categories
+   *type* - type of the task
    *level* - 1, 2 or 3
-   Example: /task?category=linear-algebra&level=1
-   Result json contains id of task and number of correct answer (1 to 4):
+   Example: /task?type=determinant&level=1
+   Result json object that contains task id and  index  of the correct answer (0 to 3):
 
 ```javascript
 {"id": "01234567", "correct": 2}
@@ -28,11 +28,6 @@ Server handles following GET requests:
    *type* - "question" or "choice"
    *number* - number of choice if type is "choice"
    Example: /image?id=01234567&type=choice&number=1
-
-* **/result** - tell server result for particular task
-   *id* - task id
-   *solved* - result, true of false
-   Example: /result?id=01234567&solved=true
 
 ## Architecture
 
@@ -45,11 +40,11 @@ Internally server works in following way:
 6. finds task in map and returns appropriate image.
 
 ### task-manager
-task-manager contains information of all task categories. For every category it contains vector of generators - functions which generates some specific kind of task (e.g. determinant, inverse matrix). Generator takes only level and returns map with following keys: ```:question```, ```:choices```, ```:correct```.
+task-manager contains information of all tasks. Task consists of following fields: ```:name```, ```:type```, ```:description``` and ```:generator```. Generator - function that takes level (1, 2 or 3) and returns map with following keys: ```:question```, ```:choices```, ```:correct```.
 ```:question``` - either InputStream of image or MathML expression (in cljml form). MathML expression will be rendered to image InputStream.
 ```:choices```  - collection of InputStream's of images or MathML expressions.
-```:correct``` - number of correct answer
+```:correct``` - index of correct answer
 
 ## License
 
-Copyright (C) 2011 Nikita Beloglazov
+Copyright (C) 2011-2012 Nikita Beloglazov
