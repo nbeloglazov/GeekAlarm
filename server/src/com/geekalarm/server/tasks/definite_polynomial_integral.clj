@@ -1,10 +1,8 @@
-(ns com.geekalarm.server.generators.definite-polynomial-integral
+(ns com.geekalarm.server.tasks.definite-polynomial-integral
   (:use [com.geekalarm.server
          [mathml-utils :only (cljml)]
          [utils :only (get-similar-by-one)]]
         [clojure.math.numeric-tower :only (expt)]))
-
-(def category :math-analysis)
 
 (def max-limit 4)
 
@@ -72,7 +70,10 @@
         [correct choices] (get-similar-by-one result)]
     {:question (integral-to-cljml integral)
      :choices (map cljml choices)
-     :correct (inc correct)
-     :name "Definite integral"
-     :info (str "Calculate given integral.\n"
-                "http://en.wikipedia.org/wiki/Symbolic_integration#Example")}))
+     :correct correct}))
+
+(def info {:id :definite-integral
+           :name "Definite integral"
+           :description (str "Calculate given integral.\n"
+                             "http://en.wikipedia.org/wiki/Symbolic_integration#Example")
+           :generator generate})

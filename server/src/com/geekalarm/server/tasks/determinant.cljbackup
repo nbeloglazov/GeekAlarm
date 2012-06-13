@@ -5,9 +5,6 @@
          [utils :only (get-similar-by-one
                        random-matrix)]]))
 
-(def category :linear-algebra)
-
-
 (defn- question-to-cljml [matrix]
   [:math [:mo "|"]
          [:mphantom [:mtext "-"]] ; hack to insert some space between by bracker and numbers
@@ -26,10 +23,13 @@
 	max (maxs level)
 	matrix (random-matrix size max)
 	det (incanter/det matrix)
-	[cor answers] (get-similar-by-one (int det))]
+	[correct answers] (get-similar-by-one (int det))]
     {:question (question-to-cljml matrix)
      :choices (map cljml answers)
-     :correct (inc cor)
-     :name "Determinant"
-     :info (str "Find determinant of the matrix.\n"
-                "http://en.wikipedia.org/wiki/Determinant")}))
+     :correct correct}))
+
+(def info {:id :determinant
+           :name "Determinant"
+           :description (str "Find determinant of the matrix.\n"
+                             "http://en.wikipedia.org/wiki/Determinant")
+           :generator generate})

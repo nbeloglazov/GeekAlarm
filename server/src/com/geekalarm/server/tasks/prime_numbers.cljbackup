@@ -2,8 +2,6 @@
   (:require [com.geekalarm.server
              [utils :as utils]]))
 
-(def category :number-theory)
-
 (def levels [[0 100]
              [100 500]
              [500 1500]])
@@ -37,7 +35,10 @@
         [correct choices] (utils/get-similar-by-fn prime pseudo-fn)]
     {:question [:mtext "Prime number?"]
      :choices (map (fn [x] [:mn x]) choices)
-     :correct (inc correct)
-     :name "Prime numbers"
-     :info (str "One of the numbers is prime. Which one?\n"
-                "http://en.wikipedia.org/wiki/Prime_number")}))
+     :correct correct}))
+
+(defn info {:id :prime-numbers
+            :name "Prime numbers"
+            :description (str "One of the numbers is prime. Which one?\n"
+                              "http://en.wikipedia.org/wiki/Prime_number")
+            :generator generate})

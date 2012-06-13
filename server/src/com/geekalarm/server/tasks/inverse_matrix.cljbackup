@@ -6,8 +6,6 @@
          [utils :only (get-similar-matrices
                        random-matrix)]]))
 
-(def category :linear-algebra)
-
 (def maxs [4 9 4])
 
 (def sizes [2 2 3])
@@ -43,9 +41,12 @@
                            [:mo "("]
                            (cljml mat)
                            [:mo ")"]])))
-     :correct (inc correct)
-     :name "Inverse matrix"
-     :info (str "Find inverse of the matrix.\n"
-                "http://en.wikipedia.org/wiki/Invertible_matrix")}))
+     :correct correct}))
+
+(def info {:id :inverse-matrix
+           :name "Inverse matrix"
+           :description (str "Find inverse of the matrix.\n"
+                             "http://en.wikipedia.org/wiki/Invertible_matrix")
+           :generator generate})
 
 

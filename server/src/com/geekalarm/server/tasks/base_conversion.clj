@@ -1,7 +1,5 @@
-(ns com.geekalarm.server.generators.base-conversion
+(ns com.geekalarm.server.tasks.base-conversion
   (:use [com.geekalarm.server.utils :only (get-similar-by-one)]))
-
-(def category :computer-science)
 
 (defn generate [level]
   (let [a (case level
@@ -32,8 +30,11 @@
                           [:msub
                            [:mn val]
                            [:mn to]])))
-     :correct (inc correct)
-     :name "Base conversion"
-     :info (str "Convert given number from one base to another.\n"
-                "http://en.wikipedia.org/wiki/Positional_notation")}))
+     :correct correct}))
+
+(def info {:name "Base conversion"
+           :id :base-conversion
+           :description (str "Convert given number from one base to another.\n"
+                             "http://en.wikipedia.org/wiki/Positional_notation")
+           :generator generate})
 

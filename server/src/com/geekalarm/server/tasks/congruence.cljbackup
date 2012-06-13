@@ -4,8 +4,6 @@
              [utils :as utils]
              [mathml-utils :as mathml]]))
 
-(def category :number-theory)
-
 (def modules [2 3 5 7 11 13 17 19])
 (def multiplier 4)
 
@@ -84,8 +82,11 @@
 
     {:question (concat [:mtable {:columnalign "left"}] (map eq-to-cljml eqs))
      :choices (map (fn [x] [:mn x]) choices)
-     :correct (inc correct)
-     :name "Congruence relation"
-     :info (str "Solve system of linear congruences.\n"
-                "http://en.wikipedia.org/wiki/Modular_arithmetic")}))
+     :correct correct}))
+
+(def info {:id :congruence
+           :name "Congruence relation"
+           :description (str "Solve system of linear congruences.\n"
+                             "http://en.wikipedia.org/wiki/Modular_arithmetic")
+           :generator generate})
 

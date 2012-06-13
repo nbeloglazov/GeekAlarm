@@ -46,25 +46,24 @@
 	  (nth choices (dec (bigint number))))
 	(response "image/png"))))
 
-(defn get-categories [request]
-  (-> (manager/get-categories)
+(defn tasks-info [_]
+  (-> (manager/tasks-info)
       (json/json-str)
       (response "application/json")))
 
-(defn get-task [request]
-  (let [{:keys [category level]} (:params request)
-	task (manager/get-task (keyword category)
-			       (dec (Integer/parseInt level)))
+(defn generate-task [request]
+  (let [{:keys [type level]} (:params request)
+	task (manager/generate-task (keyword type)
+                                    (dec (Integer/parseInt level)))
 	id (get-id)]
     (->> (assoc task
            :timestamp (.getTime (Date.))
-           :category category
            :level level)
 	 (swap! active-tasks assoc id))
-    (-> (select-keys task [:info :name :correct])
-        (assoc :id id)
+    (-> {:correct (:correct task)
+         :id id}
         (json/json-str)
-    (response "application/json"))))
+        (response "application/json"))))
 
 (defn get-static-file [name]
   (let [th (Thread/currentThread)
@@ -80,7 +79,6 @@
 (def handler
      (app wrap-params wrap-keyword-params
       [""] get-index-html
+      ["task"] generate-task
       ["image"] get-image
-      ["categories"] get-categories
-      ["task"] get-task
-      ["result"] add-result))
+      ["tasks"] tasks-info))

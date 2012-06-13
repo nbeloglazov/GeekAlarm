@@ -1,10 +1,8 @@
-(ns com.geekalarm.server.generators.matrix-multiplication
+(ns com.geekalarm.server.tasks.matrix-multiplication
   (:use [com.geekalarm.server
          [utils :only (random-matrix get-similar-matrices)]
          [mathml-utils :only (cljml)]])
   (:require [incanter.core :as incanter]))
-
-(def category :linear-algebra)
 
 (def maxs [9 19 9])
 
@@ -32,7 +30,10 @@
                       (cljml mat)
                       [:mo ")"]])
                    choices)
-     :correct (inc correct)
-     :name "Matrix multiplication"
-     :info (str "Find product of the matrices.\n"
-                "http://en.wikipedia.org/wiki/Matrix_multiplication")}))
+     :correct correct}))
+
+(def info {:id :matrix-multiplication
+           :name "Matrix multiplication"
+           :description (str "Find product of the matrices.\n"
+                             "http://en.wikipedia.org/wiki/Matrix_multiplication")
+           :generator generate})

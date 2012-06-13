@@ -1,7 +1,5 @@
-(ns com.geekalarm.server.generators.bitwise-operations
+(ns com.geekalarm.server.tasks.bitwise-operations
   (:require [com.geekalarm.server.utils :as utils]))
-
-(def category :computer-science)
 
 (def levels [[1 7]
              [1 31]
@@ -36,10 +34,13 @@
                                                    change-random-bit)]
     {:question [:mrow [:mn a] [:mo op-name] [:mn b] [:mo "="] [:mtext "?"]]
      :choices (map #(vector :mn %)
-                    choices)
-     :correct (inc correct)
-     :name "Bitwise operations"
-     :info (str "Calculate bitwise operator for 2 arguments.\n"
-                "http://en.wikipedia.org/wiki/Bitwise_operation")}))
+                   choices)
+     :correct correct}))
+
+(def info {:name "Bitwise operations"
+           :id :bitwise-operations
+           :description (str "Calculate bitwise operator for 2 arguments.\n"
+                             "http://en.wikipedia.org/wiki/Bitwise_operation")
+           :generator generate})
 
 

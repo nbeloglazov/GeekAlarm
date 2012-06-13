@@ -5,8 +5,6 @@
             [clojure.walk :as walk])
   (:use [com.geekalarm.server.mathml-utils :only (cljml)]))
 
-(def category :math-analysis)
-
 (defn rand-fn []
   (rand-nth (vec der-ut/fns)))
 
@@ -79,7 +77,11 @@
                        [:mo "="]
                        [:mtext "?"]]]]
      :choices (map der-ut/to-cljml (map der-ut/normalize choices))
-     :correct (inc correct)
-     :name "Derivative"
-     :info (str "Find derivative of the function."
-                "http://en.wikipedia.org/wiki/Table_of_derivatives")}))
+     :correct correct}))
+
+(defn info {:id :derivative
+            :name "Derivative"
+            :description (str "Find derivative of the function."
+                              "http://en.wikipedia.org/wiki/Table_of_derivatives")
+            :generator generate})
+

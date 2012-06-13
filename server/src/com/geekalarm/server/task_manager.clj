@@ -4,12 +4,12 @@
             [clojure.string :as string]))
 
 
-(defn generators-folder []
+(defn tasks-folder []
   (->> "com/geekalarm/server/server.clj"
        io/resource
        io/as-file
        (.getParent)
-       (#(str % "/generators"))))
+       (#(str % "/tasks"))))
 
 
 (defn get-namespaces [folder]
@@ -18,35 +18,26 @@
        (map #(.getName %))
        (filter #(re-matches #".*\.clj" %))
        (map #(re-find #"[^.]+" %))
-       (map #(str "com.geekalarm.server.generators." %))
+       (map #(str "com.geekalarm.server.tasks." %))
        (map #(string/replace % "_" "-"))
        (map symbol)))
 
-(defn resolve-generator [ns]
+(defn resolve-task [ns]
   (require ns)
-  (let [[cat gen] (map #(deref (ns-resolve ns %)) '[category generate])]
-    (vary-meta gen assoc :category cat)))
+  (deref (ns-resolve ns 'info)))
 
-(defn get-generators [namespaces]
-  (group-by #(:category (meta %)) (map resolve-generator namespaces)))
+(def tasks (->> (tasks-folder)
+                get-namespaces
+                (map resolve-task)
+                (reduce #(assoc % (:id %2) %2) {})))
 
-(def generators (get-generators (get-namespaces (generators-folder))))
-
-(def description
-     {:linear-algebra {:name "Linear algebra"}
-      :math-analysis {:name "Mathematical analysis"}
-      :computer-science {:name "Computer science"}
-      :number-theory {:name "Number theory"}})
-
-(defn get-task [category level]
-  (let [task ((rand-nth (generators category)) level)]
+(defn generate-task [task-id level]
+  (let [task ((get-in tasks [task-id :generator]) level)]
     (if (coll? (:question task))
       (render/render-cljml-task task)
       task)))
 
-(defn get-categories []
-  (map (fn [categ]
-	 {:code (name categ)
-	  :name (:name (description categ))})
-       (keys description)))
+(defn tasks-info []
+  (map #(dissoc % :generator) (vals tasks)))
+
 

@@ -1,6 +1,6 @@
-(ns com.geekalarm.server.generators.test.bitwise-operations
+(ns com.geekalarm.server.tasks.test.bitwise-operations
   (:use clojure.test
-        com.geekalarm.server.generators.bitwise-operations))
+        com.geekalarm.server.tasks.bitwise-operations))
 
 (defn count-bits [n]
   (->> (Integer/toBinaryString n)

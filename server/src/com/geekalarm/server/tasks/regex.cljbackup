@@ -4,8 +4,6 @@
              [utils :as utils]
              [mathml-utils :as cljml]]))
 
-(def category :computer-science)
-
 (def max-count 3)
 (def max-length 30)
 
@@ -130,9 +128,12 @@
       (recur level)
       {:question [:mtext regex]
        :choices (map (fn [x] [:mtext x]) choices)
-       :correct (inc correct)
-       :name "Regex"
-       :info (str "Choose string matching the pattern.\n"
-                  "http://www.regular-expressions.info/reference.html")})))
+       :correct correct})))
+
+(def info {:id :regex
+           :name "Regex"
+           :description (str "Choose string matching the pattern.\n"
+                             "http://www.regular-expressions.info/reference.html")
+           :generator generate})
 
 
