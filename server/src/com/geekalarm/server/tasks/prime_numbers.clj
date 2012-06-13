@@ -37,7 +37,7 @@
      :choices (map (fn [x] [:mn x]) choices)
      :correct correct}))
 
-(def info {:id :prime-numbers
+(def info {:type :prime-numbers
            :name "Prime numbers"
            :description (str "One of the numbers is prime. Which one?\n"
                              "http://en.wikipedia.org/wiki/Prime_number")

@@ -43,7 +43,7 @@
 	{:keys [question choices]} (@active-tasks id)]
     (-> (if (= type "question")
 	  question
-	  (nth choices (dec (bigint number))))
+	  (nth choices (Integer/parseInt number)))
 	(response "image/png"))))
 
 (defn tasks-info [_]

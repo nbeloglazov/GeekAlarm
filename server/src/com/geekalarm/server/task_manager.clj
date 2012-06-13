@@ -29,15 +29,17 @@
 (def tasks (->> (tasks-folder)
                 get-namespaces
                 (map resolve-task)
-                (reduce #(assoc % (:id %2) %2) {})))
+                (reduce #(assoc % (:type %2) %2) {})))
 
-(defn generate-task [task-id level]
-  (let [task ((get-in tasks [task-id :generator]) level)]
+(defn generate-task [type level]
+  (let [task ((get-in tasks [type :generator]) level)]
     (if (coll? (:question task))
       (render/render-cljml-task task)
       task)))
 
 (defn tasks-info []
-  (map #(dissoc % :generator) (vals tasks)))
+  (->> (vals tasks)
+       (map #(dissoc % :generator))
+       (sort-by :name)))
 
 

@@ -130,7 +130,7 @@
        :choices (map (fn [x] [:mtext x]) choices)
        :correct correct})))
 
-(def info {:id :regex
+(def info {:type :regex
            :name "Regex"
            :description (str "Choose string matching the pattern.\n"
                              "http://www.regular-expressions.info/reference.html")

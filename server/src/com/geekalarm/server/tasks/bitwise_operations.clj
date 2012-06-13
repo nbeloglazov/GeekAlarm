@@ -38,7 +38,7 @@
      :correct correct}))
 
 (def info {:name "Bitwise operations"
-           :id :bitwise-operations
+           :type :bitwise-operations
            :description (str "Calculate bitwise operator for 2 arguments.\n"
                              "http://en.wikipedia.org/wiki/Bitwise_operation")
            :generator generate})

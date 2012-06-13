@@ -72,7 +72,7 @@
      :choices (map cljml choices)
      :correct correct}))
 
-(def info {:id :definite-integral
+(def info {:type :definite-integral
            :name "Definite integral"
            :description (str "Calculate given integral.\n"
                              "http://en.wikipedia.org/wiki/Symbolic_integration#Example")

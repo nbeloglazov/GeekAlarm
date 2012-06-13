@@ -32,7 +32,7 @@
                    choices)
      :correct correct}))
 
-(def info {:id :matrix-multiplication
+(def info {:type :matrix-multiplication
            :name "Matrix multiplication"
            :description (str "Find product of the matrices.\n"
                              "http://en.wikipedia.org/wiki/Matrix_multiplication")

@@ -33,7 +33,7 @@
      :correct correct}))
 
 (def info {:name "Base conversion"
-           :id :base-conversion
+           :type :base-conversion
            :description (str "Convert given number from one base to another.\n"
                              "http://en.wikipedia.org/wiki/Positional_notation")
            :generator generate})

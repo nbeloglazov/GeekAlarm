@@ -28,7 +28,7 @@
      :choices (map cljml answers)
      :correct correct}))
 
-(def info {:id :determinant
+(def info {:type :determinant
            :name "Determinant"
            :description (str "Find determinant of the matrix.\n"
                              "http://en.wikipedia.org/wiki/Determinant")

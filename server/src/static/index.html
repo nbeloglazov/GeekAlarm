@@ -3,52 +3,40 @@
         <title>
             Task viewer
         </title>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script type="text/javascript">
 
-        function get(id) {
-            return document.getElementById(id);
+        function getTask() {
+            var level = $(this).data('level');
+            var taskType = $('#tasks').val();
+            $.getJSON('task', {type: taskType, level: level}, showTask);
         }
 
-        function getRequest(url, callback) {
-            var req = new XMLHttpRequest();
-            req.open("GET", url);
-            req.onreadystatechange = function(evt) {
-                if (req.readyState === 4) {
-                    if (req.status === 200) {
-                        var result = eval("(" + req.responseText + ")");
-                        callback(result);
-                    }
-                }
-            }
-            req.send();
-        }
-      
-        function getTask(level) {
-            var category = get("categories").value;
-            getRequest("/task?category=" + category + "&level=" + level, loadTask);
-        }
-
-        function loadTask(task) {
-            document.body.className = "";
-            var url = "/image?id=" + task.id;
-            get("question").src = url + "&type=question";
-            for (var i = 1; i < 5; i++) {
-                get("choice_" + i).src = url + "&type=choice&number=" + i;
-                get("choice_" + i).className = i === task.correct ? "correct" : "incorrect";
+        function showTask(task) {
+            $(document.body).removeClass('first');
+            var url = '/image?id=' + task.id;
+            $('#question').attr('src', url + '&type=question');
+            $('.correct').removeClass('correct');
+            $('.incorrect').removeClass('incorrect');
+            for (var i = 0; i < 4; i++) {
+                $('#choice_' + i).attr('src', url + '&type=choice&number=' + i);
+                $('#choice_' + i).addClass(i === task.correct ? 'correct' : 'incorrect');
             }
         }
 
-        function loadCategories(categories) {
-            var options = get("categories").options;
-            categories.forEach(function(category) {
-                var option = new Option(category.name, category.code);
+        function showTasksSelection(tasks) {
+            var options = $('#tasks')[0].options;
+            $.each(tasks, function() {
+                var option = new Option(this.name, this.type);
                 options[options.length] = option;
             });
         }
 
-        (function() {
-            getRequest("/categories", loadCategories);
-         })();
+        $(function() {
+            $.getJSON('/tasks', showTasksSelection);
+            $('button').on('click', getTask);
+        });
+
 
         </script>
         <style type="text/css">
@@ -67,7 +55,7 @@
         .first img {
             display: none;
         }
-        
+
         .correct:hover {
             border: #0F0 solid 4px;
         }
@@ -78,18 +66,18 @@
         </style>
     </head>
     <body class="first">
-        <select id="categories"></select>
+        <select id="tasks"></select>
         <div>
-            <button onclick="getTask(1);">Easy</button>
-            <button onclick="getTask(2);">Medium</button>
-            <button onclick="getTask(3);">Hard</button>
+            <button data-level="1">Easy</button>
+            <button data-level="2">Medium</button>
+            <button data-level="3">Hard</button>
         </div>
         <img id="question"></img>
         <br/>
+        <img id="choice_0"></img>
         <img id="choice_1"></img>
-        <img id="choice_2"></img>
         <br/>
+        <img id="choice_2"></img>
         <img id="choice_3"></img>
-        <img id="choice_4"></img>
     </body>
 </html>

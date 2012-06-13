@@ -84,7 +84,7 @@
      :choices (map (fn [x] [:mn x]) choices)
      :correct correct}))
 
-(def info {:id :congruence
+(def info {:type :congruence
            :name "Congruence relation"
            :description (str "Solve system of linear congruences.\n"
                              "http://en.wikipedia.org/wiki/Modular_arithmetic")

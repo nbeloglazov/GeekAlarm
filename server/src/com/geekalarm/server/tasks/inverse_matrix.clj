@@ -43,7 +43,7 @@
                            [:mo ")"]])))
      :correct correct}))
 
-(def info {:id :inverse-matrix
+(def info {:type :inverse-matrix
            :name "Inverse matrix"
            :description (str "Find inverse of the matrix.\n"
                              "http://en.wikipedia.org/wiki/Invertible_matrix")
