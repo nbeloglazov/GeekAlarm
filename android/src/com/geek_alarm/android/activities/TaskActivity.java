@@ -132,7 +132,7 @@ public class TaskActivity extends Activity {
     private boolean containsToday() {
         int id = Integer.parseInt(getIntent().getData()
                 .getEncodedSchemeSpecificPart());
-        AlarmPreference alarm = AlarmPreferenceDao.INSTANCE.getAlarmPreference(id);
+        AlarmPreference alarm = AlarmPreferenceDao.INSTANCE.findById(id);
         Calendar cal = Calendar.getInstance();
         int today = cal.get(Calendar.DAY_OF_WEEK);
         return (alarm.getDays() & (1 << Utils.getDayOfWeek(today))) != 0;

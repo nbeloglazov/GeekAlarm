@@ -43,7 +43,7 @@ public class AlarmsActivity extends Activity {
                 new TestButtonListener());
         findViewById(R.id.alarm_sound_picker).setOnClickListener(
                 new AlarmSoundPickerListener());
-        alarms = AlarmPreferenceDao.INSTANCE.getAlarmPreferences();
+        alarms = AlarmPreferenceDao.INSTANCE.getAll();
         adapter = new AlarmPreferenceAdapter(this, alarms);
         ((ListView) findViewById(R.id.alarms)).setAdapter(adapter);
         initializeDifficultySpinner();
@@ -75,7 +75,7 @@ public class AlarmsActivity extends Activity {
         alarm.setHour(data.getIntExtra("hour", 0));
         alarm.setMinute(data.getIntExtra("minute", 0));
         alarm.setDays(data.getIntExtra("days", 0));
-        AlarmPreferenceDao.INSTANCE.updateAlarmPreference(alarm);
+        AlarmPreferenceDao.INSTANCE.update(alarm);
         if (alarm.isEnabled()) {
             Utils.setAlarm(alarm);
         }
@@ -94,7 +94,7 @@ public class AlarmsActivity extends Activity {
         // All days by default.
         alarm.setDays(0x7F);
         alarm.setEnabled(true);
-        AlarmPreferenceDao.INSTANCE.addAlarmPreference(alarm);
+        AlarmPreferenceDao.INSTANCE.add(alarm);
         // It must be only AFTER we inserted in db, 
         // otherwise id will be empty and we won't find alarm in db, 
         // when it go off.

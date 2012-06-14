@@ -11,7 +11,7 @@ public class BootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        List<AlarmPreference> alarms = AlarmPreferenceDao.INSTANCE.getAlarmPreferences();
+        List<AlarmPreference> alarms = AlarmPreferenceDao.INSTANCE.getAll();
         for (AlarmPreference alarm : alarms) {
             if (alarm.isEnabled()) {
                 Utils.setAlarm(alarm);

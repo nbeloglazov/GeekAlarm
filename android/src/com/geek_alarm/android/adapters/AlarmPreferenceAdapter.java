@@ -143,7 +143,7 @@ public class AlarmPreferenceAdapter extends ArrayAdapter<AlarmPreference> {
         public void onCheckedChanged(CompoundButton buttonView,
                 boolean isChecked) {
             alarm.setEnabled(isChecked);
-            AlarmPreferenceDao.INSTANCE.updateAlarmPreference(alarm);
+            AlarmPreferenceDao.INSTANCE.update(alarm);
             if (isChecked) {
                 Utils.setAlarm(alarm);
             } else {
@@ -164,7 +164,7 @@ public class AlarmPreferenceAdapter extends ArrayAdapter<AlarmPreference> {
 
         @Override
         public void onClick(View v) {
-            AlarmPreferenceDao.INSTANCE.removeAlarmPreference(alarm);
+            AlarmPreferenceDao.INSTANCE.delete(alarm);
             if (alarm.isEnabled()) {
                 Utils.cancelAlarm(alarm);
             }

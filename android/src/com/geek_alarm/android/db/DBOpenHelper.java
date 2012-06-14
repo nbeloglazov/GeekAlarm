@@ -19,11 +19,18 @@ public final class DBOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         AlarmPreferenceDao.INSTANCE.initialize(db);
+        onUpgrade(db, 1, DATABASE_VERSION);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Do nothing
+        for (int i = oldVersion; i < newVersion; i++) {
+            switch (i) {
+                case 1:
+                    TaskTypeDao.INSTANCE.initialize(db);
+                    break;
+            }
+        }
     }
 
     private static SQLiteOpenHelper helper = new DBOpenHelper(Application.getContext());
