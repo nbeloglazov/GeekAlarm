@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.geek_alarm.android.AlarmPreference;
-import com.geek_alarm.android.DBUtils;
+import com.geek_alarm.android.db.AlarmPreferenceDao;
 import com.geek_alarm.android.R;
 import com.geek_alarm.android.Utils;
 import com.geek_alarm.android.activities.SetUpAlarmActivity;
@@ -143,7 +143,7 @@ public class AlarmPreferenceAdapter extends ArrayAdapter<AlarmPreference> {
         public void onCheckedChanged(CompoundButton buttonView,
                 boolean isChecked) {
             alarm.setEnabled(isChecked);
-            DBUtils.updateAlarmPreference(alarm);
+            AlarmPreferenceDao.INSTANCE.updateAlarmPreference(alarm);
             if (isChecked) {
                 Utils.setAlarm(alarm);
             } else {
@@ -164,12 +164,12 @@ public class AlarmPreferenceAdapter extends ArrayAdapter<AlarmPreference> {
 
         @Override
         public void onClick(View v) {
-            DBUtils.removeAlarmPreference(alarm);
+            AlarmPreferenceDao.INSTANCE.removeAlarmPreference(alarm);
             if (alarm.isEnabled()) {
                 Utils.cancelAlarm(alarm);
             }
             remove(alarm);
-        };
+        }
     }
 
 }

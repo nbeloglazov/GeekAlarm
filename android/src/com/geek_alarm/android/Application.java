@@ -6,6 +6,7 @@ public class Application extends android.app.Application {
 
     private static Context context;
 
+    @Override
     public void onCreate(){
         context=getApplicationContext();
     }

@@ -18,7 +18,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.geek_alarm.android.AlarmPreference;
-import com.geek_alarm.android.DBUtils;
+import com.geek_alarm.android.db.AlarmPreferenceDao;
 import com.geek_alarm.android.R;
 import com.geek_alarm.android.Utils;
 import com.geek_alarm.android.adapters.AlarmPreferenceAdapter;
@@ -43,7 +43,7 @@ public class AlarmsActivity extends Activity {
                 new TestButtonListener());
         findViewById(R.id.alarm_sound_picker).setOnClickListener(
                 new AlarmSoundPickerListener());
-        alarms = DBUtils.getAlarmPreferences();
+        alarms = AlarmPreferenceDao.INSTANCE.getAlarmPreferences();
         adapter = new AlarmPreferenceAdapter(this, alarms);
         ((ListView) findViewById(R.id.alarms)).setAdapter(adapter);
         initializeDifficultySpinner();
@@ -75,7 +75,7 @@ public class AlarmsActivity extends Activity {
         alarm.setHour(data.getIntExtra("hour", 0));
         alarm.setMinute(data.getIntExtra("minute", 0));
         alarm.setDays(data.getIntExtra("days", 0));
-        DBUtils.updateAlarmPreference(alarm);
+        AlarmPreferenceDao.INSTANCE.updateAlarmPreference(alarm);
         if (alarm.isEnabled()) {
             Utils.setAlarm(alarm);
         }
@@ -94,7 +94,7 @@ public class AlarmsActivity extends Activity {
         // All days by default.
         alarm.setDays(0x7F);
         alarm.setEnabled(true);
-        DBUtils.addAlarmPreference(alarm);
+        AlarmPreferenceDao.INSTANCE.addAlarmPreference(alarm);
         // It must be only AFTER we inserted in db, 
         // otherwise id will be empty and we won't find alarm in db, 
         // when it go off.

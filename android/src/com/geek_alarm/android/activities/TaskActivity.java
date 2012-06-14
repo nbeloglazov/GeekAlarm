@@ -33,7 +33,7 @@ import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 
 import com.geek_alarm.android.AlarmPreference;
-import com.geek_alarm.android.DBUtils;
+import com.geek_alarm.android.db.AlarmPreferenceDao;
 import com.geek_alarm.android.R;
 import com.geek_alarm.android.Utils;
 import com.geek_alarm.android.tasks.Category;
@@ -132,7 +132,7 @@ public class TaskActivity extends Activity {
     private boolean containsToday() {
         int id = Integer.parseInt(getIntent().getData()
                 .getEncodedSchemeSpecificPart());
-        AlarmPreference alarm = DBUtils.getAlarmPreference(id);
+        AlarmPreference alarm = AlarmPreferenceDao.INSTANCE.getAlarmPreference(id);
         Calendar cal = Calendar.getInstance();
         int today = cal.get(Calendar.DAY_OF_WEEK);
         return (alarm.getDays() & (1 << Utils.getDayOfWeek(today))) != 0;
