@@ -225,7 +225,7 @@ public class ResultActivity extends Activity {
          */
         private void drawRect(int num, int color, Canvas canvas,
                 boolean fromLeft, int width) {
-            if (width == 0) {
+            if (width == 0 || canvas == null) {
                 return;
             }
             int i = num / inRow;

@@ -23,16 +23,10 @@ import android.graphics.Paint;
 
 public final class TaskManager {
 
-    private static final String SERVER_URL = "http://7133305a.dotcloud.com/";
+    private static final String SERVER_URL = "http://geekbeta-nbeloglazov.dotcloud.com/";
     private static final Random RANDOM = new Random();
 
-    private TaskManager() {
-    }
-
-    private static Category jsonToCategory(JSONObject json)
-            throws JSONException {
-        return new Category(json.getString("code"), json.getString("name"));
-    }
+    private TaskManager() {}
 
     private static HttpEntity sendRequest(String url) throws Exception {
         HttpClient client = new DefaultHttpClient();
@@ -41,14 +35,22 @@ public final class TaskManager {
         return response.getEntity();
     }
 
-    public static List<Category> getCategories() throws Exception {
-        String jsonText = EntityUtils.toString(sendRequest("categories"));
+    public static List<TaskType> getTaskTypes() throws Exception {
+        String jsonText = EntityUtils.toString(sendRequest("tasks"));
         JSONArray array = new JSONArray(jsonText);
-        List<Category> categories = new ArrayList<Category>(array.length());
+        List<TaskType> taskTypes = new ArrayList<TaskType>();
         for (int i = 0; i < array.length(); i++) {
-            categories.add(jsonToCategory(array.getJSONObject(i)));
+            taskTypes.add(jsonToTaskType(array.getJSONObject(i)));
         }
-        return categories;
+        return taskTypes;
+    }
+
+    private static TaskType jsonToTaskType(JSONObject json) throws JSONException {
+        return new TaskType(
+                json.getString("type"),
+                json.getString("name"),
+                json.getString("description"),
+                TaskType.Level.MEDIUM);
     }
 
     private static Bitmap getImage(String url) throws Exception {
@@ -56,22 +58,21 @@ public final class TaskManager {
         return BitmapFactory.decodeStream(entity.getContent());
     }
 
-    public static Task getTask(Category category, int level) throws Exception {
-        String url = String.format("task?category=%s&level=%d",
-                category.getCode(), level);
+    public static Task getTask(TaskType taskType) throws Exception {
+        String url = String.format("task?type=%s&level=%d",
+                taskType.getType(), taskType.getLevel().getValue());
         HttpEntity taskEntity = sendRequest(url);
         JSONObject taskJson = new JSONObject(EntityUtils.toString(taskEntity));
         String id = taskJson.getString("id");
         Task task = new Task();
         task.setId(id);
         task.setCorrect(Integer.parseInt(taskJson.getString("correct")));
-        task.setName(taskJson.getString("name"));
-        task.setInfo(taskJson.getString("info"));
+        task.setType(taskType);
         String questionUrl = String.format("image?id=%s&type=question", id);
         task.setQuestion(getImage(questionUrl));
         for (int i = 0; i < 4; i++) {
             String choiceUrl = String.format(
-                    "image?id=%s&type=choice&number=%d", id, i + 1);
+                    "image?id=%s&type=choice&number=%d", id, i);
             task.setChoice(i, getImage(choiceUrl));
         }
         return task;
@@ -147,6 +148,7 @@ public final class TaskManager {
         task.setQuestion(createBitmapWithText(question));
         task.setChoices(choicesBitMap);
         task.setCorrect(correct + 1);
+        task.setType(new TaskType(null, "Arithmetic", "Calculate value of given expression", null));
         return task;
     }
 

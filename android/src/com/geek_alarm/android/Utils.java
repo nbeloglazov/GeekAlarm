@@ -12,8 +12,12 @@ import android.net.Uri;
 import com.geek_alarm.android.activities.TaskActivity;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class Utils {
+
+    private static final String LAST_TASKS_UPDATE_TIME = "lastTasksUpdateTime";
+    private static final long MIN_TASKS_UPDATE_FREQUENCY = 1000 * 60 * 60 * 24; // Once a day
     
     public static int DAYS_OF_WEEK_NAMES[] = {
         R.string.monday,
@@ -173,6 +177,22 @@ public class Utils {
                 Application.getContext().getPackageName(), 
                 resource);
         return Uri.parse(uri);
+    }
+
+    /**
+     * Run update task types async task. It will get latest tasks from server and update local copy.
+     * By default update happens when user opens application. A
+     * @param forceUpdate
+     */
+    public static void updateTaskTypesAsync(boolean forceUpdate) {
+        long lastTime = getPreferences().getLong(LAST_TASKS_UPDATE_TIME, 0);
+        long currentTime = new Date().getTime();
+        if (forceUpdate || currentTime - lastTime > MIN_TASKS_UPDATE_FREQUENCY) {
+            new UpdateTaskTypesAsyncTask().doInBackground();
+        }
+        SharedPreferences.Editor editor = getPreferences().edit();
+        editor.putLong(LAST_TASKS_UPDATE_TIME, currentTime);
+        editor.commit();
     }
 
 }

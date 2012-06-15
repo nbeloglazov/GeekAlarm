@@ -1,24 +1,17 @@
 package com.geek_alarm.android.activities;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -28,18 +21,23 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.text.util.Linkify;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
-
 import com.geek_alarm.android.AlarmPreference;
-import com.geek_alarm.android.db.AlarmPreferenceDao;
 import com.geek_alarm.android.R;
 import com.geek_alarm.android.Utils;
-import com.geek_alarm.android.tasks.Category;
-import com.geek_alarm.android.tasks.Configuration;
+import com.geek_alarm.android.db.AlarmPreferenceDao;
+import com.geek_alarm.android.db.TaskTypeDao;
 import com.geek_alarm.android.tasks.Task;
 import com.geek_alarm.android.tasks.TaskManager;
+import com.geek_alarm.android.tasks.TaskType;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Activity, it is place where user solves tasks. 
@@ -88,6 +86,7 @@ public class TaskActivity extends Activity {
         choiceListener = new ChoiceListener();
         availableTasks = new LinkedList<Task>();
         waitingForTask = true;
+        Utils.updateTaskTypesAsync(true);
         runTaskLoader();
         timer = new Timer();
         findViewById(R.id.mute_button).setOnClickListener(new MuteListener());
@@ -176,7 +175,7 @@ public class TaskActivity extends Activity {
 
         int choicesIds[] = { R.id.task_choice_1, R.id.task_choice_2,
                 R.id.task_choice_3, R.id.task_choice_4 };
-        correctChoiceId = choicesIds[task.getCorrect() - 1];
+        correctChoiceId = choicesIds[task.getCorrect()];
         currentTask = task;
         for (int i = 0; i < 4; i++) {
             ImageView choiceView = (ImageView) findViewById(choicesIds[i]);
@@ -226,17 +225,15 @@ public class TaskActivity extends Activity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            int difficulty = Utils.getPreferences().getInt("difficulty",
-                    Configuration.DEFAULT_DIFFICULTY);
             if (Utils.isOnline()) {
-                Configuration conf = Configuration.getConfiguration(difficulty);
-                if (conf != null) {
-                    downloadTasks(conf);
+                List<TaskType> taskTypes = removeDisabledTasks(TaskTypeDao.INSTANCE.getAll());
+                if (!taskTypes.isEmpty()) {
+                    downloadTasks(taskTypes);
                 } else {
-                    generateSimpleTasks(difficulty, R.string.server_error);
+                    generateSimpleTasks(TaskType.Level.MEDIUM.getValue(), R.string.server_error);
                 }
             } else {
-                generateSimpleTasks(difficulty, R.string.not_online);
+                generateSimpleTasks(TaskType.Level.MEDIUM.getValue(), R.string.not_online);
             }
             return null;
         }
@@ -249,22 +246,28 @@ public class TaskActivity extends Activity {
             }
         }
 
-        private void downloadTasks(Configuration conf) {
-            List<Map.Entry<Category, Integer>> categories = new ArrayList(conf
-                    .getCategories().entrySet());
-            Collections.shuffle(categories);
+        private List<TaskType> removeDisabledTasks(List<TaskType> taskTypes) {
+            List<TaskType> result = new ArrayList<TaskType>();
+            for (TaskType type : taskTypes) {
+                if (type.getLevel() != TaskType.Level.NONE) {
+                    result.add(type);
+                }
+            }
+            return result;
+        }
+
+        private void downloadTasks(List<TaskType> taskTypes) {
+            Collections.shuffle(taskTypes);
             for (int i = 0; i < MAX_NUM_OF_TASKS; i++) {
-                Map.Entry<Category, Integer> taskType = categories.get(i
-                        % categories.size());
+                TaskType type = taskTypes.get(i % taskTypes.size());
                 Task task;
                 try {
-                    task = TaskManager.getTask(taskType.getKey(),
-                            taskType.getValue());
+                    task = TaskManager.getTask(type);
                     task.setErrorMessageId(-1);
                 } catch (Exception e) {
                     // Some error, so we show simple task.
                     Log.e(TaskLoader.class.getName(), "Something bad", e);
-                    task = TaskManager.generateSimpleTask(taskType.getValue());
+                    task = TaskManager.generateSimpleTask(type.getLevel().getValue());
                     task.setErrorMessageId(R.string.server_error);
                 }
                 publishProgress(task);
@@ -344,10 +347,10 @@ public class TaskActivity extends Activity {
             if (currentTask == null) {
                 return;
             }
-            SpannableString info = new SpannableString(currentTask.getInfo());
+            SpannableString info = new SpannableString(currentTask.getType().getDescription());
             Linkify.addLinks(info, Linkify.ALL);
             AlertDialog dialog = new AlertDialog.Builder(TaskActivity.this)
-                .setTitle(currentTask.getName())
+                .setTitle(currentTask.getType().getName())
                 .setMessage(info)
                 .setNeutralButton(R.string.hide, new DialogInterface.OnClickListener() {
                         @Override

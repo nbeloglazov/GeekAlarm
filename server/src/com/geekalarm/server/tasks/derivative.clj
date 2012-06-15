@@ -81,7 +81,7 @@
 
 (def info {:type :derivative
            :name "Derivative"
-           :description (str "Find derivative of the function."
+           :description (str "Find derivative of the function.\n"
                              "http://en.wikipedia.org/wiki/Table_of_derivatives")
            :generator generate})
 

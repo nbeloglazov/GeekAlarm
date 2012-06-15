@@ -1,7 +1,5 @@
 package com.geek_alarm.android.activities;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,14 +14,14 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import com.geek_alarm.android.AlarmPreference;
-import com.geek_alarm.android.db.AlarmPreferenceDao;
 import com.geek_alarm.android.R;
 import com.geek_alarm.android.Utils;
 import com.geek_alarm.android.adapters.AlarmPreferenceAdapter;
 import com.geek_alarm.android.adapters.DifficultyAdapter;
-import com.geek_alarm.android.tasks.Configuration;
+import com.geek_alarm.android.db.AlarmPreferenceDao;
+
+import java.util.List;
 
 /**
  * This is main window.
@@ -38,6 +36,7 @@ public class AlarmsActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Utils.updateTaskTypesAsync(false);
         setContentView(R.layout.alarms);
         findViewById(R.id.test_button).setOnClickListener(
                 new TestButtonListener());
@@ -53,12 +52,12 @@ public class AlarmsActivity extends Activity {
         }
     }
 
+    @Deprecated
     private void initializeDifficultySpinner() {
         Spinner spinner = (Spinner) findViewById(R.id.difficulty);
         DifficultyAdapter adapter = new DifficultyAdapter(this);
         spinner.setAdapter(adapter);
-        int curDifficulty = Utils.getPreferences().getInt("difficulty",
-                Configuration.DEFAULT_DIFFICULTY);
+        int curDifficulty = 2;
         spinner.setSelection(adapter.getPosition(curDifficulty));
         spinner.setOnItemSelectedListener(new DifficultyChangedListener());
     }
