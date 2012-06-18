@@ -38,28 +38,13 @@ public class AlarmsActivity extends Activity {
         super.onCreate(savedInstanceState);
         Utils.updateTaskTypesAsync(false);
         setContentView(R.layout.alarms);
-        findViewById(R.id.test_button).setOnClickListener(
-                new TestButtonListener());
-        findViewById(R.id.alarm_sound_picker).setOnClickListener(
-                new AlarmSoundPickerListener());
         alarms = AlarmPreferenceDao.INSTANCE.getAll();
         adapter = new AlarmPreferenceAdapter(this, alarms);
         ((ListView) findViewById(R.id.alarms)).setAdapter(adapter);
-        initializeDifficultySpinner();
         // Add alarm by default, if there is no one yet.
         if (alarms.isEmpty()) {
             addAlarm();
         }
-    }
-
-    @Deprecated
-    private void initializeDifficultySpinner() {
-        Spinner spinner = (Spinner) findViewById(R.id.difficulty);
-        DifficultyAdapter adapter = new DifficultyAdapter(this);
-        spinner.setAdapter(adapter);
-        int curDifficulty = 2;
-        spinner.setSelection(adapter.getPosition(curDifficulty));
-        spinner.setOnItemSelectedListener(new DifficultyChangedListener());
     }
 
     /**
@@ -105,15 +90,23 @@ public class AlarmsActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-        case R.id.add:
-            addAlarm();
-            return true;
-        case R.id.feedback:
-            sendFeedback();
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+            case R.id.add:
+                addAlarm();
+                return true;
+            case R.id.feedback:
+                sendFeedback();
+                return true;
+            case R.id.settings:
+                showSettings();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showSettings() {
+        Intent intent = new Intent(AlarmsActivity.this, PreferenceActivity.class);
+        startActivity(intent);
     }
 
     private void sendFeedback() {
@@ -127,41 +120,6 @@ public class AlarmsActivity extends Activity {
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(this, R.string.no_email_clients,
                     Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private class TestButtonListener implements OnClickListener {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(AlarmsActivity.this, TaskActivity.class);
-            startActivity(intent);
-        }
-    }
-
-    private class DifficultyChangedListener implements OnItemSelectedListener {
-
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view,
-                int position, long id) {
-            int difficulty = (Integer) parent.getItemAtPosition(position);
-            SharedPreferences.Editor editor = Utils.getPreferences().edit();
-            editor.putInt("difficulty", difficulty);
-            editor.commit();
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-            // Do nothing
-        }
-    }
-
-    private class AlarmSoundPickerListener implements OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(AlarmsActivity.this,
-                    AlarmSoundPickerActivity.class);
-            startActivity(intent);
         }
     }
 }

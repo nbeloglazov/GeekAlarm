@@ -148,11 +148,7 @@ public class Utils {
                         Application.getContext(),
                         RingtoneManager.TYPE_ALARM);
         }
-        
-        // If no sound in preferences, no default return geek alarm music.
-        if (sound == null) {
-            sound = getUriFromResource(R.raw.mario);
-        }
+
         return sound;
     }   
     
@@ -165,18 +161,6 @@ public class Utils {
         SharedPreferences.Editor editor = pref.edit();
         editor.putString(ALARM_SOUND, uri.toString());
         editor.commit();
-    }
-    
-    /**
-     * Transforms resource id to uri.
-     * @param resource
-     * @return uri 
-     */
-    public static Uri getUriFromResource(int resource) {
-        String uri = String.format("android.resource://%s/%d", 
-                Application.getContext().getPackageName(), 
-                resource);
-        return Uri.parse(uri);
     }
 
     /**

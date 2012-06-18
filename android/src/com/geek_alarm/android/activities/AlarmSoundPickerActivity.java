@@ -32,12 +32,6 @@ import com.lamerman.FileDialog;
  */
 public class AlarmSoundPickerActivity extends Activity {
 
-    private static String[] GEEK_ALARMS_TITLES = {
-        "Mario"};
-
-    private static int[] GEEK_ALARMS_RES = {
-        R.raw.mario};
-
     private AlarmSoundAdapter adapter;
     private MediaPlayer player;
 
@@ -58,8 +52,6 @@ public class AlarmSoundPickerActivity extends Activity {
         // Add option to choose custom sound.
         sounds.add(new AlarmSound(getResources().getString(R.string.custom),
                                   null));
-        // Add built in alarms.
-        sounds.addAll(getGeekAlarms());
         // Add android alarms.
         sounds.addAll(getStandardAlarms());
         adapter =
@@ -99,25 +91,9 @@ public class AlarmSoundPickerActivity extends Activity {
         int i = 0;
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext(), i++) {
             String title = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
-            String uri = cursor.getString(RingtoneManager.URI_COLUMN_INDEX);
-            uri += "/" + cursor.getInt(RingtoneManager.ID_COLUMN_INDEX);
             sounds.add(new AlarmSound(title, manager.getRingtoneUri(i)));
         }
         cursor.deactivate();
-        return sounds;
-    }
-
-    /**
-     * Creates list of built in sounds.
-     * @return list
-     */
-    private List<AlarmSound> getGeekAlarms() {
-        List<AlarmSound> sounds = new ArrayList<AlarmSound>();
-        for (int i = 0; i < GEEK_ALARMS_RES.length; i++) {
-            sounds.add(new AlarmSound(
-                    GEEK_ALARMS_TITLES[i],
-                    Utils.getUriFromResource(GEEK_ALARMS_RES[i])));
-        }
         return sounds;
     }
 

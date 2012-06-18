@@ -147,7 +147,7 @@ public final class TaskManager {
         Task task = new Task();
         task.setQuestion(createBitmapWithText(question));
         task.setChoices(choicesBitMap);
-        task.setCorrect(correct + 1);
+        task.setCorrect(correct);
         task.setType(new TaskType(null, "Arithmetic", "Calculate value of given expression", null));
         return task;
     }

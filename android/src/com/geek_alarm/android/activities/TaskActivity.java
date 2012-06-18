@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -114,7 +115,7 @@ public class TaskActivity extends Activity {
             player.reset();
             try {
                 player.setDataSource(this,
-                        Utils.getUriFromResource(R.raw.mario));
+                        RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
                 player.setAudioStreamType(AudioManager.STREAM_ALARM);
                 player.setLooping(true);
                 player.prepare();

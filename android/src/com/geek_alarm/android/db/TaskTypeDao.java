@@ -58,6 +58,18 @@ public enum TaskTypeDao {
         DBOpenHelper.getInstance().getWritableDatabase().delete(TABLE_NAME, "type = ?", args);
     }
 
+    public TaskType findByType(String type) {
+        String query = String.format("SELECT * FROM %s WHERE %s = '%s'", TABLE_NAME, TYPE, type);
+        Cursor cursor = DBOpenHelper.getInstance().getReadableDatabase().rawQuery(query, null);
+        cursor.moveToFirst();
+        if (cursor.isAfterLast()) {
+            return null;
+        }
+        TaskType taskType = read(cursor);
+        cursor.close();
+        return taskType;
+    }
+
     private TaskType read(Cursor cursor) {
         return new TaskType(
                 cursor.getString(cursor.getColumnIndex(TYPE)),
@@ -65,8 +77,6 @@ public enum TaskTypeDao {
                 cursor.getString(cursor.getColumnIndex(DESCRIPTION)),
                 TaskType.Level.fromValue(cursor.getInt(cursor.getColumnIndex(LEVEL))));
     }
-
-
 
     private ContentValues toContentValues(TaskType taskType) {
         ContentValues values = new ContentValues();

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/common">
+
+        <PreferenceScreen
+            android:title="@string/alarm_sound"
+            android:key="alarm_sound">
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetClass="com.geek_alarm.android.activities.AlarmSoundPickerActivity"
+                android:targetPackage="com.geek_alarm.android"/>
+
+        </PreferenceScreen>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/tasks"
+        android:key="tasks">
+        <ListPreference
+            android:title="@string/all_tasks"
+            android:key="all_tasks"
+            android:order="0"/>
+
+        <PreferenceScreen
+            android:order="1000"
+            android:title="@string/test"
+            android:summary="@string/test_summary">
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetClass="com.geek_alarm.android.activities.TaskActivity"
+                android:targetPackage="com.geek_alarm.android"/>
+        </PreferenceScreen>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
