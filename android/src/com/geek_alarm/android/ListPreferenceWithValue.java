@@ -1,11 +1,14 @@
 package com.geek_alarm.android;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.preference.ListPreference;
 import android.view.View;
 import android.widget.TextView;
 
+/**
+ * ListPreferenceWithValue adds current value to the right part of the preference.
+ * http://www.androidsnippets.com/listpreference-and-edittextpreference-displaying-the-current-value
+ */
 public class ListPreferenceWithValue extends ListPreference {
 
     private TextView valueText;
