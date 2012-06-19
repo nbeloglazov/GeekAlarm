@@ -7,7 +7,10 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
+import android.util.Log;
 import com.geek_alarm.android.ListPreferenceWithValue;
+import com.geek_alarm.android.MuteUtils;
+import com.geek_alarm.android.NumberPickerPreference;
 import com.geek_alarm.android.R;
 import com.geek_alarm.android.Utils;
 import com.geek_alarm.android.db.TaskTypeDao;
@@ -22,6 +25,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
             TaskType.Level.MEDIUM.name(),
             TaskType.Level.HARD.name()
     };
+
     // Key for preference responsible for setting level for all tasks at the same time.
     private static final String ALL_TASKS_PREF = "all_tasks";
 
@@ -33,7 +37,9 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
         taskLevelChanged = new TaskLevelChanged();
         addPreferencesFromResource(R.xml.preferences);
         updateAlarmSoundSummary();
+        initMuteTime();
         initTaskLevels();
+        Log.e("#######", Utils.getPreferences().getAll().toString());
     }
 
     @Override
@@ -42,6 +48,24 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
         // We need somehow update current alarm sound after user changed in.
         // May be there is some better way to do it (e.g. with onActivityResult) but I don't know it.
         updateAlarmSoundSummary();
+    }
+
+    private void initMuteTime() {
+        NumberPickerPreference muteTime = (NumberPickerPreference) findPreference(MuteUtils.INITIAL_MUTE_TIME);
+        muteTime.setDefaultValue(MuteUtils.DEFAULT_INITIAL_MUTE_TIME);
+        muteTime.setMaxValue(300);
+        muteTime.setMinValue(0);
+        muteTime.setStep(5);
+
+        NumberPickerPreference muteStep = (NumberPickerPreference) findPreference(MuteUtils.MUTE_TIME_STEP);
+        muteStep.setDefaultValue(MuteUtils.DEFAULT_MUTE_TIME_STEP);
+        muteStep.setMaxValue(300);
+        muteStep.setMinValue(0);
+        muteStep.setStep(5);
+
+        ListPreference muteBehaviour = (ListPreference) findPreference(MuteUtils.MUTE_BEHAVIOUR);
+        muteBehaviour.setEntryValues(MuteBehaviour.getNames());
+        muteBehaviour.setValue(MuteUtils.getMuteBehaviour().name());
     }
 
     /**
@@ -53,6 +77,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
         ListPreference allTasksPref = (ListPreference) findPreference(ALL_TASKS_PREF);
         allTasksPref.setEntries(R.array.levels);
         allTasksPref.setEntryValues(LEVELS);
+        allTasksPref.setPersistent(false);
         allTasksPref.setOnPreferenceChangeListener(taskLevelChanged);
         PreferenceCategory tasks = (PreferenceCategory) findPreference("tasks");
         int order = 1;
@@ -66,7 +91,8 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
 
     private void updateAlarmSoundSummary() {
         Ringtone ringtone = RingtoneManager.getRingtone(this, Utils.getCurrentAlarmSound());
-        findPreference("alarm_sound").setSummary(ringtone.getTitle(this));
+        String title = ringtone == null ? "" : ringtone.getTitle(this);
+        findPreference("alarm_sound").setSummary(title);
     }
 
     /**
@@ -81,6 +107,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
         preference.setEntryValues(LEVELS);
         preference.setTitle(taskType.getName());
         preference.setValue(taskType.getLevel().name());
+        preference.setPersistent(false);
         preference.setLayoutResource(R.layout.preference_with_value);
         preference.setOnPreferenceChangeListener(taskLevelChanged);
         return preference;

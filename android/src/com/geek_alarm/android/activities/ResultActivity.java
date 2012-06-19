@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -209,7 +210,12 @@ public class ResultActivity extends Activity {
                 } else {
                     drawRect(curNum, winColor, canvas, win, size - steps);
                 }
-                holder.unlockCanvasAndPost(canvas);
+                try {
+                    holder.unlockCanvasAndPost(canvas);
+                } catch (IllegalArgumentException e) {
+                    Log.e(ResultActivity.class.getName(), "Need to investigate", e);
+                    return;
+                }
                 steps--;
             }
         }

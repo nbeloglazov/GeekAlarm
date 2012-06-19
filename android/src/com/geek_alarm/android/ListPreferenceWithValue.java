@@ -2,6 +2,7 @@ package com.geek_alarm.android;
 
 import android.content.Context;
 import android.preference.ListPreference;
+import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,6 +16,11 @@ public class ListPreferenceWithValue extends ListPreference {
 
     public ListPreferenceWithValue(Context context) {
         super(context);
+        setLayoutResource(R.layout.preference_with_value);
+    }
+
+    public ListPreferenceWithValue(Context context, AttributeSet attrs) {
+        super(context, attrs);
         setLayoutResource(R.layout.preference_with_value);
     }
 
@@ -39,6 +45,9 @@ public class ListPreferenceWithValue extends ListPreference {
     @Override
     public void setValue(String value) {
         super.setValue(value);
+        if (getEntryValues() == null) {
+            return;
+        }
         CharSequence entry = getEntries()[findIndexOfValue(value)];
         if (valueText != null) {
             valueText.setText(entry);

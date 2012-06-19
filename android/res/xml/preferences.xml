@@ -17,6 +17,22 @@
 
         </PreferenceScreen>
 
+        <com.geek_alarm.android.NumberPickerPreference
+            android:title="@string/initial_mute_time"
+            android:summary="@string/initial_mute_time_summary"
+            android:key="initialMuteTime"/>
+
+        <com.geek_alarm.android.NumberPickerPreference
+            android:title="@string/mute_time_step"
+            android:summary="@string/mute_time_step_summary"
+            android:key="muteTimeStep"/>
+
+        <com.geek_alarm.android.ListPreferenceWithValue
+            android:title="@string/mute_behaviour"
+            android:key="muteBehaviour"
+            android:entries="@array/mute_behaviours"/>
+
+
     </PreferenceCategory>
 
     <PreferenceCategory

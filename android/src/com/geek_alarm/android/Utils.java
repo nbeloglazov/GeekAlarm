@@ -9,6 +9,8 @@ import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.preference.PreferenceManager;
+import com.geek_alarm.android.activities.MuteBehaviour;
 import com.geek_alarm.android.activities.TaskActivity;
 
 import java.util.Calendar;
@@ -18,7 +20,7 @@ public class Utils {
 
     private static final String LAST_TASKS_UPDATE_TIME = "lastTasksUpdateTime";
     private static final long MIN_TASKS_UPDATE_FREQUENCY = 1000 * 60 * 60 * 24; // Once a day
-    
+
     public static int DAYS_OF_WEEK_NAMES[] = {
         R.string.monday,
         R.string.tuesday,
@@ -123,8 +125,7 @@ public class Utils {
     }
     
     public static SharedPreferences getPreferences() {
-        return Application.getContext()
-            .getSharedPreferences("geekalarm", Context.MODE_PRIVATE);
+        return PreferenceManager.getDefaultSharedPreferences(Application.getContext());
     }
     
     /**

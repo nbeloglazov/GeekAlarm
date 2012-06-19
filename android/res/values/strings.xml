@@ -42,11 +42,22 @@
     <string name="all_tasks">Set up all tasks</string>
     <string name="test">Test settings</string>
     <string name="test_summary">Launches tasks</string>
+    <string name="initial_mute_time">Initial mute time</string>
+    <string name="initial_mute_time_summary">Alarm will be silent during this time</string>
+    <string name="mute_time_step">Mute time step</string>
+    <string name="mute_time_step_summary">Every time you click on mute, mute time changes</string>
+    <string name="mute_behaviour">Mute time behaviour</string>
 
     <string-array name="levels">
         <item>Disable</item>
         <item>Easy</item>
         <item>Medium</item>
         <item>Hard</item>
+    </string-array>
+
+    <string-array name="mute_behaviours">
+        <item>Decrease</item>
+        <item>Permanent</item>
+        <item>Increase</item>
     </string-array>
 </resources>

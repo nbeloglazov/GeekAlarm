@@ -23,6 +23,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.geek_alarm.android.AlarmPreference;
+import com.geek_alarm.android.MuteUtils;
 import com.geek_alarm.android.R;
 import com.geek_alarm.android.Utils;
 import com.geek_alarm.android.db.AlarmPreferenceDao;
@@ -49,10 +50,6 @@ public class TaskActivity extends Activity {
     // This const indicates how many tasks user must 
     // solve correctly than incorrectly to dismiss alarm.
     private static final int TASKS_TO_FINISH = 3;
-    // Start music mute.
-    private static final long BASE_PLAY_DELAY = 40 * 1000; // 40 seconds
-    // Increasing music mute each time.
-    private static final long PLAY_DELAY_INCREASE = 10 * 1000; // 10 seconds
 
     private long curPlayDelay;
     private boolean waitingForTask;
@@ -93,7 +90,7 @@ public class TaskActivity extends Activity {
         findViewById(R.id.mute_button).setOnClickListener(new MuteListener());
         findViewById(R.id.info_button).setOnClickListener(new InfoListener());
         updateStats();
-        curPlayDelay = BASE_PLAY_DELAY;
+        curPlayDelay = MuteUtils.getInitialMuteTime() * 1000;
     }
 
     private void runTaskLoader() {
@@ -333,10 +330,18 @@ public class TaskActivity extends Activity {
 
         @Override
         public void onClick(View v) {
-            if (player.isPlaying()) {
+            boolean shouldPause = MuteUtils.getMuteBehaviour() == MuteBehaviour.INCREASE || curPlayDelay > 0;
+            if (player.isPlaying() && shouldPause) {
                 player.pause();
                 timer.schedule(new ContinuePlayTask(), curPlayDelay);
-                curPlayDelay += PLAY_DELAY_INCREASE;
+                switch (MuteUtils.getMuteBehaviour()) {
+                    case DECREASE:
+                        curPlayDelay -= MuteUtils.getMuteTimeStep() * 1000;
+                        break;
+                    case INCREASE:
+                        curPlayDelay += MuteUtils.getMuteTimeStep() * 1000;
+                        break;
+                }
             }
         }
     }
