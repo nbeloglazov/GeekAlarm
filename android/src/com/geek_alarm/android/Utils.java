@@ -166,8 +166,12 @@ public class Utils {
 
     /**
      * Run update task types async task. It will get latest tasks from server and update local copy.
-     * By default update happens when user opens application. A
-     * @param forceUpdate
+     * By default update happens when user opens application.
+     * If user opens application too frequently we don't want to check server every time. So we check it
+     * at only if last check was more then 1 day ago.
+     * But sometimes we need to force update (to get latest updates if we now they are on server :)), so forceUpdate
+     * can be used to achieve it.
+     * @param forceUpdate - if true, then ignore last task time update and check anyway.
      */
     public static void updateTaskTypesAsync(boolean forceUpdate) {
         long lastTime = getPreferences().getLong(LAST_TASKS_UPDATE_TIME, 0);
