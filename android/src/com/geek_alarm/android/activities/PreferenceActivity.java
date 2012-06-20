@@ -40,6 +40,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
         updateAlarmSoundSummary();
         initMuteTime();
         initTaskLevels();
+        initNumberOfTasks();
         initMailTo();
         Log.e("#######", Utils.getPreferences().getAll().toString());
     }
@@ -66,22 +67,28 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
         });
     }
 
-    private void initMuteTime() {
-        NumberPickerPreference muteTime = (NumberPickerPreference) findPreference(MuteUtils.INITIAL_MUTE_TIME);
-        muteTime.setDefaultValue(MuteUtils.DEFAULT_INITIAL_MUTE_TIME);
-        muteTime.setMaxValue(300);
-        muteTime.setMinValue(0);
-        muteTime.setStep(5);
+    private void initNumberOfTasks() {
+        initNumberPicker(Utils.NUMBER_OF_ATTEMPTS, Utils.DEFAULT_NUMBER_OF_ATTEMPTS, 1, 100, 1, null);
+        initNumberPicker(Utils.POSITIVE_BALANCE, Utils.DEFAULT_POSITIVE_BALANCE, 1, 100, 1, null);
+    }
 
-        NumberPickerPreference muteStep = (NumberPickerPreference) findPreference(MuteUtils.MUTE_TIME_STEP);
-        muteStep.setDefaultValue(MuteUtils.DEFAULT_MUTE_TIME_STEP);
-        muteStep.setMaxValue(300);
-        muteStep.setMinValue(0);
-        muteStep.setStep(5);
+    private void initMuteTime() {
+        initNumberPicker(MuteUtils.INITIAL_MUTE_TIME, MuteUtils.DEFAULT_INITIAL_MUTE_TIME, 0, 300, 5,"%ds");
+
+        initNumberPicker(MuteUtils.MUTE_TIME_STEP, MuteUtils.DEFAULT_MUTE_TIME_STEP, 0, 300, 5, "%ds");
 
         ListPreference muteBehaviour = (ListPreference) findPreference(MuteUtils.MUTE_BEHAVIOUR);
         muteBehaviour.setEntryValues(MuteBehaviour.getNames());
         muteBehaviour.setValue(MuteUtils.getMuteBehaviour().name());
+    }
+
+    private void initNumberPicker(String key, int defaultValue, int minValue, int maxValue, int step, String format) {
+        NumberPickerPreference preference = (NumberPickerPreference) findPreference(key);
+        preference.setDefaultValue(defaultValue);
+        preference.setMinValue(minValue);
+        preference.setMaxValue(maxValue);
+        preference.setStep(step);
+        preference.setFormat(format);
     }
 
     /**

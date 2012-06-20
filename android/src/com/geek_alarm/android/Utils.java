@@ -21,6 +21,12 @@ public class Utils {
     private static final String LAST_TASKS_UPDATE_TIME = "lastTasksUpdateTime";
     private static final long MIN_TASKS_UPDATE_FREQUENCY = 1000 * 60 * 60 * 24; // Once a day
 
+    public static final String NUMBER_OF_ATTEMPTS = "numberOfAttempts";
+    public static final String POSITIVE_BALANCE = "positiveBalance";
+
+    public static int DEFAULT_NUMBER_OF_ATTEMPTS = 10;
+    public static int DEFAULT_POSITIVE_BALANCE = 3;
+
     public static int DAYS_OF_WEEK_NAMES[] = {
         R.string.monday,
         R.string.tuesday,
@@ -182,6 +188,22 @@ public class Utils {
         SharedPreferences.Editor editor = getPreferences().edit();
         editor.putLong(LAST_TASKS_UPDATE_TIME, currentTime);
         editor.commit();
+    }
+
+    /**
+     * Max number of tasks user can try to solve during 1 alarm session.
+     * @return number of tasks user can try to solve
+     */
+    public static int getNumberOfAttempts() {
+        return getPreferences().getInt(NUMBER_OF_ATTEMPTS, DEFAULT_NUMBER_OF_ATTEMPTS);
+    }
+
+    /**
+     * User must solve NUMBER_OF_SOLVED - NUMBER_OF_FAILED tasks to dismiss alarm.
+     * @return NUMBER_OF_SOLVED - NUMBER_OF_FAILED
+     */
+    public static int getPositiveBalance() {
+        return getPreferences().getInt(POSITIVE_BALANCE, DEFAULT_POSITIVE_BALANCE);
     }
 
 }

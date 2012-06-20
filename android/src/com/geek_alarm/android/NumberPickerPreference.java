@@ -18,6 +18,7 @@ public class NumberPickerPreference extends DialogPreference {
     private int step = 1;
     private WheelView wheelView;
     private TextView valueText;
+    private String format;
 
     public NumberPickerPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -30,7 +31,7 @@ public class NumberPickerPreference extends DialogPreference {
         super.onBindDialogView(view);
         wheelView = (WheelView) view.findViewById(R.id.value);
         NumericWheelAdapter wheelAdapter =
-                new NumericWheelAdapter(getContext(), minValue, maxValue, step, "%ds");
+                new NumericWheelAdapter(getContext(), minValue, maxValue, step, format);
         wheelAdapter.setItemResource(R.layout.wheel_text_item);
         wheelAdapter.setItemTextResource(R.id.text);
         wheelView.setViewAdapter(wheelAdapter);
@@ -43,7 +44,7 @@ public class NumberPickerPreference extends DialogPreference {
     protected void onBindView(View view) {
         super.onBindView(view);
         valueText = (TextView) view.findViewById(R.id.preference_value);
-        String value = getPersistedInt(defaultValue) + "s";
+        String value = String.format(format, getPersistedInt(defaultValue));
         valueText.setText(value);
     }
 
@@ -71,5 +72,9 @@ public class NumberPickerPreference extends DialogPreference {
 
     public void setStep(int step) {
         this.step = step;
+    }
+
+    public void setFormat(String format) {
+        this.format = format == null ? "%d" : format ;
     }
 }

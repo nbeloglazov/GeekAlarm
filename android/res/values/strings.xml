@@ -36,7 +36,7 @@
 	<color name="gray">#ffff0000</color>
 
     <string name="common">Common</string>
-    <string name="tasks">Tasks</string>
+    <string name="tasks">Task levels</string>
     <string name="all">All</string>
     <string name="alarm_sound">Alarm sound</string>
     <string name="all_tasks">Set up all tasks</string>
@@ -48,6 +48,9 @@
     <string name="mute_time_step_summary">Every time you click on mute, mute time changes</string>
     <string name="mute_behaviour">Mute time behaviour</string>
     <string name="other">Others</string>
+    <string name="number_of_attempts">Number of attempts</string>
+    <string name="positive_balance">Positive balance</string>
+    <string name="positive_balance_summary">NUMBER_OF_SOLVED - NUMBER_OF_FAILED to dismiss alarm</string>
 
     <string-array name="levels">
         <item>Disable</item>

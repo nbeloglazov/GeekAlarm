@@ -32,6 +32,14 @@
             android:key="muteBehaviour"
             android:entries="@array/mute_behaviours"/>
 
+        <com.geek_alarm.android.NumberPickerPreference
+            android:title="@string/number_of_attempts"
+            android:key="numberOfAttempts"/>
+
+        <com.geek_alarm.android.NumberPickerPreference
+            android:title="@string/positive_balance"
+            android:summary="@string/positive_balance_summary"
+            android:key="positiveBalance"/>
 
     </PreferenceCategory>
 

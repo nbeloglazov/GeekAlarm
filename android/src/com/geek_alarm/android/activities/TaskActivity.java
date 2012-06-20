@@ -46,11 +46,6 @@ import java.util.TimerTask;
  */
 public class TaskActivity extends Activity {
 
-    private static final int MAX_NUM_OF_TASKS = 10;
-    // This const indicates how many tasks user must 
-    // solve correctly than incorrectly to dismiss alarm.
-    private static final int TASKS_TO_FINISH = 3;
-
     private long curPlayDelay;
     private boolean waitingForTask;
     private boolean started;
@@ -68,6 +63,9 @@ public class TaskActivity extends Activity {
     private LinearLayout layout;
     private Task currentTask;
 
+    private int numberOfAttempts;
+    private int positiveBalance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +75,8 @@ public class TaskActivity extends Activity {
             finish();
             return;
         }
+        numberOfAttempts = Utils.getNumberOfAttempts();
+        positiveBalance = Utils.getPositiveBalance();
         inflater = getLayoutInflater();
         layout = (LinearLayout) inflater.inflate(R.layout.task, null);
         setContentView(layout);
@@ -189,9 +189,9 @@ public class TaskActivity extends Activity {
     private void updateStats() {
         TextView solvedView = (TextView) findViewById(R.id.solved);
         solvedView.setText(String.format("%d/%d", 2 * solved - all,
-                TASKS_TO_FINISH));
+                positiveBalance));
         TextView leftView = (TextView) findViewById(R.id.left);
-        leftView.setText(String.valueOf(MAX_NUM_OF_TASKS - all));
+        leftView.setText(String.valueOf(numberOfAttempts - all));
     }
 
     @Override
@@ -217,7 +217,7 @@ public class TaskActivity extends Activity {
     }
 
     /**
-     * Loads MAX_NUM_OF_TASKS of random tasks from server.
+     * Loads numberOfAttempts of random tasks from server.
      */
     private class TaskLoader extends AsyncTask<Void, Task, Void> {
 
@@ -237,7 +237,7 @@ public class TaskActivity extends Activity {
         }
 
         private void generateSimpleTasks(int difficulty, int errorMessageId) {
-            for (int i = 0; i < MAX_NUM_OF_TASKS; i++) {
+            for (int i = 0; i < numberOfAttempts; i++) {
                 Task task = TaskManager.generateSimpleTask(difficulty);
                 task.setErrorMessageId(errorMessageId);
                 publishProgress(task);
@@ -256,7 +256,7 @@ public class TaskActivity extends Activity {
 
         private void downloadTasks(List<TaskType> taskTypes) {
             Collections.shuffle(taskTypes);
-            for (int i = 0; i < MAX_NUM_OF_TASKS; i++) {
+            for (int i = 0; i < numberOfAttempts; i++) {
                 TaskType type = taskTypes.get(i % taskTypes.size());
                 Task task;
                 try {
@@ -297,8 +297,8 @@ public class TaskActivity extends Activity {
             solved += v.getId() == correctChoiceId ? 1 : 0;
             new ResultSender(currentTask.getId(), v.getId() == correctChoiceId)
                     .execute();
-            if (2 * solved - all == TASKS_TO_FINISH || all == MAX_NUM_OF_TASKS) {
-                boolean win = 2 * solved - all == TASKS_TO_FINISH;
+            if (2 * solved - all == positiveBalance || all == numberOfAttempts) {
+                boolean win = 2 * solved - all == positiveBalance;
                 if (!testTask) {
                     Intent intent = new Intent(TaskActivity.this, ResultActivity.class);
                     intent.putExtra("win", win);
