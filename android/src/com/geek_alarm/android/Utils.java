@@ -177,7 +177,7 @@ public class Utils {
         long lastTime = getPreferences().getLong(LAST_TASKS_UPDATE_TIME, 0);
         long currentTime = new Date().getTime();
         if (forceUpdate || currentTime - lastTime > MIN_TASKS_UPDATE_FREQUENCY) {
-            new UpdateTaskTypesAsyncTask().doInBackground();
+            new UpdateTaskTypesAsyncTask().execute();
         }
         SharedPreferences.Editor editor = getPreferences().edit();
         editor.putLong(LAST_TASKS_UPDATE_TIME, currentTime);

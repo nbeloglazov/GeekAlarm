@@ -1,6 +1,7 @@
 package com.geek_alarm.android.activities;
 
 
+import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
         updateAlarmSoundSummary();
         initMuteTime();
         initTaskLevels();
+        initMailTo();
         Log.e("#######", Utils.getPreferences().getAll().toString());
     }
 
@@ -48,6 +50,20 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
         // We need somehow update current alarm sound after user changed in.
         // May be there is some better way to do it (e.g. with onActivityResult) but I don't know it.
         updateAlarmSoundSummary();
+    }
+
+    private void initMailTo() {
+        Preference mailTo = findPreference("feedback");
+        mailTo.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                Intent mailto = new Intent(Intent.ACTION_SEND);
+                mailto.setType("text/plain");
+                mailto.putExtra(Intent.EXTRA_EMAIL, new String[]{"feedback@geek-alarm.com"});
+                mailto.putExtra(Intent.EXTRA_SUBJECT,"Feedback");
+                startActivity(Intent.createChooser(mailto, "Select email application."));
+                return true;
+            }
+        });
     }
 
     private void initMuteTime() {

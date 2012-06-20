@@ -5,6 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:keepScreenOn="true"
+    android:background="@android:color/white"
     android:weightSum="1.0">
     <LinearLayout
         android:orientation="vertical"

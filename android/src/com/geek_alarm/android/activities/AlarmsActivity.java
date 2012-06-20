@@ -1,24 +1,25 @@
 package com.geek_alarm.android.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.InflateException;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
 import com.geek_alarm.android.AlarmPreference;
 import com.geek_alarm.android.R;
 import com.geek_alarm.android.Utils;
 import com.geek_alarm.android.adapters.AlarmPreferenceAdapter;
-import com.geek_alarm.android.adapters.DifficultyAdapter;
 import com.geek_alarm.android.db.AlarmPreferenceDao;
 
 import java.util.List;
@@ -30,7 +31,6 @@ import java.util.List;
  */
 public class AlarmsActivity extends Activity {
 
-    private List<AlarmPreference> alarms;
     private AlarmPreferenceAdapter adapter;
 
     @Override
@@ -38,7 +38,7 @@ public class AlarmsActivity extends Activity {
         super.onCreate(savedInstanceState);
         Utils.updateTaskTypesAsync(false);
         setContentView(R.layout.alarms);
-        alarms = AlarmPreferenceDao.INSTANCE.getAll();
+        List<AlarmPreference> alarms = AlarmPreferenceDao.INSTANCE.getAll();
         adapter = new AlarmPreferenceAdapter(this, alarms);
         ((ListView) findViewById(R.id.alarms)).setAdapter(adapter);
         // Add alarm by default, if there is no one yet.
@@ -93,9 +93,6 @@ public class AlarmsActivity extends Activity {
             case R.id.add:
                 addAlarm();
                 return true;
-            case R.id.feedback:
-                sendFeedback();
-                return true;
             case R.id.settings:
                 showSettings();
                 return true;
@@ -109,17 +106,4 @@ public class AlarmsActivity extends Activity {
         startActivity(intent);
     }
 
-    private void sendFeedback() {
-        Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("message/rfc822");
-        i.putExtra(Intent.EXTRA_EMAIL, new String[] { "feedback@geek-alarm.com" });
-        i.putExtra(Intent.EXTRA_SUBJECT, "Feedback");
-        try {
-            String text = getResources().getString(R.string.send_email);
-            startActivity(Intent.createChooser(i, text));
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(this, R.string.no_email_clients,
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
 }

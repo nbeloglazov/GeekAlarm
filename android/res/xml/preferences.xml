@@ -42,9 +42,10 @@
             android:title="@string/all_tasks"
             android:key="all_tasks"
             android:order="0"/>
-
+        </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/other">
         <PreferenceScreen
-            android:order="1000"
             android:title="@string/test"
             android:summary="@string/test_summary">
 
@@ -53,6 +54,11 @@
                 android:targetClass="com.geek_alarm.android.activities.TaskActivity"
                 android:targetPackage="com.geek_alarm.android"/>
         </PreferenceScreen>
+
+        <PreferenceScreen
+            android:title="@string/feedback"
+            android:key="feedback"/>
+
 
     </PreferenceCategory>
 

@@ -58,4 +58,9 @@
             #FFFFFF
         </item>
     </style>
+    <style name="WhiteBackground">
+        <item name="android:background">
+            @android:color/white
+        </item>
+    </style>
 </resources>

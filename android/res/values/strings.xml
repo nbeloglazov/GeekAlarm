@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">GeekAlarm</string>
     <string name="mute">Mute</string>
-    <string name="add">Add</string>
+    <string name="add">Add alarm</string>
     <string name="ok">Accept</string>
     <string name="cancel">Cancel</string>
     <string name="server_error">Can\'t connect to server.</string>
@@ -47,6 +47,7 @@
     <string name="mute_time_step">Mute time step</string>
     <string name="mute_time_step_summary">Every time you click on mute, mute time changes</string>
     <string name="mute_behaviour">Mute time behaviour</string>
+    <string name="other">Others</string>
 
     <string-array name="levels">
         <item>Disable</item>
