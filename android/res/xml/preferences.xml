@@ -41,6 +41,11 @@
             android:summary="@string/positive_balance_summary"
             android:key="positiveBalance"/>
 
+        <CheckBoxPreference
+            android:title="@string/use_multi_alarms"
+            android:summary="@string/use_multi_alarms_summary"
+            android:key="useMultiAlarmScreen"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory

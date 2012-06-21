@@ -51,6 +51,8 @@
     <string name="number_of_attempts">Number of attempts</string>
     <string name="positive_balance">Positive balance</string>
     <string name="positive_balance_summary">NUMBER_OF_SOLVED - NUMBER_OF_FAILED to dismiss alarm</string>
+    <string name="use_multi_alarms">Disable single alarm screen</string>
+    <string name="use_multi_alarms_summary">Show multi alarm screen even if there is only 1 alarm</string>
 
     <string-array name="levels">
         <item>Disable</item>

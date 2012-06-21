@@ -28,6 +28,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activities.SingleAlarmActivity"
+            android:theme="@style/ThemeDark">
+        </activity>
+        <activity
             android:name=".activities.TaskActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleTop"

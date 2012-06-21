@@ -48,7 +48,7 @@ public class AlarmPreferenceAdapter extends ArrayAdapter<AlarmPreference> {
         setUpCheckbox(convertView, preference);
         
         convertView.findViewById(R.id.delete).setOnClickListener(new DeleteAlarmListener(preference));
-        SetUpAlarmListenter listener = new SetUpAlarmListenter(position);   
+        SetUpAlarmListenter listener = new SetUpAlarmListenter(position);
         
         convertView.findViewById(R.id.days).setOnClickListener(listener);
         convertView.findViewById(R.id.time).setOnClickListener(listener);

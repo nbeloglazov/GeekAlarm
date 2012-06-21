@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:id="@+id/time"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerInParent="true">
+
+        <kankan.wheel.widget.WheelView
+            android:id="@+id/hour"
+            android:layout_height="wrap_content"
+            android:layout_width="180px"/>
+        <kankan.wheel.widget.WheelView
+            android:id="@+id/mins"
+            android:layout_height="wrap_content"
+            android:layout_width="180px"/>
+        <kankan.wheel.widget.WheelView
+            android:id="@+id/ampm"
+            android:layout_height="wrap_content"
+            android:layout_width="180px"/>
+    </LinearLayout>
+
+    <ToggleButton
+        android:id="@+id/enabled"
+        android:layout_height="100px"
+        android:layout_width="100px"
+        android:layout_below="@id/time"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>

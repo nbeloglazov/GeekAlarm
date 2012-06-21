@@ -3,6 +3,7 @@ package com.geek_alarm.android.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,10 +38,15 @@ public class AlarmsActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Utils.updateTaskTypesAsync(false);
+        if (SingleAlarmActivity.useSingleAlarmActivity()) {
+            goToSingleAlarmActivity();
+            return;
+        }
         setContentView(R.layout.alarms);
         List<AlarmPreference> alarms = AlarmPreferenceDao.INSTANCE.getAll();
         adapter = new AlarmPreferenceAdapter(this, alarms);
         ((ListView) findViewById(R.id.alarms)).setAdapter(adapter);
+        adapter.registerDataSetObserver(new DeleteAlarmObserver());
         // Add alarm by default, if there is no one yet.
         if (alarms.isEmpty()) {
             addAlarm();
@@ -87,6 +93,14 @@ public class AlarmsActivity extends Activity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (SingleAlarmActivity.useSingleAlarmActivity()) {
+            goToSingleAlarmActivity();
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
@@ -101,9 +115,24 @@ public class AlarmsActivity extends Activity {
         }
     }
 
+    private class DeleteAlarmObserver extends DataSetObserver {
+        @Override
+        public void onChanged() {
+            if (SingleAlarmActivity.useSingleAlarmActivity()) {
+                goToSingleAlarmActivity();
+            }
+        }
+    }
+
     private void showSettings() {
         Intent intent = new Intent(AlarmsActivity.this, PreferenceActivity.class);
         startActivity(intent);
+    }
+
+    private void goToSingleAlarmActivity() {
+        Intent intent = new Intent(this, SingleAlarmActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }
