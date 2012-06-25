@@ -11,21 +11,21 @@
             android:layout_height="wrap_content"
             android:id="@+id/task_choice_1"
             android:scaleType="centerInside"
-            android:padding="3px"
+            android:padding="3dp"
             android:background="@drawable/border" />
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/task_choice_2"
             android:scaleType="centerInside"
-            android:padding="3px"
+            android:padding="3dp"
             android:background="@drawable/border" />
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/task_choice_3"
             android:scaleType="centerInside"
-            android:padding="3px"
+            android:padding="3dp"
             android:background="@drawable/border" />
         <ImageView
             android:layout_width="match_parent"

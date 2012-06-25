@@ -18,8 +18,8 @@
             android:layout_height="wrap_content"
             android:weightSum="3.0">
             <ImageButton
-               android:layout_width="80px"
-               android:layout_height="80px"
+               android:layout_width="80dp"
+               android:layout_height="80dp"
                android:id="@+id/info_button"
                android:src="@drawable/info"
                android:layout_gravity="right"/>
@@ -43,8 +43,8 @@
                 android:layout_weight="1.0"
                 android:gravity="right">
                 <ImageButton
-                    android:layout_width="80px"
-                    android:layout_height="80px"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:id="@+id/mute_button"
                     android:src="@drawable/mute"
                     android:layout_gravity="right" />
@@ -62,17 +62,18 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical|center_horizontal">
         <ProgressBar
-            android:layout_width="100px"
-            android:layout_height="100px" 
+            android:layout_width="100dp"
+            android:layout_height="100dp" 
             android:indeterminate="true"
             style="@android:style/Widget.ProgressBar.Large.Inverse"
             android:id="@+id/progress"/>
         <ImageView
             android:id="@+id/task_question"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:scaleType="center"
+            android:layout_width="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
             android:visibility="gone" />
-            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

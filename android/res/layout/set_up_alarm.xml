@@ -9,20 +9,20 @@
          android:layout_height="wrap_content"
          android:layout_width="wrap_content"
          android:layout_gravity="center_horizontal"
-         android:paddingTop="50px"
-         android:paddingBottom="50px">
+         android:paddingTop="50dp"
+         android:paddingBottom="50dp">
         <kankan.wheel.widget.WheelView
              android:id="@+id/hour"
              android:layout_height="wrap_content"
-             android:layout_width="130px"/>
+             android:layout_width="80dp"/>
         <kankan.wheel.widget.WheelView
              android:id="@+id/mins"
              android:layout_height="wrap_content"
-             android:layout_width="130px"/>
+             android:layout_width="80dp"/>
         <kankan.wheel.widget.WheelView
              android:id="@+id/ampm"
              android:layout_height="wrap_content"
-             android:layout_width="130px"/>
+             android:layout_width="80dp"/>
 
     </LinearLayout>
 

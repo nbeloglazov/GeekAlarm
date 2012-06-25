@@ -24,8 +24,6 @@ import java.util.List;
 
 public class SingleAlarmActivity extends Activity {
 
-    private static final int WIDTH_FOR_AM_PM = 150;
-
     private Toast timeLeft;
 
     public static boolean useSingleAlarmActivity() {
@@ -120,7 +118,9 @@ public class SingleAlarmActivity extends Activity {
         for (int item : items) {
             ((WheelView) findViewById(item)).addScrollingListener(listener);
             if (!DateFormat.is24HourFormat(this)) {
-                LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(WIDTH_FOR_AM_PM, LinearLayout.LayoutParams.FILL_PARENT);
+                LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(
+                        (int) getResources().getDimension(R.dimen.width_alarm_am_pm),
+                        LinearLayout.LayoutParams.FILL_PARENT);
                 findViewById(item).setLayoutParams(layout);
             }
         }

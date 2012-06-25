@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" 
-    android:gravity="bottom">
+    android:gravity="center">
     <CheckBox 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,11 +19,11 @@
         android:layout_height="match_parent"
         android:id="@+id/days" 
         android:layout_weight="1.0"
-        android:layout_marginLeft="15px"/>
+        android:layout_marginLeft="15dp"/>
     <ImageButton
         android:src="@drawable/remove"
         android:id="@+id/delete"
         android:background="@android:color/black"
-        android:layout_width="60px"
-        android:layout_height="60px"/>
+        android:layout_width="60dp"
+        android:layout_height="60dp"/>
 </LinearLayout>
