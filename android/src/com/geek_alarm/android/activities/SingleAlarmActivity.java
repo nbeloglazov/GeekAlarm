@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import com.geek_alarm.android.ActivityUtils;
 import com.geek_alarm.android.AlarmPreference;
@@ -18,11 +19,14 @@ import com.geek_alarm.android.db.AlarmPreferenceDao;
 import kankan.wheel.widget.OnWheelScrollListener;
 import kankan.wheel.widget.WheelView;
 
+import java.util.Date;
 import java.util.List;
 
 public class SingleAlarmActivity extends Activity {
 
     private static final int WIDTH_FOR_AM_PM = 150;
+
+    private Toast timeLeft;
 
     public static boolean useSingleAlarmActivity() {
         List<AlarmPreference> alarms = AlarmPreferenceDao.INSTANCE.getAll();
@@ -48,6 +52,7 @@ public class SingleAlarmActivity extends Activity {
             goToAlarmsActivity();
             return;
         }
+        timeLeft = Toast.makeText(this, "", Toast.LENGTH_SHORT);
         setContentView(R.layout.single_alarm);
         setUpAlarm();
         setUpToggleButton();
@@ -149,11 +154,17 @@ public class SingleAlarmActivity extends Activity {
         alarm.setMinute(ActivityUtils.getMinute(this));
         alarm.setEnabled(((ToggleButton) findViewById(R.id.enabled)).isChecked());
         AlarmPreferenceDao.INSTANCE.update(alarm);
+        String message;
         if (alarm.isEnabled()) {
             Utils.setAlarm(alarm);
+            long nextTime = Utils.getNextTime(alarm.getHour(), alarm.getMinute());
+            message = Utils.timeBetween(new Date().getTime(), nextTime);
         } else {
             Utils.cancelAlarm(alarm);
+            message = "Alarm disabled";
         }
+        timeLeft.setText(message);
+        timeLeft.show();
     }
 
     private class WheelStoppedListener implements OnWheelScrollListener {

@@ -20,6 +20,9 @@ public class Utils {
 
     private static final String LAST_TASKS_UPDATE_TIME = "lastTasksUpdateTime";
     private static final long MIN_TASKS_UPDATE_FREQUENCY = 1000 * 60 * 60 * 24; // Once a day
+    private static final int MILLISECONDS_IN_HOUR = 1000 * 60 * 60;
+    private static final int MILLISECONDS_IN_MINUTE = 1000 * 60;
+
 
     public static final String NUMBER_OF_ATTEMPTS = "numberOfAttempts";
     public static final String POSITIVE_BALANCE = "positiveBalance";
@@ -101,6 +104,23 @@ public class Utils {
             next.add(Calendar.DAY_OF_MONTH, 1);
         }
         return next.getTimeInMillis();
+    }
+    
+    /**
+     * Returns string representation for time gap between 2 dates given in milliseconds.
+     * E.g. "5 hours 2 minutes".
+     * @param from
+     * @param to
+     * @return string representation of the time gap
+     */
+    public static String timeBetween(long from, long to) {
+        long diff = to - from;
+        long hours = diff / MILLISECONDS_IN_HOUR;
+        diff %= MILLISECONDS_IN_HOUR;
+        long minutes = diff / MILLISECONDS_IN_MINUTE;
+        return String.format("%d hour%s %d minute%s left",
+                hours, hours == 1 ? "" : "s",
+                minutes, minutes == 1 ? "" : "s");
     }
     
     private static PendingIntent buildAlarmIntent(int alarmId) {
