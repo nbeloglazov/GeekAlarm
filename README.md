@@ -28,6 +28,7 @@ Tasks, with '+' sign already implemented.
 * [Greatest common divisors](http://en.wikipedia.org/wiki/Greatest_common_divisor).
 * \+ [Congruence relation](http://en.wikipedia.org/wiki/Modular_arithmetic).
 * \+ [Bitwise operations](http://en.wikipedia.org/wiki/Bitwise_operation)
+* \+ Select lucky ticket.
 
 ## Architecture
 

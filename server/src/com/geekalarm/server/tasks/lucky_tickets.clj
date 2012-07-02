@@ -49,7 +49,7 @@
 
 (def info {:type :lucky-tickets
            :name "Lucky tickets"
-           :description (str "Ticket is lucky if it's number has 2n digits and"
-                             "sum of the first n digits equals to sum of the last n digits."
-                             "Example: 2314, 22, 123600")
+           :description (str "Ticket is lucky if it's number has 2n digits and\n"
+                             "sum of the first n digits equals to sum of the last n digits.\n"
+                             "Examples: 2314, 22.")
            :generator generate})
