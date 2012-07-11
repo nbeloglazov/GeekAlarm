@@ -51,7 +51,6 @@
         (= 9 digit) dec
         :else (rand-nth [inc dec])))
 
-
 (defn similar [number]
   (let [size (count number)
         indexes (->> #((juxt rand-int rand-int) size)
@@ -67,9 +66,24 @@
                      (map #(reduce (fn [num [ind fn]] (update-in num [ind] fn)) number %)))]
     (shuffle-and-track-first numbers)))
 
+(defn lucky? [number]
+  (let [length (count number)]
+    (= (apply + (take (/ length 2) number))
+       (apply + (drop (/ length 2) number)))))
+
+
+(defn satisfy?
+  "Checks whether only 1 of the number is lucky ticket"
+  [[_ numbers]]
+  (->> numbers
+       (filter lucky?)
+       count
+       (= 1)))
+
+
 (defn generate [level]
   (let [number (->> level levels rand-nth generate-number)
-        [correct choices] (similar number)]
+        [correct choices] (->> #(similar number) repeatedly (filter satisfy?) first)]
     {:question [:mtext "Lucky ticket?"]
      :choices (map (fn [x] [:mn (apply str x)]) choices)
      :correct correct}))
