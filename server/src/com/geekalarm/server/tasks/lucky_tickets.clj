@@ -5,19 +5,46 @@
              [4 5 6]
              [7 8 9]])
 
-(defn generate-half [size sum]
-  (let [num (vec (repeat size 0))
-        inc-rand (fn [digits]
-                   (->> (repeatedly #(rand-int size))
-                        (filter #(< (digits %) 9))
-                        first
-                        (#(update-in digits [%] inc))))]
-    (nth (iterate inc-rand num) sum)))
+(def variants
+  (memoize (fn [sum length]
+             (cond (and (zero? length) (zero? sum))
+                   1
+                   (or (neg? sum) (> sum (* 9 length)))
+                   0
+                   :else
+                   (->> (range 10)
+                        (map #(variants (- sum %) (dec length)))
+                        (apply +))))))
 
+(defn rand-with-weight [weights]
+  (let [rnd (rand)
+        sum (apply + (vals weights))]
+    (->> (seq  weights)
+         (reductions (fn [[val sum-weight] [new-val weight]]
+                       (vector new-val (+ sum-weight (/ weight sum))))
+                     [nil 0])
+         (filter (fn [[val weight]] (> weight rnd)))
+         first
+         first)))
+
+(defn rand-digit [sum length]
+  (->> (range 10)
+       (reduce #(assoc % %2
+                       (variants (- sum %2) (dec length))) {})
+       rand-with-weight))
+
+(defn rand-number [sum length]
+  (->> [[] sum length]
+       (iterate (fn [[acc sum length]]
+                  (let [dig (rand-digit sum length)]
+                    [(conj acc dig) (- sum dig) (dec length)])))
+       (drop-while #(pos? (last %)))
+       first
+       first))
 
 (defn generate-number [size]
   (let [sum (rand-int (inc (* 9 size)))]
-    (vec (concat (generate-half size sum) (generate-half size sum)))))
+    (vec (concat (rand-number sum size) (rand-number sum size)))))
 
 (defn similar-digit-fn [digit]
   (cond (zero? digit) inc
