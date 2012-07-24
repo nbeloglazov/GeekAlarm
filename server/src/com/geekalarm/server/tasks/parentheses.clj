@@ -7,7 +7,7 @@
 (defn generate-ops [length]
   (repeatedly (dec length) #(rand-nth '[+ - *])))
 
-(defn merge [op vals1 vals2]
+(defn merge-with-op [op vals1 vals2]
   (set (for [v1 (seq vals1) v2 (seq vals2)]
          ((resolve op) v1 v2))))
 
@@ -27,7 +27,7 @@
         [ops-l ops-r] (split-at ind ops)
         vals-l (calculate nums-l ops-l)
         vals-r (calculate nums-r (rest ops-r))]
-    (merge (nth ops ind) vals-l vals-r)))
+    (merge-with-op (nth ops ind) vals-l vals-r)))
 
 (defn generate [level]
   (let [len (rand-nth (levels level))
