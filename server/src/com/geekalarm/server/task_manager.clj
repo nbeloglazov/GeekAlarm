@@ -33,9 +33,7 @@
 
 (defn generate-task [type level]
   (let [task ((get-in tasks [type :generator]) level)]
-    (if (coll? (:question task))
-      (render/render-cljml-task task)
-      task)))
+    (render/render-cljml-task task)))
 
 (defn tasks-info []
   (->> (vals tasks)

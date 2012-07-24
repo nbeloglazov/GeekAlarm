@@ -20,15 +20,20 @@
         converter (net.sourceforge.jeuclid.converter.Converter/getInstance)]
     (.convert converter node (java.io.File. "/home/nikelandjelo/res.png") "image/png" layout)))
 
+(defn image-to-stream [image]
+  (let [output (ByteArrayOutputStream.)]
+    (javax.imageio.ImageIO/write image "PNG" output)
+    (ByteArrayInputStream. (.toByteArray output))))
+
 (defn cljml-to-stream [cljml]
-  (let [layout (get-layout)
-        output (ByteArrayOutputStream.)
-	converter (net.sourceforge.jeuclid.converter.Converter/getInstance)]
-  (-> (mathml/cljml-to-str cljml)
-      (parse-node)
-      (#(.render converter % layout))
-      (javax.imageio.ImageIO/write "PNG" output))
-  (ByteArrayInputStream. (.toByteArray output))))
+  (if (coll? cljml)
+   (let [layout (get-layout)
+         converter (net.sourceforge.jeuclid.converter.Converter/getInstance)]
+     (-> (mathml/cljml-to-str cljml)
+         (parse-node)
+         (#(.render converter % layout))
+         (image-to-stream)))
+   cljml))
 
 (defn cljml-to-image [cljml]
   (->> (mathml/cljml-to-str cljml)

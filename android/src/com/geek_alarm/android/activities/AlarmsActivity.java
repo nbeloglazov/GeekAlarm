@@ -1,22 +1,13 @@
 package com.geek_alarm.android.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.InflateException;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
 import com.geek_alarm.android.AlarmPreference;
 import com.geek_alarm.android.R;
 import com.geek_alarm.android.Utils;
