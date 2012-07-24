@@ -10,12 +10,16 @@
    [:mn (numerator ratio)]
    [:mn (denominator ratio)]])
 
+(defn symbol-to-mathml [symb]
+  [:mi ({'* \u00D7} symb symb)])
+
 
 (defn cljml
   ([name children] (reduce conj [name] children))
   ([value] (cond (ratio? value) (ratio-to-cljml value)
 		 (number? value) [:mn (math/round value)]
 		 (string? value) [:mi value]
+                 (symbol? value) (symbol-to-mathml value)
 		 (coll? value) (matrix-to-cljml value)
 		 :else [:mi (str value)])))
 
