@@ -41,5 +41,5 @@
   {:type :unique-substrings
    :name "Unique substrings"
    :generator generate
-   :info (str "Calculate number of unique substrings of the given string.\n"
-              "Example: \"abab\". Substrings: \"a\", \"b\", \"ab\", \"ba\", \"aba\", \"bab\", \"abab\". Answer: 7")})
+   :description (str "Calculate number of unique substrings of the given string.\n"
+                     "Example: \"abab\". Substrings: \"a\", \"b\", \"ab\", \"ba\", \"aba\", \"bab\", \"abab\". Answer: 7")})

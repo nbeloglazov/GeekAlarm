@@ -51,5 +51,5 @@
   {:type :parentheses
    :name "Parentheses"
    :generator generate
-   :info (str "Example: 2+2*2 can be converted to (2+2)*2 and 2+(2*2).\n"
-              "It gives 2 different results: 8 and 6. Answer is 2.")})
+   :description (str "Example: 2+2*2 can be converted to (2+2)*2 and 2+(2*2).\n"
+                     "It gives 2 different results: 8 and 6. Answer is 2.")})
