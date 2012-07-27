@@ -120,7 +120,6 @@
                   #(vector radius (get-y height size-l %))
                   #(vector (+ radius width) (get-y height size-r %)))
       draw-question-string)
-    (save-image image)
     image))
 
 
