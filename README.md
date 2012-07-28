@@ -47,6 +47,10 @@ Project consists of 2 parts:
 
  2. Clojure server
 
+## Build status
+
+[![Build Status](https://secure.travis-ci.org/nbeloglazov/GeekAlarm.png)](http://travis-ci.org/nbeloglazov/GeekAlarm])
+
 ## License
 
 Copyright (C) 2011-2012 Nikita Beloglazov
