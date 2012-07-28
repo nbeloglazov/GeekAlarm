@@ -49,7 +49,7 @@ Project consists of 2 parts:
 
 ## Build status
 
-[![Build Status](https://secure.travis-ci.org/nbeloglazov/GeekAlarm.png)](http://travis-ci.org/nbeloglazov/GeekAlarm])
+[![Build Status](https://secure.travis-ci.org/nbeloglazov/GeekAlarm.png)](http://travis-ci.org/nbeloglazov/GeekAlarm)
 
 ## License
 
