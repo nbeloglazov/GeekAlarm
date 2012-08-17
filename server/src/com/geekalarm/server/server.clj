@@ -44,6 +44,7 @@
     (-> (if (= type "question")
 	  question
 	  (nth choices (Integer/parseInt number)))
+        (java.io.ByteArrayInputStream.)
 	(response "image/png"))))
 
 (defn tasks-info [_]

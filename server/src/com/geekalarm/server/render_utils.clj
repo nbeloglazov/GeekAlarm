@@ -1,7 +1,7 @@
 (ns com.geekalarm.server.render-utils
   (require [com.geekalarm.server.mathml-utils :as mathml])
   (import [net.sourceforge.jeuclid.context Parameter]
-	  [java.io ByteArrayInputStream ByteArrayOutputStream]))
+	  [java.io ByteArrayOutputStream]))
 
 (defn get-layout []
   (let [layout (net.sourceforge.jeuclid.context.LayoutContextImpl/getDefaultLayoutContext)]
@@ -23,7 +23,7 @@
 (defn image-to-stream [image]
   (let [output (ByteArrayOutputStream.)]
     (javax.imageio.ImageIO/write image "PNG" output)
-    (ByteArrayInputStream. (.toByteArray output))))
+    (.toByteArray output)))
 
 (defn cljml-to-stream [cljml]
   (if (coll? cljml)
