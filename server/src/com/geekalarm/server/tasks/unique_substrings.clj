@@ -17,7 +17,7 @@
   (->> #(rand-nth alphabet) (repeatedly length) (apply str)))
 
 (defn unique-substrings [str]
-  (->> (for [s (range (dec (count str)))
+  (->> (for [s (range (count str))
              e (range (inc s) (inc (count str)))]
          (subs str s e))
        set
