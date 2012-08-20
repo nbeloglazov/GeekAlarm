@@ -23,7 +23,7 @@
 	max (maxs level)
 	matrix (random-matrix size max)
 	det (incanter/det matrix)
-	[correct answers] (get-similar-by-one (int det))]
+	[correct answers] (get-similar-by-one (Math/round det))]
     {:question (question-to-cljml matrix)
      :choices (map cljml answers)
      :correct correct}))
