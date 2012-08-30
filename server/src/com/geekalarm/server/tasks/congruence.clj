@@ -57,6 +57,7 @@
         upper-bound (reduce max answers)
         additional (->> #(rand-int upper-bound)
                         repeatedly
+                        distinct
                         (remove (set answers))
                         (take missing))]
     (concat answers additional)))
