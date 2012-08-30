@@ -54,11 +54,10 @@
 
 (defn add-missing [answers]
   (let [missing (- 4 (count answers))
-        base (rand-nth answers)
-        additional (->> (utils/get-similar-by-one base)
-                        (second)
-                        (remove #(= % base))
-                        (reverse)
+        upper-bound (reduce max answers)
+        additional (->> #(rand-int upper-bound)
+                        repeatedly
+                        (remove (set answers))
                         (take missing))]
     (concat answers additional)))
 
