@@ -50,14 +50,18 @@
                            (repeatedly)
                            (filter not-real-answer?)
                            (first)))]
-    (cons real-answer (map rand-answer rst))))
+    (println base mod rst)
+    (with-meta (cons real-answer (map rand-answer rst))
+      {:not-real-answer? not-real-answer?})))
 
 (defn add-missing [answers]
   (let [missing (- 4 (count answers))
-        upper-bound (reduce max answers)
+        upper-bound (reduce max 10 answers)
+        not-real-answer? (:not-real-answer? (meta answers))
         additional (->> #(rand-int upper-bound)
                         repeatedly
                         distinct
+                        (filter not-real-answer?)
                         (remove (set answers))
                         (take missing))]
     (concat answers additional)))
