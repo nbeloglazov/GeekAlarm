@@ -1,7 +1,7 @@
 (ns com.geekalarm.server.tasks.max-matching
-  (:use [com.geekalarm.server.utils :only (rand-range get-similar-by-one)]
-        [com.geekalarm.server.mathml-utils :only (cljml)]
-        [com.geekalarm.server.render-utils :only (image-to-stream)]))
+  (:require [com.geekalarm.server
+             [utils :refer (rand-range get-similar-by-one)]
+             [render-utils :refer (image-to-stream)]]))
 
 (def levels [[2 3]
              [4 5]
@@ -128,12 +128,12 @@
         [correct choices] (->> graph max-matching count get-similar-by-one)]
     {:question (image-to-stream (draw-question graph))
      :correct correct
-     :choices (map cljml choices)}))
+     :choices (map str choices)}))
 
 (def info {:type :max-matching
            :name "Maximum matching"
            :description (str "Find size of maximium matching for given graph.\n"
                              "http://en.wikipedia.org/wiki/Matching_(graph_theory)")
-           :generator generate})
+           :generator #'generate})
 
 

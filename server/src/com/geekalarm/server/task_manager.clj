@@ -33,7 +33,7 @@
 
 (defn generate-task [type level]
   (let [task ((get-in tasks [type :generator]) level)]
-    (render/render-cljml-task task)))
+    (render/render-task task)))
 
 (defn tasks-info []
   (->> (vals tasks)

@@ -1,8 +1,9 @@
 (ns com.geekalarm.server.tasks.parentheses
-  (:use [com.geekalarm.server.mathml-utils :only (cljml)]
-        [com.geekalarm.server.utils :only (get-similar-by-one)]))
+  (:require [com.geekalarm.server
+             [utils :refer (get-similar-by-one)]
+             [latex-utils :refer (lines to-latex text)]]))
 
-(def levels [[3] [4 5] [6 7]])
+(def levels [[3] [4] [5 6]])
 
 (defn generate-ops [length]
   (repeatedly (dec length) #(rand-nth '[+ - *])))
@@ -34,22 +35,17 @@
         ops (generate-ops len)
         nums (repeatedly len #(rand-int 10))
         [correct choices] (-> (calculate nums ops) count get-similar-by-one)]
-    {:question [:mtable
-                [:mtr
-                 [:mtd [:mtext "How many different values can be obtained"]]]
-                [:mtr
-                 [:mtd [:mtext "from this expression via adding"]]]
-                [:mtr
-                 [:mtd [:mtext "arbitrary number of parentheses:"]]]
-                [:mtr
-                 (vec (cons :mtd
-                  (map cljml (interleave nums (concat ops [""])))))]]
+    {:question (lines (concat (map text ["How many different values can be obtained"
+                                         "from this expression via adding"
+                                         "arbitrary number of parentheses:"])
+                              [(apply str (interleave nums (concat ops [""])))]) 
+                      "c")
      :correct correct
-     :choices (map cljml choices)}))
+     :choices (map to-latex choices)}))
 
 (def info
   {:type :parentheses
    :name "Parentheses"
-   :generator generate
+   :generator #'generate
    :description (str "Example: 2+2*2 can be converted to (2+2)*2 and 2+(2*2).\n"
                      "It gives 2 different results: 8 and 6. Answer is 2.")})

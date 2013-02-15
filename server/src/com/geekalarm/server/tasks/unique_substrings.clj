@@ -1,6 +1,7 @@
 (ns com.geekalarm.server.tasks.unique-substrings
-  (:use [com.geekalarm.server.utils :only (get-similar-by-one)]
-        [com.geekalarm.server.mathml-utils :only (cljml)]))
+  (:require [com.geekalarm.server
+             [utils :refer (get-similar-by-one)]
+             [latex-utils :refer (text lines)]]))
 
 (def levels [ {:letters [2 3] :length [3 4]}
               {:letters [2 3] :length [4 5]}
@@ -30,16 +31,14 @@
         st (generate-string length (generate-alphabet letters))
         result (unique-substrings st)
         [correct choices] (get-similar-by-one result)]
-    {:question [:mtable
-                [:mtr [:mtd [:mtext "Number of unique substrings of the string:"]]]
-                [:mtr [:mtd [:mtext (str \" st \")]]]]
+    {:question (lines (map text ["Number of unique substrings of the string:" (str \' st \')]) "c")
      :correct correct
-     :choices (map cljml choices)}))
+     :choices (map str choices)}))
 
 
 (def info
   {:type :unique-substrings
    :name "Unique substrings"
-   :generator generate
+   :generator #'generate
    :description (str "Calculate number of unique substrings of the given string.\n"
                      "Example: \"abab\". Substrings: \"a\", \"b\", \"ab\", \"ba\", \"aba\", \"bab\", \"abab\". Answer: 7")})

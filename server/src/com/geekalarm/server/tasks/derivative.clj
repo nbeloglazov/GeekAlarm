@@ -1,9 +1,9 @@
 (ns com.geekalarm.server.tasks.derivative
   (:require [com.geekalarm.server
              [derivative-utils :as der-ut]
-             [utils :as utils]]
-            [clojure.walk :as walk])
-  (:use [com.geekalarm.server.mathml-utils :only (cljml)]))
+             [utils :as utils]
+             [latex-utils :refer (lines)]]
+            [clojure.walk :as walk]))
 
 (defn rand-fn []
   (rand-nth (vec der-ut/fns)))
@@ -62,26 +62,16 @@
                         (der-ut/normalize))
         [correct choices] (utils/get-similar-by-fn derivative
                                                    get-similar-expr)]
-
-    {:question [:mtable
-                [:mtr [:mtd
-                       [:mo "f"]
-                       [:mfenced
-                        [:mi "x"]]
-                       [:mo "="]
-                       (der-ut/to-cljml expr)]]
-                [:mtr [:mtd
-                       [:mo "f '"]
-                       [:mfenced
-                        [:mi "x"]]
-                       [:mo "="]
-                       [:mtext "?"]]]]
-     :choices (map der-ut/to-cljml (map der-ut/normalize choices))
+    {:question (lines
+                [(format "f(x)=%s" (der-ut/to-latex expr))
+                 "f'(x) = ?"]
+                "c")
+     :choices (map (comp der-ut/to-latex der-ut/normalize) choices)
      :correct correct}))
 
 (def info {:type :derivative
            :name "Derivative"
            :description (str "Find derivative of the function.\n"
                              "http://en.wikipedia.org/wiki/Table_of_derivatives")
-           :generator generate})
+           :generator #'generate})
 

@@ -1,8 +1,9 @@
 (ns com.geekalarm.server.tasks.definite-polynomial-integral
-  (:use [com.geekalarm.server
-         [mathml-utils :only (cljml)]
-         [utils :only (get-similar-by-one)]]
-        [clojure.math.numeric-tower :only (expt)]))
+  (:require [com.geekalarm.server
+             [utils :refer (get-similar-by-one)]
+             [latex-utils :refer (to-latex)]]
+            [clojure.math.numeric-tower :refer (expt)]
+            [clojure.string :refer (join)]))
 
 (def max-limit 4)
 
@@ -13,67 +14,57 @@
 (def sizes [1 2 3])
 
 (defn generate-integral [size]
-     (let [parts (->> (range (inc max-power))
-                      (shuffle)
-                      (take size)
-                      (sort >)
-                      (map (fn [power] {:power power
-                                        :multiplier (inc (rand-int max-multiplier))})))]
-       {:parts parts
-        :limit (inc (rand-int max-limit))}))
+  (let [parts (->> (range (inc max-power))
+                   (shuffle)
+                   (take size)
+                   (sort >)
+                   (map (fn [power] {:power power
+                                     :multiplier (inc (rand-int max-multiplier))})))]
+    {:parts parts
+     :limit (inc (rand-int max-limit))}))
 
 (defn calculate-integral [integral]
   (let [limit (:limit integral)
         calc-part (fn [{:keys [power multiplier]}]
                     (let [pow (inc power)
                           mult (/ multiplier pow)]
-                    (* mult (- (expt limit pow)
-                               (expt (- limit) pow)))))]
+                      (* mult (- (expt limit pow)
+                                 (expt (- limit) pow)))))]
     (->> (:parts integral)
          (map calc-part)
          (reduce +))))
 
-(defn part-to-cljml [part]
-  (let [{pow :power mult :multiplier} part
-        m (when (or (not= mult 1)
-                  (zero? pow))
-            [:mn mult])
-        b (when (not= pow 0)
-            (if (not= pow 1)
-              [:msup [:mi "x"]
-                     [:mn pow]]
-              [:mi "x"]))]
-    (remove nil? [m b])))
+(defn part-to-latex [{:keys [power multiplier]}]
+  (let [m (if (or (not= multiplier 1)
+                  (zero? power))
+            multiplier
+            "")
+        b (if (not= power 0)
+            (format "x^{%s}" (if (= 1 power) "" power))
+            "")]
+    (str m b)))
 
-(defn integral-to-cljml [integral]
-  (let [parts (map part-to-cljml (:parts integral))
+(defn integral-to-latex [{:keys [parts limit]}]
+  (let [parts (map part-to-latex parts)
         one? (= (count parts) 1)
-        parts-pluses (->> (interpose [[:mo "+"]] parts)
-                          (apply concat))
-        limit (:limit integral)
-        expr [[:munderover
-               [:mo "&#8747;"]
-               [:mn (- limit)]
-               [:mn limit]]
-               (cljml :row (concat [(if one? [] [:mo "("])]
-                                   parts-pluses
-                                   [[:mo (if one? " " ")")]]))
-               [:mi "d"]
-               [:mi "x"]
-               [:mo "="]
-               [:mtext "?"]]]
-    (cljml :math expr)))
+        parts-pluses (join "+" parts)]
+    (format "\\int_{%s}^{%s} %s dx = ?"
+            (- limit)
+            limit
+            (str (if one? "" "(")
+                 parts-pluses
+                 (if one? "" ")")))))
 
 (defn generate [level]
   (let [integral (generate-integral (sizes level))
         result (calculate-integral integral)
         [correct choices] (get-similar-by-one result)]
-    {:question (integral-to-cljml integral)
-     :choices (map cljml choices)
+    {:question (integral-to-latex integral)
+     :choices (map to-latex choices)
      :correct correct}))
 
 (def info {:type :definite-integral
            :name "Definite integral"
            :description (str "Calculate given integral.\n"
                              "http://en.wikipedia.org/wiki/Symbolic_integration#Example")
-           :generator generate})
+           :generator #'generate})

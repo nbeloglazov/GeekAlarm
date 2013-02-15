@@ -33,12 +33,12 @@
         pseudo-fn (fn [_] (rand-pseudoprime left right))
         prime (rand-prime left right)
         [correct choices] (utils/get-similar-by-fn prime pseudo-fn)]
-    {:question [:mtext "Prime number?"]
-     :choices (map (fn [x] [:mn x]) choices)
+    {:question "\\text{Prime number?}"
+     :choices (map str choices)
      :correct correct}))
 
 (def info {:type :prime-numbers
            :name "Prime numbers"
            :description (str "One of the numbers is prime. Which one?\n"
                              "http://en.wikipedia.org/wiki/Prime_number")
-           :generator generate})
+           :generator #'generate})

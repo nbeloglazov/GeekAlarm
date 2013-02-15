@@ -1,18 +1,9 @@
 (ns com.geekalarm.server.tasks.determinant
-  (:require [incanter.core :as incanter])
-  (:use [com.geekalarm.server
-         [mathml-utils :only (cljml)]
-         [utils :only (get-similar-by-one
-                       random-matrix)]]))
-
-(defn- question-to-cljml [matrix]
-  [:math [:mo "|"]
-         [:mphantom [:mtext "-"]] ; hack to insert some space between by bracker and numbers
-         (cljml matrix)
-         [:mphantom [:mtext "-"]]
-         [:mo "|"]
-         [:mo "="]
-         [:mtext "?"]])
+  (:require [incanter.core :as incanter]
+            [com.geekalarm.server
+             [latex-utils :refer (to-latex matrix)]
+             [utils :refer (get-similar-by-one
+                            random-matrix)]]))
 
 (def sizes [2 2 3])
 
@@ -21,15 +12,15 @@
 (defn generate [level]
   (let [size (sizes level)
 	max (maxs level)
-	matrix (random-matrix size max)
-	det (incanter/det matrix)
+	mat (random-matrix size max)
+	det (incanter/det mat)
 	[correct answers] (get-similar-by-one (Math/round det))]
-    {:question (question-to-cljml matrix)
-     :choices (map cljml answers)
+    {:question (str (matrix mat "||") " = ?")
+     :choices (map to-latex answers)
      :correct correct}))
 
 (def info {:type :determinant
            :name "Determinant"
            :description (str "Find determinant of the matrix.\n"
                              "http://en.wikipedia.org/wiki/Determinant")
-           :generator generate})
+           :generator #'generate})

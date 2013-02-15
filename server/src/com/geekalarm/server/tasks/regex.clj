@@ -2,7 +2,8 @@
   (:import [dk.brics.automaton RegExp])
   (:require [com.geekalarm.server
              [utils :as utils]
-             [mathml-utils :as cljml]]))
+             [latex-utils :as lu]]
+            [clojure.string :as string]))
 
 (def max-count 3)
 (def max-length 30)
@@ -126,14 +127,14 @@
                 (reduce max))
            max-length)
       (recur level)
-      {:question [:mtext regex]
-       :choices (map (fn [x] [:mtext x]) choices)
+      {:question (lu/text regex)
+       :choices (map lu/text (replace {"" " "} choices))
        :correct correct})))
 
 (def info {:type :regex
            :name "Regex"
            :description (str "Choose string matching the pattern.\n"
                              "http://www.regular-expressions.info/reference.html")
-           :generator generate})
+           :generator #'generate})
 
 

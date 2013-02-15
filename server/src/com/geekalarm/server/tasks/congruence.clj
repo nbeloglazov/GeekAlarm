@@ -1,8 +1,9 @@
 (ns com.geekalarm.server.tasks.congruence
   (:require [clojure.math.combinatorics :as combinatorics]
+            [clojure.string :refer (join)]
             [com.geekalarm.server
              [utils :as utils]
-             [mathml-utils :as mathml]]))
+             [latex-utils :refer (lines)]]))
 
 (def modules [2 3 5 7 11 13 17 19])
 (def multiplier 4)
@@ -50,7 +51,6 @@
                            (repeatedly)
                            (filter not-real-answer?)
                            (first)))]
-    (println base mod rst)
     (with-meta (cons real-answer (map rand-answer rst))
       {:not-real-answer? not-real-answer?})))
 
@@ -76,21 +76,16 @@
 (defn generate [level]
   (let [eqs (generate-equations (inc level))
         [correct choices] (get-choices eqs)
-        eq-to-cljml (fn [[base mod]]
-                      [:mrow
-                       [:mi "x"]
-                       [:mo "&#8801;"]
-                       [:mn base]
-                       [:mo " "]
-                       [:mtext (format "(mod %d)" mod)]])]
+        eq-to-latex (fn [[base mod]]
+                      (format "x \\equiv %s\\; (mod\\; %s)" base mod))]
 
-    {:question (concat [:mtable {:columnalign "left"}] (map eq-to-cljml eqs))
-     :choices (map (fn [x] [:mn x]) choices)
+    {:question (lines (map eq-to-latex eqs))
+     :choices (map str choices)
      :correct correct}))
 
 (def info {:type :congruence
            :name "Congruence relation"
            :description (str "Solve system of linear congruences.\n"
                              "http://en.wikipedia.org/wiki/Modular_arithmetic")
-           :generator generate})
+           :generator #'generate})
 

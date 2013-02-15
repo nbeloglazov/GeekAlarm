@@ -1,10 +1,10 @@
 (ns com.geekalarm.server.tasks.inverse-matrix
-  (:require [incanter.core :as incanter])
-  (:use [clojure.math.numeric-tower :only (round)]
-        [com.geekalarm.server
-         [mathml-utils :only (cljml)]
-         [utils :only (get-similar-matrices
-                       random-matrix)]]))
+   (:require [incanter.core :as incanter]
+             [clojure.math.numeric-tower :refer (round)]
+             [com.geekalarm.server
+              [latex-utils :refer (matrix to-latex)]
+              [utils :refer (get-similar-matrices
+                             random-matrix)]]))
 
 (def maxs [4 9 4])
 
@@ -22,31 +22,18 @@
         [det mat] (get-matrix n (maxs level))
         answer (incanter/solve mat (incanter/mult det (incanter/identity-matrix n)))
         [correct choices] (get-similar-matrices answer)]
-    {:question [:math
-                [:msup
-                 [:mrow
-                  [:mo "("]
-                  (cljml mat)
-                  [:mo ")"]]
-                 [:mn -1]]
-                [:mo "="]
-                [:mtext "?"]]
-     :choices (->> choices
-                   (map (fn [mat]
-                          (map (fn [row]
-                                 (map #(/ (round %) det) row))
-                               mat)))
-                   (map (fn [mat]
-                          [:math
-                           [:mo "("]
-                           (cljml mat)
-                           [:mo ")"]])))
+    {:question (str (matrix mat "()") "^{-1} = ?")
+     :choices (map #(matrix % "()")
+                   (for [mat choices]
+                     (for [row mat]
+                       (for [val row]
+                         (/ (round val) det)))))
      :correct correct}))
 
 (def info {:type :inverse-matrix
            :name "Inverse matrix"
            :description (str "Find inverse of the matrix.\n"
                              "http://en.wikipedia.org/wiki/Invertible_matrix")
-           :generator generate})
+           :generator #'generate})
 
 

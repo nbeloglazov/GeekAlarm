@@ -1,6 +1,7 @@
 (ns com.geekalarm.server.derivative-utils
-  (:use [com.geekalarm.server.mathml-utils :only (cljml)]
-        [clojure.core.match :only (match)]))
+  (:require [com.geekalarm.server.latex-utils :as lu]
+            [clojure.core.match :refer (match)]
+            [clojure.string :refer (join)]))
 
 (declare derivative-expr)
 
@@ -111,39 +112,52 @@
                                     (#(if minus [:minus %] %)))))
           :else expr)))
 
-(declare to-cljml-expr)
+(defmulti to-latex-expr (fn [[f]] (if (fns f) :function f)))
 
-(defn to-cljml [expr]
-  (cond (number? expr) (cljml expr)
-        (= expr :x) [:mi "x"]
-        :else (vec (to-cljml-expr expr))))
+(defn to-latex [expr]
+  (cond (number? expr) (lu/to-latex expr)
+        (= expr :x) "x"
+        (fns expr) (str "\\" (name expr))
+        :else (to-latex-expr expr)))
 
-(defn to-cljml-expr [[func & in-args]]
-  (let [args (map to-cljml in-args)]
-    (case func
-          :pow (let [[arg pow] args
-                     in-arg (first in-args)]
-                 (cond (= arg [:mi "x"]) [:msup arg pow]
-                       (and (coll? in-arg)
-                            (fns (first in-arg)))
-                       (update-in arg [1] (fn [op] [:msup op pow]))
-                       :else [:msup
-                              [:mfenced arg]
-                              pow]))
-          :exp (let [[base pow] args]
-                 [:msup base pow])
-          :plus (let [ops (map #(if (fn-of % :minus)
-                                  ""
-                                  [:mo "+"]) in-args)]
-                  (->> (interleave (cons "" (rest ops))
-                                   args)
-                       (remove empty?)
-                       (cons :mrow)))
-          :minus [:mrow [:mo "-"] (first args)]
-          :mult (->> (map #(if (fn-of %2 :plus) [:mfenced %1] %1) args in-args)
-                     (cons :mrow))
-          :div (cons :mfrac args)
-          [:mrow
-           [:mo (name func)]
-           [:mfenced
-           (first args)]])))
+(defmethod to-latex-expr :pow
+  [[_ arg pow]]
+  (let [l-pow (to-latex pow)
+        l-arg (to-latex arg)
+        [fn in-arg] (when (coll? arg) arg)]
+    (cond (fns fn) (str (lu/pow (to-latex fn) l-pow) "(" (to-latex in-arg) ")")
+          (= l-arg "x") (lu/pow l-arg l-pow)
+          :default (lu/pow (str "(" l-arg ")") l-pow))))
+
+(defmethod to-latex-expr :function
+  [[f arg]]
+  (str (to-latex f) "(" (to-latex arg) ")"))
+
+(defmethod to-latex-expr :exp
+  [[_ base pow]]
+  (lu/pow (to-latex base) (to-latex pow)))
+
+(defmethod to-latex-expr :plus
+  [[_ & args]]
+  (let [ops (map #(if (fn-of % :minus) "" "+") args)
+        l-args (map to-latex args)]
+    (->> (interleave (cons "" (rest ops))
+                     l-args)
+         (remove empty?)
+         (apply str))))
+
+(defmethod to-latex-expr :minus
+  [[_ arg]]
+  (str "-" (to-latex arg)))
+
+(defmethod to-latex-expr :mult
+  [[_ & args]]
+  (letfn [(conf [v]
+            (if (fn-of v :plus)
+              (str "(" (to-latex v) ")")
+              (to-latex v)))]
+    (apply str (map conf args))))
+
+(defmethod to-latex-expr :div
+  [[_ num den]]
+  (lu/frac (to-latex num) (to-latex den)))

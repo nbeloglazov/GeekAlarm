@@ -32,15 +32,14 @@
         res (op-fn a b)
         [correct choices] (utils/get-similar-by-fn res
                                                    change-random-bit)]
-    {:question [:mrow [:mn a] [:mo op-name] [:mn b] [:mo "="] [:mtext "?"]]
-     :choices (map #(vector :mn %)
-                   choices)
+    {:question (format "%s\\; %s\\; %s = ?" a op-name b)
+     :choices (map str choices)
      :correct correct}))
 
 (def info {:name "Bitwise operations"
            :type :bitwise-operations
            :description (str "Calculate bitwise operator for 2 arguments.\n"
                              "http://en.wikipedia.org/wiki/Bitwise_operation")
-           :generator generate})
+           :generator #'generate})
 
 

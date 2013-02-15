@@ -1,5 +1,7 @@
 (ns com.geekalarm.server.tasks.lucky-tickets
-  (:use [com.geekalarm.server.utils :only (shuffle-and-track-first)]))
+  (:use [com.geekalarm.server
+         [utils :only (shuffle-and-track-first)]
+         [latex-utils :only (text)]]))
 
 (def levels [[2 3]
              [4 5 6]
@@ -84,8 +86,8 @@
 (defn generate [level]
   (let [number (->> level levels rand-nth generate-number)
         [correct choices] (->> #(similar number) repeatedly (filter satisfy?) first)]
-    {:question [:mtext "Lucky ticket?"]
-     :choices (map (fn [x] [:mn (apply str x)]) choices)
+    {:question (text "Lucky ticket?")
+     :choices (map (fn [x] (apply str x)) choices)
      :correct correct}))
 
 (def info {:type :lucky-tickets
@@ -93,4 +95,4 @@
            :description (str "Ticket is lucky if it's number has 2n digits and\n"
                              "sum of the first n digits equals to sum of the last n digits.\n"
                              "Examples: 2314, 22.")
-           :generator generate})
+           :generator #'generate})

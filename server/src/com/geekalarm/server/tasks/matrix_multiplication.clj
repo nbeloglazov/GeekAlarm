@@ -1,8 +1,8 @@
 (ns com.geekalarm.server.tasks.matrix-multiplication
-  (:use [com.geekalarm.server
-         [utils :only (random-matrix get-similar-matrices)]
-         [mathml-utils :only (cljml)]])
-  (:require [incanter.core :as incanter]))
+  (:require [incanter.core :as incanter]
+            [com.geekalarm.server
+             [utils :refer (random-matrix get-similar-matrices)]
+             [latex-utils :refer (matrix)]]))
 
 (def maxs [9 19 9])
 
@@ -14,26 +14,15 @@
                    (repeatedly 2))
         c (incanter/mmult a b)
         [correct choices] (get-similar-matrices c)]
-    {:question [:mrow
-                [:mo "("]
-                (cljml a)
-                [:mo ")"]
-                [:mo "&#215;"]
-                [:mo "("]
-                (cljml b)
-                [:mo ")"]
-                [:mo "="]
-                [:mtext "?"]]
-     :choices (map (fn [mat]
-                     [:mrow
-                      [:mo "("]
-                      (cljml mat)
-                      [:mo ")"]])
-                   choices)
+    {:question (str (matrix a "()")
+                    "\\times"
+                    (matrix b "()")
+                    "=?")
+     :choices (map #(matrix % "()") choices)
      :correct correct}))
 
 (def info {:type :matrix-multiplication
            :name "Matrix multiplication"
            :description (str "Find product of the matrices.\n"
                              "http://en.wikipedia.org/wiki/Matrix_multiplication")
-           :generator generate})
+           :generator #'generate})

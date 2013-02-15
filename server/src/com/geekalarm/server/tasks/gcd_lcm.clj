@@ -1,6 +1,7 @@
 (ns com.geekalarm.server.tasks.gcd-lcm
-  (:use [com.geekalarm.server.utils :only (rand-range primes get-similar-by-fn)]
-        [com.geekalarm.server.mathml-utils :only (cljml)]))
+  (:require [com.geekalarm.server
+             [utils :refer (rand-range primes get-similar-by-fn)]
+             [latex-utils :refer (to-latex)]]))
 
 (def difficulty [[2 100]
                  [100 1000]
@@ -54,9 +55,9 @@
                 (gcd a b)
                 (/ (* a b) (gcd a b)))
         [correct choices] (get-similar-by-fn value similar)]
-    {:question [:mtext (str (if (= type :gcd) "GCD" "LCM")
-                            "(" a ", " b ") = ?")]
-     :choices (map cljml choices)
+    {:question (str (if (= type :gcd) "GCD" "LCM")
+                     "(" a ", " b ") = ?")
+     :choices (map to-latex choices)
      :correct correct}))
 
 (def info {:type :gcd-lcm
@@ -65,6 +66,6 @@
                              "http://en.wikipedia.org/wiki/Greatest_common_divisor\n"
                              "or least common multiple:\n"
                              "http://en.wikipedia.org/wiki/Least_common_multiple")
-           :generator generate})
+           :generator #'generate})
 
 
