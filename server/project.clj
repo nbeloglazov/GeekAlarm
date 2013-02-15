@@ -7,7 +7,7 @@
                  [org.clojure/core.incubator "0.1.2"]
 		 [ring "1.1.8"]
 		 [net.cgrand/moustache "1.1.0"]
-                 [org.clojure/core.match "0.2.0-alpha11"]
+                 [org.clojure/core.match "0.2.0-alpha8"]
 		 [incanter/incanter-core "1.4.0"]
                  [org.scilab.forge/jlatexmath "0.9.6"]
                  [dk.brics.automaton/automaton "1.11.2"]]

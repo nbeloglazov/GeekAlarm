@@ -92,7 +92,7 @@
     (doseq [l left]
       (doseq [r (graph l [])]
         (draw-line graphics
-                   (coords-l l)p
+                   (coords-l l)
                    (coords-r r))))))
 
 
