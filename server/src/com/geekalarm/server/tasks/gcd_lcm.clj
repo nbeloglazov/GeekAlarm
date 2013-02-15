@@ -1,7 +1,7 @@
 (ns com.geekalarm.server.tasks.gcd-lcm
   (:require [com.geekalarm.server
              [utils :refer (rand-range primes get-similar-by-fn)]
-             [latex-utils :refer (to-latex)]]))
+             [latex-utils :refer (to-latex text)]]))
 
 (def difficulty [[2 100]
                  [100 1000]
@@ -55,7 +55,7 @@
                 (gcd a b)
                 (/ (* a b) (gcd a b)))
         [correct choices] (get-similar-by-fn value similar)]
-    {:question (str (if (= type :gcd) "GCD" "LCM")
+    {:question (str (text (if (= type :gcd) "GCD" "LCM"))
                      "(" a ", " b ") = ?")
      :choices (map to-latex choices)
      :correct correct}))

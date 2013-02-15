@@ -10,8 +10,8 @@
 (def radius 6)
 (def diam (* 2 radius))
 
-(def text-offset 25)
-(def gap 30)
+(def text-offset 55)
+(def gap 40)
 
 (def width 170)
 
@@ -92,7 +92,7 @@
     (doseq [l left]
       (doseq [r (graph l [])]
         (draw-line graphics
-                   (coords-l l)
+                   (coords-l l)p
                    (coords-r r))))))
 
 
@@ -104,7 +104,10 @@
       (+ radius text-offset)))
 
 (defn draw-question-string [gr]
-  (.drawString gr "Size of maximum matching?" 5 15))
+  (let [font (.. gr getFont (deriveFont (float 20)))]
+    (.setFont gr font))
+  (.drawString gr "Size of maximum" 5 15)
+  (.drawString gr "matching?" 40 40))
 
 (defn draw-question [graph]
   (let [im-width (+ width radius radius)
@@ -135,5 +138,3 @@
            :description (str "Find size of maximium matching for given graph.\n"
                              "http://en.wikipedia.org/wiki/Matching_(graph_theory)")
            :generator #'generate})
-
-

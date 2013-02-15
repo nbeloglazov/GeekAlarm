@@ -1,25 +1,7 @@
 (ns com.geekalarm.server.render-utils
   (require [com.geekalarm.server.mathml-utils :as mathml])
-  (import [net.sourceforge.jeuclid.context Parameter]
-	  [java.io ByteArrayOutputStream]
+  (import [java.io ByteArrayOutputStream]
           [org.scilab.forge.jlatexmath TeXConstants TeXIcon TeXFormula]))
-
-(defn get-layout []
-  (let [layout (net.sourceforge.jeuclid.context.LayoutContextImpl/getDefaultLayoutContext)]
-    (.setParameter layout Parameter/MATHSIZE 30)
-    (.setParameter layout Parameter/MATHBACKGROUND java.awt.Color/WHITE)
-    layout))
-
-
-(defn parse-node [str]
-  (let [parser (net.sourceforge.jeuclid.parser.Parser/getInstance)
-	source (javax.xml.transform.stream.StreamSource. (java.io.StringReader. str))]
-    (.parse parser source)))
-
-(defn save-image [node]
-  (let [layout (get-layout)
-        converter (net.sourceforge.jeuclid.converter.Converter/getInstance)]
-    (.convert converter node (java.io.File. "/home/nikelandjelo/res.png") "image/png" layout)))
 
 (defn image-to-stream [image]
   (let [output (ByteArrayOutputStream.)]
@@ -47,20 +29,9 @@
       image)))
 
 (defn render-to-stream [val]
-  (cond (coll? val)
-        (let [layout (get-layout)
-              converter (net.sourceforge.jeuclid.converter.Converter/getInstance)]
-          (-> (mathml/cljml-to-str val)
-              (parse-node)
-              (#(.render converter % layout))
-              (image-to-stream)))
-        (string? val) (image-to-stream (latex val))
-        :default val))
-
-(defn cljml-to-image [cljml]
-  (->> (mathml/cljml-to-str cljml)
-       (parse-node)
-       (save-image)))
+  (if (string? val)
+    (image-to-stream (latex val))
+    val))
 
 (defn render-task [task]
   (-> task

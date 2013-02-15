@@ -32,7 +32,7 @@
         res (op-fn a b)
         [correct choices] (utils/get-similar-by-fn res
                                                    change-random-bit)]
-    {:question (format "%s\\; %s\\; %s = ?" a op-name b)
+    {:question (format "%s\\; \\text{%s} \\; %s = ?" a op-name b)
      :choices (map str choices)
      :correct correct}))
 
