@@ -129,7 +129,7 @@
         graph (rand-graph n m)
         non-isom (gen-different graph)
         [correct choices] (utils/shuffle-and-track-first [non-isom graph graph graph])]
-    {:question (latex/lines (map latex/text ["One of graph is not isomorphic to the other three."
+    {:question (latex/lines (map latex/text ["One graph is not isomorphic to the other three."
                                              "Which one?"])
                             "c")
      :choices (map render/image-to-stream (map draw-graph-randomly choices))
