@@ -1,5 +1,5 @@
 (ns com.geekalarm.server.tasks.triangles-count
-  (:require [clojure.math.combinatorics :refer [combinations]]
+  (:require [clojure.math.combinatorics :refer (combinations)]
             [incanter.core :refer (abs)]
             [com.geekalarm.server
              [render-utils :refer (image-to-stream)]
