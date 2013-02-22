@@ -137,6 +137,6 @@
 
 (def info {:type :isomorphic-graphs
            :name "Isomorphic graphs"
-           :description (str "Find non-isomorphics graph.\n"
+           :description (str "Find non-isomorphic graph.\n"
                              "http://en.wikipedia.org/wiki/Graph_isomorphism")
            :generator #'generate})
