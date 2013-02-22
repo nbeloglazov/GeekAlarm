@@ -1,9 +1,10 @@
 package com.geek_alarm.android.tasks;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -15,15 +16,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public final class TaskManager {
 
-    private static final String SERVER_URL = "http://geekbeta-nbeloglazov.dotcloud.com/";
+    private static final String SERVER_URL = "http://geek-alarm.com/";
     private static final Random RANDOM = new Random();
 
     private TaskManager() {}
