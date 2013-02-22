@@ -25,7 +25,8 @@ Implemented:
 * [Bitwise operations](http://en.wikipedia.org/wiki/Bitwise_operation).
 * Select lucky ticket.
 * [Maximum matching][matching].
-* Parentheses in expression
+* Parentheses in expression.
+* Triangles count.
 * Unique substrings.
 
 Plans:
