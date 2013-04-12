@@ -171,6 +171,7 @@ public class TaskActivity extends Activity {
     public void onDestroy() {
         super.onDestroy();
         player.destroy();
+        loader.cancel(false);
     }
 
     /**
@@ -226,6 +227,9 @@ public class TaskActivity extends Activity {
                     task.setErrorMessageId(R.string.server_error);
                 }
                 publishProgress(task);
+                if (isCancelled()) {
+                    return;
+                }
             }
         }
 

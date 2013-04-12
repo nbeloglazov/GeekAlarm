@@ -11,6 +11,9 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,9 +27,15 @@ public final class TaskManager {
 
     private static final String SERVER_URL = "http://geekalarm-nbeloglazov.rhcloud.com/";
     private static final Random RANDOM = new Random();
-    private static final HttpClient CLIENT = new DefaultHttpClient();
+    private static final HttpClient CLIENT = createClient();
 
     private TaskManager() {}
+
+    private static HttpClient createClient() {
+        HttpParams params = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(params, 30000);
+        return new DefaultHttpClient(params);
+    }
 
     private static HttpEntity sendRequest(String url) throws Exception {
         HttpUriRequest request = new HttpGet(SERVER_URL + url);
