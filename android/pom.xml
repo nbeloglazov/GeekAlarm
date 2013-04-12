@@ -75,7 +75,6 @@
                                 <phase>package</phase>
                                 <inherited>true</inherited>
                                 <configuration>
-                                    <archiveDirectory></archiveDirectory>
                                     <includes>
                                         <include>target/*.apk</include>
                                     </includes>

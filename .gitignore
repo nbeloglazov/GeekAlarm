@@ -10,5 +10,4 @@ gen
 server/classes/
 .lein-deps-sum
 *war
-*.keystore
 .lein-failures
