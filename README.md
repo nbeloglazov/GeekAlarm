@@ -2,7 +2,7 @@
 
 Geek alarm is alarm application for android. It works as usual alarm application, but to turn it off you need to solve several math or computer tasks (calculate matrix determinant, calulcate integral, convert number from binary, etc).
 
-Tasks examples can be found here [http://geekbeta-nbeloglazov.dotcloud.com](http://geekbeta-nbeloglazov.dotcloud.com).
+Tasks examples can be found here [http://geekalarm-nbeloglazov.rhcloud.com/](http://geekalarm-nbeloglazov.rhcloud.com/).
 
 App in android market: [GeekAlarm](http://market.android.com/details?id=com.geek_alarm.android)
 
