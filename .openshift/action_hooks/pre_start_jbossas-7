@@ -19,10 +19,10 @@ VERSION=LATEST
 # Determine whether we're getting a release or an incremental 
 if [[ ${VERSION} =~ \. ]]; then
     # Official release, e.g. 0.9.0
-    URL=http://repository-projectodd.forge.cloudbees.com/release/org/immutant/immutant-dist/${VERSION}/immutant-dist-${VERSION}-slim.zip
+    URL=http://repository-projectodd.forge.cloudbees.com/release/org/immutant/immutant-dist/${VERSION}/immutant-dist-${VERSION}-full.zip
 else
     # Incremental build, e.g. 999 or LATEST
-    URL=http://repository-projectodd.forge.cloudbees.com/incremental/immutant/${VERSION}/immutant-dist-slim.zip
+    URL=http://repository-projectodd.forge.cloudbees.com/incremental/immutant/${VERSION}/immutant-dist-full.zip
 fi
 
 cd ${OPENSHIFT_DATA_DIR}
