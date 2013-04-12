@@ -27,6 +27,7 @@
          (into {}))))
 
 (defn run-collector []
+  (println "Collector started")
   (utils/start-timer #(swap! active-tasks remove-expired-tasks)
                      timer-interval))
 

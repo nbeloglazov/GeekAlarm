@@ -11,7 +11,8 @@
                  [incanter/incanter-core "1.4.0"]
                  [org.scilab.forge/jlatexmath "0.9.6"]
                  [dk.brics.automaton/automaton "1.11.2"]]
-  :plugins [[lein-ring "0.8.2"]]
+  :plugins [[lein-ring "0.8.2"]
+            [lein-immutant "0.17.1"]]
   :ring {:handler com.geekalarm.server.server/handler
          :init com.geekalarm.server.server/run-collector}
   :uberjar-name "root.war")

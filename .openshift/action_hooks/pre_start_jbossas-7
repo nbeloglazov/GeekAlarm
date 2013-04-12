@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# The pre_start_cartridge and pre_stop_cartridge hooks are *SOURCED*
+# immediately before (re)starting or stopping the specified cartridge.
+# They are able to make any desired environment variable changes as
+# well as other adjustments to the application environment.
+
+# The post_start_cartridge and post_stop_cartridge hooks are executed
+# immediately after (re)starting or stopping the specified cartridge.
+
+# Exercise caution when adding commands to these hooks.  They can
+# prevent your application from stopping cleanly or starting at all.
+# Application start and stop is subject to different timeouts
+# throughout the system.
+
+FORCE_BUILD=false               # set to true to force build
+VERSION=LATEST
+
+# Determine whether we're getting a release or an incremental 
+if [[ ${VERSION} =~ \. ]]; then
+    # Official release, e.g. 0.9.0
+    URL=http://repository-projectodd.forge.cloudbees.com/release/org/immutant/immutant-dist/${VERSION}/immutant-dist-${VERSION}-slim.zip
+else
+    # Incremental build, e.g. 999 or LATEST
+    URL=http://repository-projectodd.forge.cloudbees.com/incremental/immutant/${VERSION}/immutant-dist-slim.zip
+fi
+
+cd ${OPENSHIFT_DATA_DIR}
+
+if [[ ${FORCE_BUILD} == true ]]; then
+    rm -f immutant
+fi
+
+# Download/explode the dist and symlink it to immutant
+if [ ! -d immutant ]; then
+    rm -rf immutant*
+    wget -nv ${URL}
+    unzip -q immutant-dist-*.zip
+    rm immutant-dist-*.zip
+    ln -s immutant-* immutant
+    echo "Installed" immutant-*
+fi
+
+# Insert the Immutant modules before the jbossas-7 ones
+export JBOSS_MODULEPATH_ADD=$OPENSHIFT_DATA_DIR/immutant/jboss/modules/system/layers/base:$OPENSHIFT_DATA_DIR/immutant/jboss/modules
