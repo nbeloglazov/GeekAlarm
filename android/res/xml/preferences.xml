@@ -27,11 +27,6 @@
             android:summary="@string/mute_time_step_summary"
             android:key="muteTimeStep"/>
 
-        <com.geek_alarm.android.ListPreferenceWithValue
-            android:title="@string/mute_behaviour"
-            android:key="muteBehaviour"
-            android:entries="@array/mute_behaviours"/>
-
         <com.geek_alarm.android.NumberPickerPreference
             android:title="@string/number_of_attempts"
             android:key="numberOfAttempts"/>

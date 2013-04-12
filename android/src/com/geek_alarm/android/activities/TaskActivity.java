@@ -4,10 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -23,7 +19,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.geek_alarm.android.AlarmPreference;
-import com.geek_alarm.android.MuteUtils;
+import com.geek_alarm.android.Player;
 import com.geek_alarm.android.R;
 import com.geek_alarm.android.Utils;
 import com.geek_alarm.android.db.AlarmPreferenceDao;
@@ -38,27 +34,23 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Activity, it is place where user solves tasks. 
  */
 public class TaskActivity extends Activity {
 
-    private long curPlayDelay;
     private boolean waitingForTask;
-    private boolean started;
     private boolean testTask;
     private Queue<Task> availableTasks;
     private ChoiceListener choiceListener;
     private int correctChoiceId;
     private TaskLoader loader;
-    private MediaPlayer player;
+    //private MediaPlayer player;
+    private Player player;
     private int solved;
     // How many tasks user already tried: solved + unsolved.
     private int all;
-    private Timer timer;
     private LayoutInflater inflater;
     private LinearLayout layout;
     private Task currentTask;
@@ -80,46 +72,20 @@ public class TaskActivity extends Activity {
         inflater = getLayoutInflater();
         layout = (LinearLayout) inflater.inflate(R.layout.task, null);
         setContentView(layout);
-        createPlayer();
+        player = new Player(this);
         choiceListener = new ChoiceListener();
         availableTasks = new LinkedList<Task>();
         waitingForTask = true;
         Utils.updateTaskTypesAsync(true);
         runTaskLoader();
-        timer = new Timer();
         findViewById(R.id.mute_button).setOnClickListener(new MuteListener());
         findViewById(R.id.info_button).setOnClickListener(new InfoListener());
         updateStats();
-        curPlayDelay = MuteUtils.getInitialMuteTime() * 1000;
     }
 
     private void runTaskLoader() {
         loader = new TaskLoader();
         loader.execute();
-    }
-
-    private void createPlayer() {
-        Uri music = Utils.getCurrentAlarmSound();
-        player = new MediaPlayer();
-        try {
-            player.setDataSource(this, music);
-            player.setAudioStreamType(AudioManager.STREAM_ALARM);
-            player.setLooping(true);
-            player.prepare();
-        } catch (Exception e) {
-            // Suppose we can't play current music, because it's renamed/removed.
-            // Play standard mario theme.
-            player.reset();
-            try {
-                player.setDataSource(this,
-                        RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
-                player.setAudioStreamType(AudioManager.STREAM_ALARM);
-                player.setLooping(true);
-                player.prepare();
-            } catch (Exception e2) {
-                Log.e(this.getClass().getName(), "Now I don't know what to do.", e2);
-            }
-        }
     }
 
     /**
@@ -204,16 +170,7 @@ public class TaskActivity extends Activity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (player != null) {
-            if (player.isPlaying()) {
-                player.stop();
-            }
-            player.release();
-            player = null;
-        }
-        if (timer != null) {
-            timer.cancel();
-        }
+        player.destroy();
     }
 
     /**
@@ -278,10 +235,7 @@ public class TaskActivity extends Activity {
                 availableTasks.add(task);
             }
             if (waitingForTask) {
-                if (!started && player != null) {
-                    player.start();
-                }
-                started = true;
+                player.start();
                 Task task = availableTasks.poll();
                 displayTask(task);
                 waitingForTask = false;
@@ -330,19 +284,7 @@ public class TaskActivity extends Activity {
 
         @Override
         public void onClick(View v) {
-            boolean shouldPause = MuteUtils.getMuteBehaviour() == MuteBehaviour.INCREASE || curPlayDelay > 0;
-            if (player.isPlaying() && shouldPause) {
-                player.pause();
-                timer.schedule(new ContinuePlayTask(), curPlayDelay);
-                switch (MuteUtils.getMuteBehaviour()) {
-                    case DECREASE:
-                        curPlayDelay -= MuteUtils.getMuteTimeStep() * 1000;
-                        break;
-                    case INCREASE:
-                        curPlayDelay += MuteUtils.getMuteTimeStep() * 1000;
-                        break;
-                }
-            }
+            player.mute();
         }
     }
 
@@ -366,14 +308,6 @@ public class TaskActivity extends Activity {
                 .show();
             ((TextView)dialog.findViewById(android.R.id.message))
                 .setMovementMethod(LinkMovementMethod.getInstance());
-        }
-    }
-
-    private class ContinuePlayTask extends TimerTask {
-
-        @Override
-        public void run() {
-            player.start();
         }
     }
 

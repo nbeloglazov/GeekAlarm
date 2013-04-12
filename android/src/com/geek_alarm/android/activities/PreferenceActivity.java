@@ -73,13 +73,9 @@ public class PreferenceActivity extends android.preference.PreferenceActivity {
     }
 
     private void initMuteTime() {
-        initNumberPicker(MuteUtils.INITIAL_MUTE_TIME, MuteUtils.DEFAULT_INITIAL_MUTE_TIME, 0, 300, 5,"%ds");
+        initNumberPicker(MuteUtils.INITIAL_MUTE_TIME, MuteUtils.DEFAULT_INITIAL_MUTE_TIME, 5, 300, 5,"%ds");
 
-        initNumberPicker(MuteUtils.MUTE_TIME_STEP, MuteUtils.DEFAULT_MUTE_TIME_STEP, 0, 300, 5, "%ds");
-
-        ListPreference muteBehaviour = (ListPreference) findPreference(MuteUtils.MUTE_BEHAVIOUR);
-        muteBehaviour.setEntryValues(MuteBehaviour.getNames());
-        muteBehaviour.setValue(MuteUtils.getMuteBehaviour().name());
+        initNumberPicker(MuteUtils.MUTE_TIME_STEP, MuteUtils.DEFAULT_MUTE_TIME_STEP, -300, 300, 5, "%ds");
     }
 
     private void initNumberPicker(String key, int defaultValue, int minValue, int maxValue, int step, String format) {

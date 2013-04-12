@@ -22,15 +22,15 @@ import java.util.Random;
 
 public final class TaskManager {
 
-    private static final String SERVER_URL = "http://geek-alarm.com/";
+    private static final String SERVER_URL = "http://geekalarm-nbeloglazov.rhcloud.com/";
     private static final Random RANDOM = new Random();
+    private static final HttpClient CLIENT = new DefaultHttpClient();
 
     private TaskManager() {}
 
     private static HttpEntity sendRequest(String url) throws Exception {
-        HttpClient client = new DefaultHttpClient();
         HttpUriRequest request = new HttpGet(SERVER_URL + url);
-        HttpResponse response = client.execute(request);
+        HttpResponse response = CLIENT.execute(request);
         return response.getEntity();
     }
 

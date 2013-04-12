@@ -10,7 +10,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import com.geek_alarm.android.activities.MuteBehaviour;
 import com.geek_alarm.android.activities.TaskActivity;
 
 import java.util.Calendar;
