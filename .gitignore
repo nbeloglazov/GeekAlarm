@@ -4,6 +4,7 @@
 target
 bin
 gen
+out
 .project
 *jar
 /lib/
