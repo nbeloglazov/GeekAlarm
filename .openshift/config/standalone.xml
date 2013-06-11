@@ -31,6 +31,7 @@
         <extension module="org.jboss.as.web"/>
         <extension module="org.jboss.as.webservices"/>
         <extension module="org.jboss.as.weld"/>
+        <extension module="org.immutant.xa"/>
         <extension module="org.immutant.web"/>
         <extension module="org.immutant.messaging"/>
         <extension module="org.immutant.jobs"/>
