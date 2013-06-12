@@ -42,4 +42,4 @@ if [ ! -d immutant ]; then
 fi
 
 # Insert the Immutant modules before the jbossas-7 ones
-export JBOSS_MODULEPATH_ADD=$OPENSHIFT_DATA_DIR/immutant/jboss/modules/system/layers/base:$OPENSHIFT_DATA_DIR/immutant/jboss/modules
+export OPENSHIFT_JBOSSAS_MODULE_PATH=$OPENSHIFT_DATA_DIR/immutant/jboss/modules/system/layers/base:$OPENSHIFT_DATA_DIR/immutant/jboss/modules
