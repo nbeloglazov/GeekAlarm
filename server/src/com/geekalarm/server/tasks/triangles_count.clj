@@ -115,12 +115,22 @@
     (draw-lines gr lines)
     image))
 
-(defn generate [level]
+(defn generate-non-rendered [level]
   (let [n (rand-nth (levels level))
         lines (rand-lines n)
-        image (get-image lines)
         [correct choices] (get-similar-by-one (calc-triangles lines))]
-    {:question (image-to-stream image)
+    {:lines lines
+     :choices choices
+     :correct correct}))
+
+
+(defn generate [level]
+  (let [has-neg? (fn [task]
+                   (some neg? (:choices task)))
+        {:keys [lines choices correct]} (->> (repeatedly #(generate-non-rendered level))
+                                             (remove has-neg?)
+                                             first)]
+    {:question (image-to-stream (get-image lines))
      :choices (map str choices)
      :correct correct}))
 
