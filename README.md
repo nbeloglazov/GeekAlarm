@@ -54,6 +54,6 @@ Project consists of 2 parts:
 
 ## License
 
-Copyright (C) 2011-2012 Nikita Beloglazov
+Copyright (C) 2011-2013 Nikita Beloglazov
 
 [matching]: http://en.wikipedia.org/wiki/Matching_(graph_theory)
