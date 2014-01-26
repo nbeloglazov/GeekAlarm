@@ -1,9 +1,9 @@
 package com.geek_alarm.android.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,7 +21,7 @@ import java.util.List;
  * List of alarms and option buttons
  * are displayed in this activity.
  */
-public class AlarmsActivity extends Activity {
+public class AlarmsActivity extends ActionBarActivity {
 
     private AlarmPreferenceAdapter adapter;
 

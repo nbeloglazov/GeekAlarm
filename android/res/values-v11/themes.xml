@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="ThemeDark" parent="@android:style/Theme.Holo.NoActionBar"/>
-    <style name="ThemeLight" parent="@android:style/Theme.Holo.Light.NoActionBar"/>
-</resources>

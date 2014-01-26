@@ -1,8 +1,8 @@
 package com.geek_alarm.android.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,7 +22,8 @@ import kankan.wheel.widget.WheelView;
 import java.util.Date;
 import java.util.List;
 
-public class SingleAlarmActivity extends Activity {
+
+public class SingleAlarmActivity extends ActionBarActivity {
 
     private Toast timeLeft;
 
@@ -120,7 +121,7 @@ public class SingleAlarmActivity extends Activity {
             if (!DateFormat.is24HourFormat(this)) {
                 LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(
                         (int) getResources().getDimension(R.dimen.width_alarm_am_pm),
-                        LinearLayout.LayoutParams.FILL_PARENT);
+                        LinearLayout.LayoutParams.MATCH_PARENT);
                 findViewById(item).setLayoutParams(layout);
             }
         }

@@ -12,3 +12,5 @@ server/classes/
 .lein-deps-sum
 *war
 .lein-failures
+.gradle
+android/build

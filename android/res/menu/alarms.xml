@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:yourapp="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/add"
         android:title="@string/add"
-        android:icon="@drawable/add"/>
+        android:icon="@drawable/add"
+        yourapp:showAsAction="ifRoom"/>
     <item
         android:id="@+id/settings"
         android:title="@string/settings"
-        android:icon="@drawable/settings"/>
+        android:icon="@drawable/settings"
+        yourapp:showAsAction="ifRoom"/>
 </menu>
