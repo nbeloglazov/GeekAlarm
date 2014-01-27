@@ -31,6 +31,24 @@ android {
         }
     }
 
+    signingConfigs {
+
+        release {
+            storeFile file("geekalarm.keystore")
+            storePassword "I'm password"
+            keyAlias "geekalarm"
+            keyPassword "Really! Don't you believe me?"
+        }
+    }
+
+    buildTypes {
+        release {
+            runProguard true
+            proguardFile getDefaultProguardFile('proguard-android.txt')
+            signingConfig signingConfigs.release
+        }
+    }
+
     dependencies {
         compile 'com.android.support:appcompat-v7:18.0.+'
     }

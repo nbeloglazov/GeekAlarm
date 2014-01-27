@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -81,6 +83,11 @@ public class TaskActivity extends Activity {
         findViewById(R.id.mute_button).setOnClickListener(new MuteListener());
         findViewById(R.id.info_button).setOnClickListener(new InfoListener());
         updateStats();
+
+        WindowManager.LayoutParams layout = getWindow().getAttributes();
+        layout.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+        layout.screenBrightness = 0.1F;
+        getWindow().setAttributes(layout);
     }
 
     private void runTaskLoader() {
@@ -135,7 +142,7 @@ public class TaskActivity extends Activity {
         layout.addView(inflater.inflate(isTable ? R.layout.choices_table
                 : R.layout.choices_list, null), new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, weight));
-        question.setImageBitmap(task.getQuestion());
+        question.setImageBitmap(Utils.resizeImage(task.getQuestion()));
 
         int choicesIds[] = { R.id.task_choice_1, R.id.task_choice_2,
                 R.id.task_choice_3, R.id.task_choice_4 };
@@ -144,7 +151,7 @@ public class TaskActivity extends Activity {
         for (int i = 0; i < 4; i++) {
             ImageView choiceView = (ImageView) findViewById(choicesIds[i]);
             choiceView.setOnClickListener(choiceListener);
-            choiceView.setImageBitmap(task.getChoice(i));
+            choiceView.setImageBitmap(Utils.resizeImage(task.getChoice(i)));
             if (!isTable) {
                 choiceView.getLayoutParams().height = Math.max(minHeight, task
                         .getChoice(i).getHeight());
@@ -172,6 +179,9 @@ public class TaskActivity extends Activity {
         super.onDestroy();
         player.destroy();
         loader.cancel(false);
+        WindowManager.LayoutParams layout = getWindow().getAttributes();
+        layout.screenBrightness = -1F;
+        getWindow().setAttributes(layout);
     }
 
     /**

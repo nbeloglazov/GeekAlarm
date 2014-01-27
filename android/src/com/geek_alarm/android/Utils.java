@@ -5,11 +5,16 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.preference.PreferenceManager;
+import android.view.Display;
+import android.view.WindowManager;
 import com.geek_alarm.android.activities.TaskActivity;
 
 import java.util.Calendar;
@@ -21,6 +26,8 @@ public class Utils {
     private static final long MIN_TASKS_UPDATE_FREQUENCY = 1000 * 60 * 60 * 24; // Once a day
     private static final int MILLISECONDS_IN_HOUR = 1000 * 60 * 60;
     private static final int MILLISECONDS_IN_MINUTE = 1000 * 60;
+    private static final int HTC_SENSATION_SCREEN_WIDTH = 540;
+    private static final int HTC_SENSATION_SCREEN_HEIGHT = 960;
 
 
     public static final String NUMBER_OF_ATTEMPTS = "numberOfAttempts";
@@ -223,6 +230,28 @@ public class Utils {
      */
     public static int getPositiveBalance() {
         return getPreferences().getInt(POSITIVE_BALANCE, DEFAULT_POSITIVE_BALANCE);
+    }
+
+    public static Bitmap resizeImage(final Bitmap image) {
+        Point screenSize = getScreenSize();
+        double screenWidth = (double) screenSize.x;
+        double screenHeight = (double) screenSize.y;
+        double scale = Math.min(screenWidth / HTC_SENSATION_SCREEN_WIDTH, screenHeight / HTC_SENSATION_SCREEN_HEIGHT);
+        return Bitmap.createScaledBitmap( image, (int) (image.getWidth() * scale), (int) (image.getHeight() * scale),
+                true);
+
+    }
+
+    private static Point getScreenSize() {
+        Point result = new Point();
+        WindowManager wm = (WindowManager) Application.getContext().getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        if(Build.VERSION.SDK_INT> Build.VERSION_CODES.HONEYCOMB){
+            display.getSize(result);
+        } else {
+            result.set(display.getWidth(), display.getHeight());
+        }
+        return result;
     }
 
 }
