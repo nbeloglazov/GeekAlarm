@@ -14,7 +14,7 @@
 # throughout the system.
 
 FORCE_BUILD=false               # set to true to force build
-VERSION=LATEST
+VERSION=1.1.0
 
 # Determine whether we're getting a release or an incremental 
 if [[ ${VERSION} =~ \. ]]; then
@@ -43,3 +43,11 @@ fi
 
 # Insert the Immutant modules before the jbossas-7 ones
 export OPENSHIFT_JBOSSAS_MODULE_PATH=$OPENSHIFT_DATA_DIR/immutant/jboss/modules/system/layers/base:$OPENSHIFT_DATA_DIR/immutant/jboss/modules
+
+# Reduce the messaging threads to conserve memory
+export MESSAGING_THREAD_RATIO=0.12 # default is 0.2
+
+# Bump up from default of 250 on a small gear
+if [ $(ulimit -u) -lt 500 ]; then ulimit -u 500; fi
+
+#rm -rf $OPENSHIFT_JBOSSAS_DIR/standalone/{data,tmp}

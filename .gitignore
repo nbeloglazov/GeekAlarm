@@ -14,3 +14,4 @@ server/classes/
 .lein-failures
 .gradle
 android/build
+.lein-repl-history
