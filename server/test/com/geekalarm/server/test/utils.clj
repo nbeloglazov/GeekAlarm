@@ -21,7 +21,7 @@
           [orig-pos shuffled] (get-similar-by-fn orig f)]
       (is (= (nth shuffled orig-pos) orig))
       (is (apply distinct? shuffled))
-      (is (every? #(<= orig % (+ orig 100)) shuffled)))))
+      (is (every? #(<= orig %) shuffled)))))
 
 (deftest test-prime?
   (are [x] (prime? x)
@@ -49,5 +49,11 @@
       (dotimes [_ 10]
         (is (<= a (rand-range a b) b))))))
 
-
-
+(deftest test-to-base
+  (are [value base expected] (= (to-base value base) expected)
+       10 10 "10_{10}"
+       10 2 "1010_{2}"
+       15 16 "F_{16}"
+       16 16 "10_{16}"
+       11259375 16 "ABCDEF_{16}"
+       -26 3 "-222_{3}"))

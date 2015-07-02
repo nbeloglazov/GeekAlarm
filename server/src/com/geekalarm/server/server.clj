@@ -1,10 +1,10 @@
 (ns com.geekalarm.server.server
   (:import [java.util Date])
-  (:use [net.cgrand.moustache :only [app delegate]]
-        [ring.middleware
-         [params :only (wrap-params)]
-         [keyword-params :only (wrap-keyword-params)]])
-  (:require [com.geekalarm.server
+  (:require [net.cgrand.moustache :refer [app delegate]]
+            [ring.middleware
+             [params :refer [wrap-params]]
+             [keyword-params :refer [wrap-keyword-params]]]
+            [com.geekalarm.server
              [render-utils :as render]
              [mathml-utils :as mathml]
              [task-manager :as manager]
@@ -84,3 +84,14 @@
        ["task"] generate-task
        ["image"] get-image
        ["tasks"] tasks-info))
+
+
+(comment
+
+  (do
+    (require 'ring.adapter.jetty)
+    (def server (ring.adapter.jetty/run-jetty
+                 handler {:port 8080
+                          :join? false
+                          :daemon? true})))
+  )

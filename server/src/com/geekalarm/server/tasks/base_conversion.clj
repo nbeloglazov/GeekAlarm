@@ -1,6 +1,5 @@
 (ns com.geekalarm.server.tasks.base-conversion
-  (:require [com.geekalarm.server.utils :refer (get-similar-by-one)]
-            [clojure.core.strint :refer (<<)]))
+  (:require [com.geekalarm.server.utils :as u]))
 
 (defn generate [level]
   (let [a (case level
@@ -15,16 +14,10 @@
                        (remove #(= a %))
                        (rand-nth)))
         val (+ (rand-int 50))
-        [correct choices] (get-similar-by-one val)
+        [correct choices] (u/get-similar-by-one val)
         [from to] (shuffle [a b])]
-    {:question (format "%s_{%s} = ?_{%s}"
-                       (.toUpperCase (Integer/toString val from))
-                       from
-                       to)
-     :choices (->> (map #(Integer/toString % to) choices)
-                   (map #(.toUpperCase %))
-                   (map (fn [val]
-                          (format "%s_{%s}" val to))))
+    {:question (format "%s = ?" (u/to-base val from))
+     :choices (map #(u/to-base % to) choices)
      :correct correct}))
 
 (def info {:name "Base conversion"

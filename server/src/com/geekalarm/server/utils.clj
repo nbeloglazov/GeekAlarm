@@ -62,7 +62,9 @@
      (map create-matrix (map types order))]))
 
 (defn get-similar-by-fn [orig similar-fn]
-  (let [sim-seq (repeatedly #(similar-fn orig))
+  (let [sim-seq (nth (iterate #(conj % (similar-fn (rand-nth %)))
+                              [orig])
+                     100)
         add-sim (fn [found]
                   (->> (remove (set found) sim-seq)
                        (first)
@@ -81,6 +83,11 @@
 
 (defn rand-range [a b]
   (+ a (rand-int (inc (- b a)))))
+
+(defn to-base [value base]
+  (format "%s_{%s}"
+          (.toUpperCase (Long/toString value base))
+          base))
 
 
 
