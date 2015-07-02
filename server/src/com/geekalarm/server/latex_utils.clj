@@ -1,6 +1,7 @@
 (ns com.geekalarm.server.latex-utils
-  (:require [clojure.string :refer (join)]
-            [clojure.math.numeric-tower :as math]))
+  (:require [clojure.string :refer [join]]
+            [clojure.math.numeric-tower :as math]
+            [incanter.core :as i]))
 
 (defn lines
   ([lines align]
@@ -37,7 +38,7 @@
         close {"()" "\\right)"
                "||" "\\right|"}]
     (str (open type)
-         "\\begin{array}{" (apply str (repeat (count (first matrix)) "r")) "}"
+         "\\begin{array}{" (apply str (repeat (i/length (first matrix)) "r")) "}"
          (join "\\\\" (map #(join "&" (map to-latex %)) matrix))
          "\\end{array}"
          (close type))))
