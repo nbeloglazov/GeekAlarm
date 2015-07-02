@@ -18,6 +18,7 @@
 (defn good-pair? [[a b]]
   (let [gcd (gcd a b)]
     (and (> gcd 1)
+         (not= a b)
          (some #(> gcd (/ % 10)) [a b]))))
 
 (defn generate-pair [[lower upper]]
