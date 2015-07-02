@@ -72,10 +72,25 @@
                   (- y2 y0))))
        2)))
 
+(defn lines-overlap? [[[x1 y1] [x2 y2] :as l1]
+                      [[x3 y3] [x4 y4] :as l2]
+                      inters]
+  (let [dx1 (- x1 x2)
+        dy1 (- y1 y2)
+        dx2 (- x3 x4)
+        dy2 (- y3 y4)
+        len1 (Math/hypot dx1 dy1)
+        len2 (Math/hypot dx2 dy2)
+        cos (/ (+ (* dx1 dx2) (* dy1 dy2))
+               len1 len2)]
+    (and (> (Math/abs cos) (Math/cos (Math/toRadians 2)))
+         (inside-offsets? inters (- offset)))))
+
 (defn satisfy?
   ([line1 line2]
      (if-let [inters (intersection line1 line2)]
-       (not (near-border? inters))
+       (and (not (near-border? inters))
+            (not (lines-overlap? line1 line2 inters)))
        false))
   ([lines]
      (and (every? true? (map #(apply satisfy? %) (combinations lines 2)))
@@ -138,3 +153,25 @@
            :name "Triangles count"
            :description (str "Calculate how many triangles are on screen.")
            :generator #'generate})
+
+(comment
+
+  (require '[quil.core :as q])
+
+  (defn overlapping-lines [n]
+   (let [lines (repeatedly n rand-line)]
+     (set (for [a lines
+                b lines
+                :when (and (not= a b)
+                           (lines-overlap? a b))]
+            a))))
+
+  (defn q-draw-lines [lines]
+    (q/sketch
+     :size [size size]
+     :draw (fn []
+             (q/background 255)
+             (doseq [line lines]
+               (apply q/line line)))))
+
+  )

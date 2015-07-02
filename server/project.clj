@@ -13,6 +13,7 @@
                  [dk.brics.automaton/automaton "1.11.2"]]
   :plugins [[lein-ring "0.8.10"]
             [lein-immutant "1.2.0"]]
+  :profiles {:dev {:dependencies [[quil "2.2.6"]]}}
   :ring {:handler com.geekalarm.server.server/handler
          :init com.geekalarm.server.server/run-collector}
   :uberjar-name "root.war")
