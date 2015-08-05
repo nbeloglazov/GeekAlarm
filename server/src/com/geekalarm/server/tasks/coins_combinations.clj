@@ -52,7 +52,7 @@
         [correct choices] (u/find-matching-value
                            #(u/get-similar-by-one answer)
                            pos-choices?)
-        question [(str "Make up " sum)
+        question [(str "Get " sum)
                   (str "using coins " (cstr/join ", " coins) ".")
                   "Number of combinations?"]]
     {:question (lu/lines (map lu/text question) "c")
