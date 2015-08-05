@@ -16,12 +16,12 @@
   ([from to]
      (->> [from to]
           (map int)
-          (apply u/rand-int-within)
+          (apply u/rand-range)
           (char)))
   ([transition]
      (->> [(.getMin transition) (.getMax transition)]
           (map int)
-          (apply u/rand-int-within)
+          (apply u/rand-range)
           (char))))
 
 
@@ -42,7 +42,7 @@
   ((rand-nth [one-char-exp range-char-exp])))
 
 (defn group-char-exp []
-  (let [n (u/rand-int-within 1 2)
+  (let [n (u/rand-range 1 2)
         delims (repeatedly n #(rand-nth ["" "|"]))]
     (->> (repeatedly n char-exp)
          (interleave delims)
@@ -51,7 +51,7 @@
          (#(format "(%s)" %)))))
 
 (defn quantifier-exp []
-  (let [rnd-count #(u/rand-int-within 1 (dec max-count))
+  (let [rnd-count #(u/rand-range 1 (dec max-count))
         res (rand-nth
              ["*" "+" "?"
               (fn [] (format "{%d}" (rnd-count)))
@@ -102,12 +102,9 @@
                  (rand-char)))))
 
 (defn similar-invalid [regex st]
-  (->> (repeatedly 100 #(similar-string st))
-       (filter #(not (.run regex %)))
-       (first)
-       (#(if (nil? %)
-           "He$$o_world!"
-           %))))
+  (or (u/find-matching-value #(similar-string st)
+                             #(not (.run regex %)))
+      "He$$o_world!"))
 
 (defn generate [level]
   (let [regex (generate-regex level)

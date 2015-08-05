@@ -13,9 +13,8 @@
 
 (defn get-bases [level]
   (let [base (rand-base)
-        second-base (->> (repeatedly rand-base)
-                         (remove #(= base %))
-                         first)]
+        second-base (u/find-matching-value rand-base
+                                           #(not= base %))]
     [base
      (if (= level 2) second-base base)]))
 

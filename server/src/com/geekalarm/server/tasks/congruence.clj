@@ -1,9 +1,8 @@
 (ns com.geekalarm.server.tasks.congruence
   (:require [clojure.math.combinatorics :as combinatorics]
-            [clojure.string :refer (join)]
             [com.geekalarm.server
-             [utils :as utils]
-             [latex-utils :refer (lines)]]))
+             [utils :as u]
+             [latex-utils :as lu]]))
 
 (def modules [2 3 5 7 11 13 17 19])
 (def multiplier 4)
@@ -47,10 +46,9 @@
                                      (zero?)
                                      (not)))
         rand-answer (fn [ans]
-                      (->> #(rand-with-module ans upper-bound)
-                           (repeatedly)
-                           (filter not-real-answer?)
-                           (first)))]
+                      (u/find-matching-value
+                       #(rand-with-module ans upper-bound)
+                       not-real-answer?))]
     (with-meta (cons real-answer (map rand-answer rst))
       {:not-real-answer? not-real-answer?})))
 
@@ -71,7 +69,7 @@
        (map solve)
        (answers-generic-to-concrete)
        (add-missing)
-       (utils/shuffle-and-track-first)))
+       (u/shuffle-and-track-first)))
 
 (defn generate [level]
   (let [eqs (generate-equations (inc level))
@@ -79,7 +77,7 @@
         eq-to-latex (fn [[base mod]]
                       (format "x \\equiv %s\\; (mod\\; %s)" base mod))]
 
-    {:question (lines (map eq-to-latex eqs))
+    {:question (lu/lines (map eq-to-latex eqs))
      :choices (map str choices)
      :correct correct}))
 

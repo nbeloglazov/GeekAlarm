@@ -1,7 +1,7 @@
 (ns com.geekalarm.server.tasks.gcd-lcm
   (:require [com.geekalarm.server
-             [utils :refer (rand-range primes get-similar-by-fn)]
-             [latex-utils :refer (to-latex text)]]))
+             [utils :as u]
+             [latex-utils :as lu]]))
 
 (def difficulty [[2 100]
                  [100 1000]
@@ -22,16 +22,15 @@
          (some #(> gcd (/ % 10)) [a b]))))
 
 (defn generate-pair [[lower upper]]
-  (->> #(vector (rand-range lower upper)
-                (rand-range lower upper))
-       repeatedly
-       (filter good-pair?)
-       first))
+  (u/find-matching-value
+   #(vector (u/rand-range lower upper)
+            (u/rand-range lower upper))
+   good-pair?))
 
 (defn divisors [num]
   (loop [divs #{}
          num num
-         primes (primes)]
+         primes (u/primes)]
     (let [prime (first primes)]
       (if (>= num prime)
         (if (zero? (mod num prime))
@@ -55,10 +54,10 @@
         value (if (= type :gcd)
                 (gcd a b)
                 (/ (* a b) (gcd a b)))
-        [correct choices] (get-similar-by-fn value similar)]
-    {:question (str (text (if (= type :gcd) "GCD" "LCM"))
+        [correct choices] (u/get-similar-by-fn value similar)]
+    {:question (str (lu/text (if (= type :gcd) "GCD" "LCM"))
                      "(" a ", " b ") = ?")
-     :choices (map to-latex choices)
+     :choices (map lu/to-latex choices)
      :correct correct}))
 
 (def info {:type :gcd-lcm

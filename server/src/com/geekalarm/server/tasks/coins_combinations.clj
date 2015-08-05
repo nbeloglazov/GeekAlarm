@@ -25,12 +25,12 @@
       2 (<= 8 answer 10))))
 
 (defn generate-setup [level]
-  (let [sum (apply u/rand-int-within
+  (let [sum (apply u/rand-range
                    (case level
                      0 [6 9]
                      1 [10 12]
                      2 [10 14]))
-        n (apply u/rand-int-within
+        n (apply u/rand-range
                  (case level
                    0 [1 2]
                    1 [2 3]

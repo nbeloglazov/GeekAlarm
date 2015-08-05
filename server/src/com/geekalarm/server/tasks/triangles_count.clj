@@ -1,9 +1,9 @@
 (ns com.geekalarm.server.tasks.triangles-count
-  (:require [clojure.math.combinatorics :refer (combinations)]
-            [incanter.core :refer (abs)]
+  (:require [clojure.math.combinatorics :as comb]
+            [incanter.core :as ic]
             [com.geekalarm.server
-             [render-utils :refer (image-to-stream)]
-             [utils :refer (get-similar-by-one)]]))
+             [render-utils :as ru]
+             [utils :as u]]))
 
 (def size 330)
 (def text-height 30)
@@ -30,10 +30,9 @@
       (- y0 (* dy size c))]]))
 
 (defn rand-line []
-  (->> (repeatedly #(list (rand-point) (rand-point)))
-       (filter far-enough?)
-       first
-       enlarge-line))
+  (enlarge-line (u/find-matching-value
+                 #(list (rand-point) (rand-point))
+                 far-enough?)))
 
 (defn intersects? [[[x1 y1] [x2 y2]] [[x3 y3] [x4 y4]]]
   (java.awt.geom.Line2D/linesIntersect x1 y1 x2 y2 x3 y3 x4 y4))
@@ -66,10 +65,10 @@
   (let [[x0 y0] (intersection l1 l2)
         [x1 y1] (intersection l2 l3)
         [x2 y2] (intersection l1 l3)]
-    (/ (abs (- (* (- x0 x2)
-                  (- y1 y0))
-               (* (- x0 x1)
-                  (- y2 y0))))
+    (/ (ic/abs (- (* (- x0 x2)
+                     (- y1 y0))
+                  (* (- x0 x1)
+                     (- y2 y0))))
        2)))
 
 (defn lines-overlap? [[[x1 y1] [x2 y2] :as l1]
@@ -93,8 +92,8 @@
             (not (lines-overlap? line1 line2 inters)))
        false))
   ([lines]
-     (and (every? true? (map #(apply satisfy? %) (combinations lines 2)))
-          (every? #(> % 50) (map triangle-area (combinations lines 3))))))
+     (and (every? true? (map #(apply satisfy? %) (comb/combinations lines 2)))
+          (every? #(> % 50) (map triangle-area (comb/combinations lines 3))))))
 
 (defn triangle-inside? [[l1 l2 l3]]
   (and (inside-offsets? (intersection l1 l2) 0)
@@ -102,14 +101,12 @@
        (inside-offsets? (intersection l1 l3) 0)))
 
 (defn calc-triangles [lines]
-  (->> (combinations lines 3)
+  (->> (comb/combinations lines 3)
        (filter triangle-inside?)
        count))
 
 (defn rand-lines [n]
-  (->> (repeatedly #(repeatedly n rand-line))
-       (filter satisfy?)
-       first))
+  (u/find-matching-value #(repeatedly n rand-line) satisfy?))
 
 (defn draw-line [gr [[x0 y0] [x1 y1]]]
   (.drawLine gr x0 y0 x1 y1))
@@ -133,19 +130,18 @@
 (defn generate-non-rendered [level]
   (let [n (rand-nth (levels level))
         lines (rand-lines n)
-        [correct choices] (get-similar-by-one (calc-triangles lines))]
+        [correct choices] (u/get-similar-by-one (calc-triangles lines))]
     {:lines lines
      :choices choices
      :correct correct}))
 
 
 (defn generate [level]
-  (let [has-neg? (fn [task]
-                   (some neg? (:choices task)))
-        {:keys [lines choices correct]} (->> (repeatedly #(generate-non-rendered level))
-                                             (remove has-neg?)
-                                             first)]
-    {:question (image-to-stream (get-image lines))
+  (let [non-neg? #(not (neg? %))
+        {:keys [lines choices correct]} (u/find-matching-value
+                                         #(generate-non-rendered level)
+                                         #(every? non-neg? (:choices %)))]
+    {:question (ru/image-to-stream (get-image lines))
      :choices (map str choices)
      :correct correct}))
 

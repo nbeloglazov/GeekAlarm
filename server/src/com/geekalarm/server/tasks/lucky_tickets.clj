@@ -1,7 +1,7 @@
 (ns com.geekalarm.server.tasks.lucky-tickets
   (:use [com.geekalarm.server
-         [utils :only (shuffle-and-track-first)]
-         [latex-utils :only (text)]]))
+         [utils :as u]
+         [latex-utils :as lu]]))
 
 (def levels [[2 3]
              [4 5 6]
@@ -55,10 +55,9 @@
 
 (defn similar [number]
   (let [size (count number)
-        indexes (->> #((juxt rand-int rand-int) size)
-                         repeatedly
-                         (remove #(= (first %) (last %)))
-                         first)
+        indexes (u/find-matching-value
+                 #((juxt rand-int rand-int) size)
+                 #(not= (first %) (last %)))
         [fn1 fn2] (->> indexes (map number) (map similar-digit-fn))
         numbers (->> [[identity identity]
                       [identity fn2]
@@ -66,7 +65,7 @@
                       [fn1 fn2]]
                      (map (fn [fns] (map #(vector % %2) indexes fns)))
                      (map #(reduce (fn [num [ind fn]] (update-in num [ind] fn)) number %)))]
-    (shuffle-and-track-first numbers)))
+    (u/shuffle-and-track-first numbers)))
 
 (defn lucky? [number]
   (let [length (count number)]
@@ -85,8 +84,10 @@
 
 (defn generate [level]
   (let [number (->> level levels rand-nth generate-number)
-        [correct choices] (->> #(similar number) repeatedly (filter satisfy?) first)]
-    {:question (text "Lucky ticket?")
+        [correct choices] (u/find-matching-value
+                           #(similar number)
+                           satisfy?)]
+    {:question (lu/text "Lucky ticket?")
      :choices (map (fn [x] (apply str x)) choices)
      :correct correct}))
 
