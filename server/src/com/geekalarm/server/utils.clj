@@ -89,6 +89,17 @@
           (.toUpperCase (Long/toString value base))
           base))
 
+(defn rand-int-within [a b]
+  (->> (- b a)
+       (inc)
+       (rand-int)
+       (+ a)))
+
+(defn find-matching-value [generator-fn pred?]
+  (->> (repeatedly generator-fn)
+       (filter pred?)
+       first))
+
 
 
 

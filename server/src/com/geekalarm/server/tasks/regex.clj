@@ -1,18 +1,12 @@
 (ns com.geekalarm.server.tasks.regex
   (:import [dk.brics.automaton RegExp])
   (:require [com.geekalarm.server
-             [utils :as utils]
+             [utils :as u]
              [latex-utils :as lu]]
             [clojure.string :as string]))
 
 (def max-count 3)
 (def max-length 30)
-
-(defn rand-int-within [a b]
-  (->> (- b a)
-       (inc)
-       (rand-int)
-       (+ a)))
 
 (defn rand-char
   ([]
@@ -22,12 +16,12 @@
   ([from to]
      (->> [from to]
           (map int)
-          (apply rand-int-within)
+          (apply u/rand-int-within)
           (char)))
   ([transition]
      (->> [(.getMin transition) (.getMax transition)]
           (map int)
-          (apply rand-int-within)
+          (apply u/rand-int-within)
           (char))))
 
 
@@ -48,7 +42,7 @@
   ((rand-nth [one-char-exp range-char-exp])))
 
 (defn group-char-exp []
-  (let [n (rand-int-within 1 2)
+  (let [n (u/rand-int-within 1 2)
         delims (repeatedly n #(rand-nth ["" "|"]))]
     (->> (repeatedly n char-exp)
          (interleave delims)
@@ -57,7 +51,7 @@
          (#(format "(%s)" %)))))
 
 (defn quantifier-exp []
-  (let [rnd-count #(rand-int-within 1 (dec max-count))
+  (let [rnd-count #(u/rand-int-within 1 (dec max-count))
         res (rand-nth
              ["*" "+" "?"
               (fn [] (format "{%d}" (rnd-count)))
@@ -121,7 +115,7 @@
         answer (generate-xeger automat)
         invalid (->> (repeatedly 3 #(generate-xeger automat))
                      (map #(similar-invalid automat %)))
-        [correct choices] (utils/shuffle-and-track-first
+        [correct choices] (u/shuffle-and-track-first
                            (cons answer invalid))]
     (if (> (->> (map count choices)
                 (reduce max))
