@@ -9,7 +9,10 @@
        (join "\\\\" lines)
        "\\end{array}"))
   ([lns]
-     (lines lns "l")))
+   (lines lns "l")))
+
+(defn frac [num den]
+  (format "\\frac{%s}{%s}" num den))
 
 (defn pow [base pow]
   (format "%s^{%s}" base pow))
@@ -25,10 +28,9 @@
   (format "\\text{%s}" (escape text)))
 
 (defn- render-regular-fraction [num]
-  (format "%s\\frac{%s}{%s}"
-          (if (pos? num) "" "-")
-          (Math/abs (long (numerator num)))
-          (denominator num)))
+  (str (if (pos? num) "" "-")
+       (frac (Math/abs (long (numerator num)))
+             (denominator num))))
 
 (defn- render-mixed-fraction [num]
   (let [sgn (if (neg? num) -1 1)
