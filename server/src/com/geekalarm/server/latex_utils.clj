@@ -11,9 +11,6 @@
   ([lns]
      (lines lns "l")))
 
-(defn frac [num den]
-  (format "\\frac{%s}{%s}" num den))
-
 (defn pow [base pow]
   (format "%s^{%s}" base pow))
 
@@ -27,10 +24,30 @@
 (defn text [text]
   (format "\\text{%s}" (escape text)))
 
-(defn to-latex [num]
-  (cond (ratio? num) (frac (numerator num) (denominator num))
-        (number? num) (str (math/round num))
-        :default (str num)))
+(defn- render-regular-fraction [num]
+  (format "%s\\frac{%s}{%s}"
+          (if (pos? num) "" "-")
+          (Math/abs (long (numerator num)))
+          (denominator num)))
+
+(defn- render-mixed-fraction [num]
+  (let [sgn (if (neg? num) -1 1)
+        fr (* num sgn)
+        q (quot (numerator fr) (denominator fr))
+        r (- fr q)]
+    (if (zero? q)
+      (render-regular-fraction (* sgn r))
+      (str (* sgn q) (render-regular-fraction r)))))
+
+(defn to-latex
+  ([num]
+   (to-latex num false))
+  ([num use-mixed-fraction?]
+   (cond (ratio? num) (if use-mixed-fraction?
+                        (render-mixed-fraction num)
+                        (render-regular-fraction num))
+         (number? num) (str (math/round num))
+         :default (str num))))
 
 (defn matrix [matrix type]
   (let [open {"()" "\\left("
